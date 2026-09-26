@@ -1,1 +1,8 @@
 css/main.css
+tmp/
+.playwright-mcp/
+*.png.tmp
+shot.png
+site-full.png
+.DS_Store
+.idea/
