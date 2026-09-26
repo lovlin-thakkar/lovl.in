@@ -1,0 +1,28 @@
+title: Lovlin Thakkar
+description: Notes from a backend engineer.
+author: Lovlin Thakkar
+url: https://lovl.in
+permalink: /blog/:title/
+timezone: Asia/Kolkata
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-feed
+feed:
+  path: feed.xml
+exclude:
+  - tmp/
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - serve.sh
+  - .idea/
+  - .playwright-mcp/
+  - .claude/
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
