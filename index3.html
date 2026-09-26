@@ -59,13 +59,30 @@
     }
   }
 
-  html { background: var(--paper); }
+  /* one paper tint per chapter; JS sets data-tint as you scroll */
+  html[data-tint="zenarate"]  { --paper: #fbf8ef; }
+  html[data-tint="break"]     { --paper: #f3f2ef; }
+  html[data-tint="heymarvin"] { --paper: #f7f1f8; }
+  html[data-tint="swiggy"]    { --paper: #fdf0e3; }
+  html[data-tint="goldman"]   { --paper: #edf1f7; }
+  html[data-tint="nirma"]     { --paper: #f1f4ea; }
+  html[data-tint="made"]      { --paper: #f6f4ee; }
+  @media (prefers-color-scheme: dark) {
+    html[data-tint="zenarate"]  { --paper: #1d1b17; }
+    html[data-tint="break"]     { --paper: #1c1c1c; }
+    html[data-tint="heymarvin"] { --paper: #1f1a21; }
+    html[data-tint="swiggy"]    { --paper: #231b14; }
+    html[data-tint="goldman"]   { --paper: #161b23; }
+    html[data-tint="nirma"]     { --paper: #191d16; }
+    html[data-tint="made"]      { --paper: #1b1a18; }
+  }
+
+  html { background: var(--paper); transition: background-color 0.9s ease; }
   body {
     margin: 0 auto;
     padding: 56px 20px 80px;
     max-width: 34rem;
     color: var(--ink);
-    background: var(--paper);
     font: 18px/1.6 Charter, "Bitstream Charter", "Iowan Old Style", "Sitka Text", Cambria, Georgia, serif;
     font-variant-numeric: oldstyle-nums;
     -webkit-text-size-adjust: 100%;
@@ -99,6 +116,43 @@
   .projects dd { margin: 2px 0 0; }
   .projects .stack { color: var(--soft); font-size: 0.9em; }
 
+  .rail {
+    position: fixed;
+    left: max(24px, calc(50% - 392px));
+    top: 18vh;
+    height: 64vh;
+    width: 1px;
+    background: var(--line);
+    font: 12px/1 ui-sans-serif, system-ui, sans-serif;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--soft);
+  }
+  .rail span { position: absolute; left: 10px; transform: translateY(-50%); transition: color 0.4s; }
+  .rail span::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    width: 5px;
+    height: 1px;
+    background: var(--soft);
+  }
+  .rail span.on { color: var(--ink); }
+  .rail i {
+    position: absolute;
+    left: -4px;
+    width: 9px;
+    height: 9px;
+    margin-top: -4.5px;
+    border-radius: 50%;
+    background: var(--ink);
+    transition: top 0.7s ease;
+  }
+  @media (max-width: 999px) { .rail { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    html, .rail i, .rail span { transition: none; }
+  }
+
   footer {
     margin-top: 64px;
     padding-top: 14px;
@@ -113,6 +167,8 @@
     .me { width: 84px; height: 84px; }
   }
   @media print {
+    html { background: #fff; }
+    .rail { display: none; }
     body { padding: 0; font-size: 11pt; }
     a { color: inherit; }
     footer { display: none; }
@@ -121,7 +177,16 @@
 </head>
 <body>
 
-<header>
+<nav class="rail" aria-hidden="true">
+  <span style="top:11.1%">2026</span>
+  <span style="top:33.3%">2024</span>
+  <span style="top:55.6%">2022</span>
+  <span style="top:77.8%">2020</span>
+  <span style="top:100%">2018</span>
+  <i></i>
+</nav>
+
+<header data-tint="">
   <img class="me" src="assets/dp.jpg" alt="Lovlin Thakkar" width="108" height="108">
   <h1>Lovlin Thakkar</h1>
   <p>I'm a backend engineer. For seven years I've worked on systems where throughput and correctness both matter: trade processing at Goldman Sachs, delivery capacity at Swiggy, and compliance-heavy SaaS at HeyMarvin.</p>
@@ -139,12 +204,17 @@
 
 <h2>Work</h2>
 
+<div data-tint="zenarate" data-year="2026.5">
 <h3>Zenarate</h3>
 <p class="role">Senior Software Engineer II, Jul 2026 - now</p>
+</div>
 
+<div data-tint="break" data-year="2026.1">
 <h3>Career break</h3>
 <p class="role">Feb - Jun 2026</p>
+</div>
 
+<div data-tint="heymarvin" data-year="2024.85">
 <h3>HeyMarvin AI</h3>
 <p class="role">Senior Software Engineer (Equafin Corp), Nov 2024 - Jan 2026</p>
 <ul>
@@ -154,7 +224,9 @@
   <li>Ran design reviews and mentored junior engineers. Onboarding time dropped by about 30%.</li>
   <li>Worked with Product to turn compliance requirements into a phased roadmap.</li>
 </ul>
+</div>
 
+<div data-tint="swiggy" data-year="2022.35">
 <h3>Swiggy</h3>
 <p class="role">Software Engineer II (Instamart, Insanely Good, SuprDaily), May 2022 - Oct 2024</p>
 <p>The one I remember best: Insanely Good had a big marketing launch coming and needed new dark store slots within a week. Capacity was tracked per zone, which was too coarse to hand out individual delivery slots without overcommitting. I moved it to slot-level tracking in 7 days. Expansion lead time went from 4 weeks to 1, and the launch went out on schedule with no order failures.</p>
@@ -163,7 +235,9 @@
   <li>Led backend for the Insanely Good pivot, including the high-availability presentation services it ran on.</li>
   <li>Integrated delivery tracking end to end while the product migrated into the main Swiggy app.</li>
 </ul>
+</div>
 
+<div data-tint="goldman" data-year="2018.45">
 <h3>Goldman Sachs</h3>
 <p class="role">Associate and Analyst, Jun 2019 - May 2022. Intern, Jun 2018 - Apr 2019</p>
 <ul>
@@ -173,10 +247,14 @@
   <li>Automated regression testing for derivatives exchange connectivity. Release cycles went from 8 hours to 2.</li>
   <li>Tuned Kafka processors for real-time trade data over the FIX protocol.</li>
 </ul>
+</div>
 
+<div data-tint="nirma">
 <h3>Nirma University</h3>
 <p class="role">B.Tech, Information Technology</p>
+</div>
 
+<div data-tint="made">
 <h2>Things I've made</h2>
 
 <dl class="projects">
@@ -196,10 +274,13 @@
   <dd>Watches prices across 5+ shopping sites and sends an alert when one crosses a threshold.</dd>
   <dd class="stack">Node.js, MongoDB</dd>
 </dl>
+</div>
 
+<div data-tint="">
 <h2>Get in touch</h2>
 <p>Email is best: <a href="mailto:lovlinthakkar99@gmail.com">lovlinthakkar99@gmail.com</a>. If you'd rather talk, <a href="https://calendly.com/lovlinthakkar99/30min">book 30 minutes</a>.</p>
 <p>I'm most interested in backend-heavy work in fintech, infrastructure, or early-stage startups.</p>
+</div>
 
 </main>
 
@@ -207,6 +288,40 @@
   <p>Updated September 2026. Also available as <a href="resume.json">JSON Resume</a>.<br>
   Older versions: <a href="index.html">terminal</a>, <a href="index_archive.html">original</a>.</p>
 </footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var parts = document.querySelectorAll('[data-tint]');
+  var labels = document.querySelectorAll('.rail span');
+  var dot = document.querySelector('.rail i');
+  var FROM = 2018, TO = 2027;
+  var queued = false;
+
+  function update() {
+    queued = false;
+    var line = innerHeight * 0.45, cur = parts[0];
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i].getBoundingClientRect().top < line) cur = parts[i];
+    }
+    root.dataset.tint = cur.dataset.tint;
+
+    // header and anything after the jobs park the dot at "now"
+    var y = parseFloat(cur.dataset.year) || TO - 0.2;
+    dot.style.top = ((TO - y) / (TO - FROM) * 100) + '%';
+    labels.forEach(function (l) {
+      var ly = +l.textContent;
+      l.classList.toggle('on', y >= ly && y < ly + 2);
+    });
+  }
+
+  addEventListener('scroll', function () {
+    if (!queued) { queued = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  addEventListener('resize', update);
+  update();
+})();
+</script>
 
 </body>
 </html>
