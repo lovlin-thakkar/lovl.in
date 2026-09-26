@@ -56,7 +56,16 @@
     object-fit: cover;
     filter: grayscale(0.15);
   }
-  .role { font-style: italic; color: var(--soft); margin-bottom: 10px; }
+  .job { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 16px; }
+  .job .when {
+    font-weight: normal;
+    font-size: 0.85em;
+    color: var(--soft);
+    font-variant-numeric: lining-nums tabular-nums;
+    white-space: nowrap;
+  }
+  .role { font-style: italic; margin: 2px 0 12px; }
+  .team { display: block; font-style: normal; font-size: 0.85em; color: var(--soft); }
   .links a { margin-right: 14px; white-space: nowrap; }
   .quiet { color: var(--soft); }
   .projects dt { font-weight: bold; margin-top: 18px; }
@@ -68,15 +77,55 @@
   .ext:hover, .ext:focus-visible { color: var(--link); }
   .ext svg { width: 0.8em; height: 0.8em; vertical-align: -0.05em; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-  .contrib { margin: 0 0 20px; }
+  body { max-width: calc(34rem + 112px); padding: 44px 20px 60px; }
+  .sheet {
+    padding: 52px 56px 36px;
+    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    background: color-mix(in srgb, var(--paper) 72%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    backdrop-filter: blur(14px) saturate(1.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 14px 44px rgba(0, 0, 0, 0.08);
+  }
+  [data-theme="dark"] .sheet { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 44px rgba(0, 0, 0, 0.4); }
+  .sheet footer { margin-top: 56px; }
+
+  .contrib { position: relative; margin: 0 0 20px; }
   .contrib[hidden] { display: none; }
   .contrib svg { display: block; width: 100%; height: auto; }
-  .contrib rect { fill: var(--line); }
-  .contrib .l1 { fill: var(--link); fill-opacity: 0.3; }
-  .contrib .l2 { fill: var(--link); fill-opacity: 0.55; }
-  .contrib .l3 { fill: var(--link); fill-opacity: 0.8; }
-  .contrib .l4 { fill: var(--link); }
+  .contrib svg text { font: 9px ui-sans-serif, system-ui, sans-serif; fill: var(--soft); }
+  .contrib rect { cursor: pointer; }
+  .contrib rect:hover { stroke: var(--ink); stroke-width: 1; }
+  .l0 { fill: #ebedf0; } .l1 { fill: #9be9a8; } .l2 { fill: #40c463; } .l3 { fill: #30a14e; } .l4 { fill: #216e39; }
+  [data-theme="dark"] .l0 { fill: #1f262d; }
+  [data-theme="dark"] .l1 { fill: #0e4429; }
+  [data-theme="dark"] .l2 { fill: #006d32; }
+  [data-theme="dark"] .l3 { fill: #26a641; }
+  [data-theme="dark"] .l4 { fill: #39d353; }
   .contrib figcaption { color: var(--soft); font-size: 0.85em; margin-top: 8px; }
+  .years { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: 0.85em; }
+  .years button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--soft);
+    font: inherit;
+    cursor: pointer;
+  }
+  .years button:hover { color: var(--ink); }
+  .years button[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .tip {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--ink);
+    color: var(--paper);
+    font: 12px/1.4 ui-sans-serif, system-ui, sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .tip[hidden] { display: none; }
   .numbers { border-collapse: collapse; margin: 0 0 18px; }
   .numbers td { padding: 7px 0; border-bottom: 1px solid var(--line); vertical-align: baseline; }
   .numbers td:first-child {
@@ -86,11 +135,16 @@
     font-variant-numeric: lining-nums tabular-nums;
   }
 
+  @media (max-width: 560px) {
+    body { padding: 0; }
+    .sheet { padding: 48px 20px 32px; border-radius: 0; border: 0; box-shadow: none; }
+  }
   @media (max-width: 480px) {
     .me { width: 84px; height: 84px; }
   }
   @media print {
     #map { display: none; }
+    .sheet { padding: 0; border: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
 </style>
 </head>
@@ -103,6 +157,7 @@
 
 <canvas id="map" aria-hidden="true"></canvas>
 
+<div class="sheet">
 <header>
   <img class="me" src="assets/dp.jpg" alt="Lovlin Thakkar" width="108" height="108">
   <h1>Lovlin Thakkar</h1>
@@ -125,8 +180,10 @@
 <h2>Numbers</h2>
 
 <figure class="contrib" hidden>
-  <svg id="contrib" role="img" aria-label="GitHub contributions over the last year"></svg>
-  <figcaption><span id="contrib-total"></span> contributions on <a href="https://github.com/lovlin-thakkar">GitHub</a> in the last year</figcaption>
+  <svg id="contrib" role="img" aria-label="GitHub contributions calendar"></svg>
+  <div class="tip" hidden></div>
+  <figcaption id="contrib-cap"></figcaption>
+  <div class="years" role="group" aria-label="Contribution year"></div>
 </figure>
 
 <table class="numbers">
@@ -138,18 +195,17 @@
   <!-- Claude Code usage row goes here once the numbers are in -->
 </table>
 
-<p>Day to day I build with <a href="https://claude.com/claude-code">Claude Code</a>, and use <a href="https://superset.sh">Superset</a> to run several agents at once, each on its own branch.</p>
+<p>AI tools I use: <a href="https://claude.com/claude-code">Claude Code</a>, <a href="https://superset.sh">Superset</a>.</p>
 
 <h2>Work</h2>
 
-<h3>Zenarate <a class="ext" href="https://www.zenarate.com" aria-label="Zenarate website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></h3>
-<p class="role">Senior Software Engineer II, Jul 2026 - now</p>
+<h3 class="job"><span>Zenarate <a class="ext" href="https://www.zenarate.com" aria-label="Zenarate website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Jul 2026 - now</span></h3>
+<p class="role">Senior Software Engineer II</p>
 
-<h3>Career break</h3>
-<p class="role">Feb - Jun 2026</p>
+<h3 class="job"><span>Career break</span><span class="when">Feb - Jun 2026</span></h3>
 
-<h3>HeyMarvin AI <a class="ext" href="https://heymarvin.com" aria-label="HeyMarvin AI website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></h3>
-<p class="role">Senior Software Engineer (Equafin Corp), Nov 2024 - Jan 2026</p>
+<h3 class="job"><span>HeyMarvin AI <a class="ext" href="https://heymarvin.com" aria-label="HeyMarvin AI website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Nov 2024 - Jan 2026</span></h3>
+<p class="role">Senior Software Engineer<span class="team">Equafin Corp</span></p>
 <ul>
   <li>Built a data archival system that unblocked sales to 10+ enterprise customers and kept 30+ organisations compliant on data sovereignty.</li>
   <li>Shipped a PII processing engine for surveys. It closed 5 enterprise contracts.</li>
@@ -158,8 +214,8 @@
   <li>Worked with Product to turn compliance requirements into a phased roadmap.</li>
 </ul>
 
-<h3>Swiggy <a class="ext" href="https://www.swiggy.com" aria-label="Swiggy website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></h3>
-<p class="role">Software Engineer II (Instamart, Insanely Good, SuprDaily), May 2022 - Oct 2024</p>
+<h3 class="job"><span>Swiggy <a class="ext" href="https://www.swiggy.com" aria-label="Swiggy website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">May 2022 - Oct 2024</span></h3>
+<p class="role">Software Engineer II<span class="team">Instamart, Insanely Good, SuprDaily</span></p>
 <p>The one I remember best: Insanely Good had a big marketing launch coming and needed new dark store slots within a week. Capacity was tracked per zone, which was too coarse to hand out individual delivery slots without overcommitting. I moved it to slot-level tracking in 7 days. Expansion lead time went from 4 weeks to 1, and the launch went out on schedule with no order failures.</p>
 <ul>
   <li>Delivered real-time demand shaping v2. Peak-hour order failures fell by about 1% absolute, worth roughly $1k+ GMV a day.</li>
@@ -167,8 +223,8 @@
   <li>Integrated delivery tracking end to end while the product migrated into the main Swiggy app.</li>
 </ul>
 
-<h3>Goldman Sachs <a class="ext" href="https://www.goldmansachs.com" aria-label="Goldman Sachs website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></h3>
-<p class="role">Associate and Analyst, Jun 2019 - May 2022. Intern, Jun 2018 - Apr 2019</p>
+<h3 class="job"><span>Goldman Sachs <a class="ext" href="https://www.goldmansachs.com" aria-label="Goldman Sachs website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Jun 2018 - May 2022</span></h3>
+<p class="role">Associate and Analyst<span class="team">Intern from Jun 2018 to Apr 2019</span></p>
 <ul>
   <li>Reworked trade allocation to handle 10x the throughput on 80% less infrastructure.</li>
   <li>Built a trade position open-close calculator that prevented $10,000+ in projected monthly losses.</li>
@@ -228,27 +284,97 @@
 <footer>
   <p>Updated September 2026. Also available as <a href="resume.json">JSON Resume</a>.</p>
 </footer>
+</div>
 
 <script>
 (function () {
+  var USER = 'lovlin-thakkar';
   var fig = document.querySelector('.contrib');
-  fetch('https://github-contributions-api.jogruber.de/v4/lovlin-thakkar?y=last')
+  var svg = document.getElementById('contrib');
+  var tip = fig.querySelector('.tip');
+  var cap = document.getElementById('contrib-cap');
+  var years = fig.querySelector('.years');
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var CELL = 10, GAP = 2, LEFT = 26, TOP = 14, DAY = 864e5;
+  var byDate = {}, totals = {}, today = new Date().toISOString().slice(0, 10);
+
+  function utc(s) { return new Date(s + 'T00:00:00Z'); }
+  function nice(s) { var d = utc(s); return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+  function fmt(n) { return n.toLocaleString('en-US'); }
+
+  function render(view) {
+    var end = utc(today), start;
+    if (view === 'last') {
+      // 53 columns ending today, each starting on a Sunday, like GitHub
+      start = new Date(end - (364 + end.getUTCDay()) * DAY);
+    } else {
+      start = utc(view + '-01-01');
+      var dec = utc(view + '-12-31');
+      if (dec < end) end = dec;
+    }
+    var lead = start.getUTCDay();
+    var days = Math.round((end - start) / DAY) + 1;
+    var weeks = Math.ceil((days + lead) / 7);
+    var out = '', sum = 0, month = -1;
+
+    for (var i = 0; i < days; i++) {
+      var d = new Date(+start + i * DAY), key = d.toISOString().slice(0, 10);
+      var c = byDate[key] || { count: 0, level: 0 };
+      var k = i + lead, w = Math.floor(k / 7);
+      var x = LEFT + w * (CELL + GAP), y = TOP + (k % 7) * (CELL + GAP);
+      sum += c.count;
+      if (d.getUTCMonth() !== month && (k % 7 === 0 || i === 0)) {
+        month = d.getUTCMonth();
+        if (w < weeks - 2) out += '<text x="' + x + '" y="' + (TOP - 4) + '">' + MONTHS[month] + '</text>';
+      }
+      out += '<rect class="l' + c.level + '" x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL +
+             '" rx="2" data-d="' + key + '" data-c="' + c.count + '"></rect>';
+    }
+    ['Mon', 'Wed', 'Fri'].forEach(function (name, j) {
+      out += '<text x="0" y="' + (TOP + (2 * j + 1) * (CELL + GAP) + CELL - 1) + '">' + name + '</text>';
+    });
+    svg.setAttribute('viewBox', '0 0 ' + (LEFT + weeks * (CELL + GAP) - GAP) + ' ' + (TOP + 7 * (CELL + GAP) - GAP));
+    svg.innerHTML = out;
+
+    var all = Object.keys(totals).reduce(function (a, y) { return a + totals[y]; }, 0);
+    var first = Object.keys(totals).filter(function (y) { return totals[y] > 0; }).sort()[0];
+    cap.innerHTML = fmt(sum) + ' contributions ' + (view === 'last' ? 'in the last year' : 'in ' + view) +
+      ' on <a href="https://github.com/' + USER + '">GitHub</a>. ' + fmt(all) + ' since ' + first + '.';
+    years.querySelectorAll('button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.view === view));
+    });
+  }
+
+  svg.addEventListener('pointermove', function (e) {
+    var r = e.target.closest('rect');
+    if (!r) { tip.hidden = true; return; }
+    var n = +r.dataset.c, box = r.getBoundingClientRect(), f = fig.getBoundingClientRect();
+    tip.textContent = (n ? fmt(n) : 'No') + ' contribution' + (n === 1 ? '' : 's') + ' on ' + nice(r.dataset.d);
+    tip.style.left = Math.min(Math.max(box.left - f.left + box.width / 2, 90), f.width - 90) + 'px';
+    tip.style.top = (box.top - f.top - 6) + 'px';
+    tip.hidden = false;
+  });
+  svg.addEventListener('pointerleave', function () { tip.hidden = true; });
+  svg.addEventListener('click', function (e) {
+    var r = e.target.closest('rect');
+    if (r) open('https://github.com/' + USER + '?tab=overview&from=' + r.dataset.d + '&to=' + r.dataset.d, '_blank');
+  });
+  years.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (b) render(b.dataset.view);
+  });
+
+  fetch('https://github-contributions-api.jogruber.de/v4/' + USER + '?y=all')
     .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
     .then(function (d) {
-      var days = d.contributions, cell = 10, gap = 2;
-      // pad the front so each column starts on a Sunday, like GitHub
-      var lead = new Date(days[0].date + 'T00:00:00Z').getUTCDay();
-      var weeks = Math.ceil((days.length + lead) / 7);
-      var svg = document.getElementById('contrib');
-      svg.setAttribute('viewBox', '0 0 ' + (weeks * (cell + gap) - gap) + ' ' + (7 * (cell + gap) - gap));
-      var out = '';
-      days.forEach(function (day, i) {
-        var k = i + lead, x = Math.floor(k / 7) * (cell + gap), y = (k % 7) * (cell + gap);
-        out += '<rect class="l' + day.level + '" x="' + x + '" y="' + y + '" width="' + cell +
-               '" height="' + cell + '" rx="2"><title>' + day.count + ' on ' + day.date + '</title></rect>';
-      });
-      svg.innerHTML = out;
-      document.getElementById('contrib-total').textContent = d.total.lastYear.toLocaleString('en-US');
+      d.contributions.forEach(function (c) { byDate[c.date] = c; });
+      totals = d.total;
+      var list = [['last', 'Last 12 months']].concat(
+        Object.keys(totals).sort().reverse().map(function (y) { return [y, y]; }));
+      years.innerHTML = list.map(function (v) {
+        return '<button type="button" data-view="' + v[0] + '">' + v[1] + '</button>';
+      }).join('');
+      render('last');
       fig.hidden = false;
     })
     .catch(function () {});
@@ -264,7 +390,7 @@
   var still = matchMedia('(prefers-reduced-motion: reduce)');
   var SERIF = 'Charter, "Iowan Old Style", Georgia, serif';
   var STORES = [
-    ['Malleshwaram', 0.12, 0.16], ['Rajajinagar', 0.2, 0.52], ['Jayanagar', 0.14, 0.86],
+    ['Malleshwaram', 0.12, 0.16], ['Rajajinagar', 0.13, 0.52], ['Jayanagar', 0.14, 0.86],
     ['Indiranagar', 0.86, 0.18], ['Koramangala', 0.8, 0.56], ['HSR Layout', 0.88, 0.88]
   ];
   var LAKES = [['Sankey Tank', 0.05, 0.33, 1.5], ['Ulsoor Lake', 0.95, 0.38, 1.7]];
