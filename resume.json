@@ -1,0 +1,146 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "meta": {
+    "canonical": "https://lovlin-thakkar.github.io/resume.json",
+    "version": "1.0.0",
+    "lastModified": "2026-08-17",
+    "note": "Machine-readable copy of https://lovlin-thakkar.github.io/ in JSON Resume format."
+  },
+  "basics": {
+    "name": "Lovlin Thakkar",
+    "label": "Senior Software Engineer II",
+    "image": "https://lovlin-thakkar.github.io/assets/dp.jpg",
+    "email": "lovlinthakkar99@gmail.com",
+    "url": "https://lovlin-thakkar.github.io/",
+    "summary": "Backend engineer. Seven years on high-throughput systems across fintech, quick commerce, and B2B SaaS. Distributed systems, high-throughput APIs, platform reliability.",
+    "location": {
+      "countryCode": "IN",
+      "region": "India"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "lovlin-thakkar",
+        "url": "https://in.linkedin.com/in/lovlin-thakkar"
+      },
+      {
+        "network": "GitHub",
+        "username": "lovlin-thakkar",
+        "url": "https://github.com/lovlin-thakkar"
+      },
+      {
+        "network": "X",
+        "username": "lovlin_t",
+        "url": "https://x.com/lovlin_t"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Zenarate",
+      "url": "https://www.zenarate.com",
+      "position": "Senior Software Engineer II",
+      "startDate": "2026-07",
+      "highlights": []
+    },
+    {
+      "name": "HeyMarvin AI",
+      "description": "Equafin Corp",
+      "position": "Senior Software Engineer",
+      "startDate": "2024-11",
+      "endDate": "2026-01",
+      "highlights": [
+        "Architected a data archival system that unblocked sales for 10+ enterprise customers and ensured data sovereignty compliance across 30+ organizations.",
+        "Shipped a Survey PII processing engine that directly secured 5 enterprise contracts.",
+        "Built a feature-flag and plan-control system enabling granular tier-based access and self-serve monetization.",
+        "Led design reviews and mentored junior engineers, cutting onboarding time by 30% while raising the bar on code quality.",
+        "Partnered with Product to translate complex compliance requirements into phased technical roadmaps."
+      ]
+    },
+    {
+      "name": "Swiggy",
+      "url": "https://www.swiggy.com",
+      "description": "Instamart / Insanely Good / SuprDaily",
+      "position": "Software Engineer II",
+      "startDate": "2022-05",
+      "endDate": "2024-10",
+      "highlights": [
+        "Re-architected capacity management to Slot-level granularity in 7 days, shrinking expansion lead time from 4 weeks to 1 week ahead of a high-visibility marketing launch.",
+        "Delivered Real-time Demand Shaping v2, cutting peak-traffic order failures by ~1% absolute and recovering ~$1k+ GMV per day.",
+        "Led backend engineering for the InsanelyGood pivot, designing high-availability presentation-layer services to support a major product transition.",
+        "Orchestrated end-to-end integration of delivery tracking during a high-stakes migration into the primary Swiggy ecosystem."
+      ]
+    },
+    {
+      "name": "Goldman Sachs",
+      "url": "https://www.goldmansachs.com",
+      "position": "Associate & Analyst (SE 2 / SE 1)",
+      "startDate": "2018-06",
+      "endDate": "2022-05",
+      "highlights": [
+        "Re-engineered Trade Allocation workflows to handle 10x the throughput while cutting infrastructure costs by 80%.",
+        "Built a Trade Position Open-Close calculator preventing $10,000+ in projected monthly losses.",
+        "Deployed Kong API Gateway for the Advisor Portal, centralizing auth, rate-limiting, and traffic routing.",
+        "Automated regression testing for Derivatives Exchange Connectivity, cutting release cycles from 8 hours to 2 hours.",
+        "Optimized high-throughput Kafka processors handling real-time trade data streams over the FIX Protocol."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Nirma University",
+      "url": "https://nirmauni.ac.in/",
+      "area": "Information Technology",
+      "studyType": "B.Tech",
+      "score": "8.18/10"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "keywords": ["Python", "Go", "Java", "JavaScript", "SQL"]
+    },
+    {
+      "name": "Backend",
+      "keywords": ["Django", "Django REST Framework", "FastAPI", "Node.js", "Microservices", "REST APIs"]
+    },
+    {
+      "name": "Distributed Systems",
+      "keywords": ["Apache Kafka", "Redis", "Kong API Gateway", "FIX Protocol", "System Design", "High-throughput APIs"]
+    },
+    {
+      "name": "Data",
+      "keywords": ["PostgreSQL", "MongoDB"]
+    },
+    {
+      "name": "Infrastructure",
+      "keywords": ["AWS", "Unix", "Git", "CI/CD"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Kharcha",
+      "description": "Personal finance tracker built as a Flutter mobile app. Backend powered by FastAPI with PostgreSQL, both self-hosted on AWS EC2. AI features run on a self-hosted Ollama model, keeping everything off third-party inference.",
+      "url": "https://kharcha.webvue.co.in",
+      "keywords": ["Flutter", "FastAPI", "PostgreSQL", "AWS EC2", "Ollama"]
+    },
+    {
+      "name": "Tokamak Trajectory Planning",
+      "description": "Robotic arm simulation using Actor-Critic RL for nuclear fusion research, optimizing magnetic coil trajectories for plasma containment in a Tokamak reactor.",
+      "url": "https://dr-swati-jain.webflow.io/funded-research-projects/trajectory-planning-for-robotic-arm",
+      "keywords": ["Actor-Critic RL", "Python", "Simulation"]
+    },
+    {
+      "name": "Gaming AI Agent",
+      "description": "Deep Q-Network agent reaching human-level play on simple mobile games. Built to understand how reward shaping affects convergence speed in sparse-reward environments.",
+      "url": "https://github.com/Pdh97/RoadFighter",
+      "keywords": ["Python", "DQN", "Reinforcement Learning"]
+    },
+    {
+      "name": "Price Tracker",
+      "description": "High-concurrency scraping service built with Node.js and MongoDB. Monitors prices across 5+ e-commerce platforms and fires alerts when thresholds are crossed.",
+      "url": "https://github.com/Pdh97/ScrapeMetal",
+      "keywords": ["Node.js", "MongoDB", "Scraping"]
+    }
+  ]
+}
