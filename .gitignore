@@ -6,3 +6,6 @@ shot.png
 site-full.png
 .DS_Store
 .idea/
+_site/
+.jekyll-cache/
+Gemfile.lock

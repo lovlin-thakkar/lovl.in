@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- assign desc = page.description | default: page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 %}
+{%- if page.title %}{% assign full_title = page.title | append: " | " | append: site.title %}{% else %}{% assign full_title = site.title %}{% endif %}
+<title>{{ full_title }}</title>
+<meta name="description" content="{{ desc | escape }}">
+<meta name="author" content="{{ site.author }}">
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<link rel="alternate" type="application/atom+xml" href="/feed.xml" title="{{ site.title }}, blog">
+<link rel="icon" href="/favicon.ico">
+<meta property="og:type" content="{% if page.date %}article{% else %}website{% endif %}">
+<meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+<meta property="og:description" content="{{ desc | escape }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:image" content="{{ site.url }}{{ page.image | default: '/assets/dp.jpg' }}">
+<meta name="twitter:card" content="{% if page.image %}summary_large_image{% else %}summary{% endif %}">
+<meta name="twitter:creator" content="@lovlin_t">
+{%- if page.date %}
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ desc | jsonify }},
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+  "url": "{{ site.url }}{{ page.url }}",
+  "author": { "@type": "Person", "name": "Lovlin Thakkar", "url": "{{ site.url }}/" }
+}
+</script>
+{%- endif %}
+{% include theme.html %}
+<style>
+  .top { margin-bottom: 44px; font-size: 0.95em; }
+  .top a { color: var(--soft); text-decoration: none; }
+  .top a:hover { color: var(--ink); text-decoration: underline; }
+  .meta { color: var(--soft); font-style: italic; margin: -12px 0 32px; }
+  .quiet { color: var(--soft); }
+
+  article h2 { margin-top: 40px; }
+  article h3 { margin-top: 28px; }
+  article img, article video { max-width: 100%; height: auto; border-radius: 3px; }
+  article figure { margin: 24px 0; }
+  article figcaption { color: var(--soft); font-size: 0.85em; font-style: italic; margin-top: 6px; }
+  article blockquote { margin: 20px 0; padding-left: 18px; border-left: 2px solid var(--line); color: var(--soft); }
+  article hr { border: 0; border-top: 1px solid var(--line); margin: 36px 0; }
+  article iframe { max-width: 100%; }
+
+  code, pre { font: 0.82em/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  :not(pre) > code { background: var(--line); padding: 1px 5px; border-radius: 3px; }
+  pre { background: var(--line); padding: 14px 16px; border-radius: 3px; overflow-x: auto; margin: 0 0 18px; }
+  table { border-collapse: collapse; margin: 0 0 18px; font-size: 0.9em; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 12px 6px 0; text-align: left; }
+
+  .posts { list-style: none; padding: 0; }
+  .posts li { margin-bottom: 18px; }
+  .posts .quiet { display: block; font-size: 0.85em; }
+</style>
+</head>
+<body>
+{% include toggle.html %}
+
+<nav class="top"><a href="/">Lovlin Thakkar</a>{% if page.url != "/blog/" %} / <a href="/blog/">Blog</a>{% endif %}</nav>
+
+<main>
+{{ content }}
+</main>
+
+<footer>
+  <p><a href="/feed.xml">RSS</a></p>
+</footer>
+<script>
+  // external links open in a new tab, same as the homepage
+  document.querySelectorAll('a[href^="http"]').forEach(function (a) {
+    if (a.hostname !== location.hostname) a.target = '_blank';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<script>
+  // set before first paint so a saved theme never flashes white
+  (function () {
+    var t;
+    try { t = localStorage.getItem('theme'); } catch (e) {}
+    document.documentElement.dataset.theme = /^(white|paper|dark)$/.test(t) ? t : 'white';
+  })();
+</script>
+<style>
+  :root, [data-theme="white"] {
+    --paper: #ffffff;
+    --ink: #1a1c1e;
+    --soft: #62676c;
+    --line: #e3e5e8;
+    --link: #1f45a3;
+    --visited: #5e3d8c;
+    --road: #eceef1;
+    --zone: #c3c8ce;
+    --zonefill: rgba(31, 69, 163, 0.04);
+    --water: #e6eef3;
+    color-scheme: light;
+  }
+  [data-theme="paper"] {
+    --paper: #f2f3ee;
+    --ink: #1d2320;
+    --soft: #5f6862;
+    --line: #d6dacf;
+    --road: #d9ddd2;
+    --zone: #aab2a0;
+    --zonefill: rgba(31, 69, 163, 0.05);
+    --water: #dde6e4;
+  }
+  [data-theme="dark"] {
+    --paper: #171c21;
+    --ink: #e3e6e1;
+    --soft: #97a09a;
+    --line: #2c343b;
+    --link: #8fb3ea;
+    --visited: #c3a3dc;
+    --road: #242b32;
+    --zone: #3b4650;
+    --zonefill: rgba(143, 179, 234, 0.05);
+    --water: #1c2a33;
+    color-scheme: dark;
+  }
+
+  html { background: var(--paper); }
+  body {
+    position: relative;
+    margin: 0 auto;
+    padding: 56px 20px 80px;
+    max-width: 34rem;
+    color: var(--ink);
+    font: 18px/1.6 Charter, "Bitstream Charter", "Iowan Old Style", "Sitka Text", Cambria, Georgia, serif;
+    font-variant-numeric: oldstyle-nums;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:visited { color: var(--visited); }
+  a:hover { text-decoration-thickness: 2px; }
+
+  h1 { font-size: 1.9rem; font-weight: normal; line-height: 1.2; margin: 0 0 22px; }
+  h2 { font-size: 1.3em; font-weight: normal; margin: 56px 0 6px; }
+  h3 { font-size: 1em; font-weight: bold; margin: 26px 0 0; }
+  p, ul, ol { margin: 0 0 14px; }
+  ul, ol { padding-left: 1.2em; }
+  li { margin-bottom: 6px; }
+  li::marker { color: var(--soft); }
+
+  .themes {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+  }
+  .themes button {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 1px solid var(--soft);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .themes button[aria-pressed="true"] { outline: 1.5px solid var(--ink); outline-offset: 2px; }
+  .themes button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 0.85em;
+    color: var(--soft);
+  }
+  footer a { color: inherit; }
+
+  @media (max-width: 480px) {
+    body { font-size: 17px; padding-top: 44px; }
+    .themes { top: 14px; }
+  }
+  @media print {
+    html { background: #fff; }
+    body { padding: 0; font-size: 11pt; }
+    a { color: inherit; }
+    footer, .themes { display: none; }
+  }
+</style>

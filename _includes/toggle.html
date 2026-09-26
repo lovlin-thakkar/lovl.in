@@ -1,0 +1,25 @@
+<div class="themes" role="group" aria-label="Colour theme">
+  <button type="button" data-set="white" aria-label="White theme" style="background:#ffffff"></button>
+  <button type="button" data-set="paper" aria-label="Paper theme" style="background:#f2f3ee"></button>
+  <button type="button" data-set="dark" aria-label="Dark theme" style="background:#171c21"></button>
+</div>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var buttons = document.querySelectorAll('.themes button');
+    function mark() {
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.set === root.dataset.theme));
+      });
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        root.dataset.theme = b.dataset.set;
+        try { localStorage.setItem('theme', b.dataset.set); } catch (e) {}
+        mark();
+        dispatchEvent(new Event('themechange'));
+      });
+    });
+    mark();
+  })();
+</script>
