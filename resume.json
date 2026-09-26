@@ -1,17 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
   "meta": {
-    "canonical": "https://lovlin-thakkar.github.io/resume.json",
+    "canonical": "https://lovl.in/resume.json",
     "version": "1.0.0",
     "lastModified": "2026-08-17",
-    "note": "Machine-readable copy of https://lovlin-thakkar.github.io/ in JSON Resume format."
+    "note": "Machine-readable copy of https://lovl.in/ in JSON Resume format."
   },
   "basics": {
     "name": "Lovlin Thakkar",
     "label": "Senior Software Engineer II",
-    "image": "https://lovlin-thakkar.github.io/assets/dp.jpg",
+    "image": "https://lovl.in/assets/dp.jpg",
     "email": "lovlinthakkar99@gmail.com",
-    "url": "https://lovlin-thakkar.github.io/",
+    "url": "https://lovl.in/",
     "summary": "Backend engineer. Seven years on high-throughput systems across fintech, quick commerce, and B2B SaaS. Distributed systems, high-throughput APIs, platform reliability.",
     "location": {
       "countryCode": "IN",

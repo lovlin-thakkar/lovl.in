@@ -14,4 +14,4 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
-Sitemap: https://lovlin-thakkar.github.io/sitemap.xml
+Sitemap: https://lovl.in/sitemap.xml
