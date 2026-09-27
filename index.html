@@ -82,9 +82,9 @@
     padding: 52px 56px 36px;
     border-radius: 14px;
     border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-    background: color-mix(in srgb, var(--paper) 72%, transparent);
-    -webkit-backdrop-filter: blur(14px) saturate(1.1);
-    backdrop-filter: blur(14px) saturate(1.1);
+    background: color-mix(in srgb, var(--paper) 50%, transparent);
+    -webkit-backdrop-filter: blur(4px) saturate(1.1);
+    backdrop-filter: blur(4px) saturate(1.1);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 14px 44px rgba(0, 0, 0, 0.08);
   }
   [data-theme="dark"] .sheet { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 44px rgba(0, 0, 0, 0.4); }
@@ -315,7 +315,7 @@
     var lead = start.getUTCDay();
     var days = Math.round((end - start) / DAY) + 1;
     var weeks = Math.ceil((days + lead) / 7);
-    var out = '', sum = 0, month = -1;
+    var out = '', sum = 0, month = -1, lastLabel = -9;
 
     for (var i = 0; i < days; i++) {
       var d = new Date(+start + i * DAY), key = d.toISOString().slice(0, 10);
@@ -325,7 +325,7 @@
       sum += c.count;
       if (d.getUTCMonth() !== month && (k % 7 === 0 || i === 0)) {
         month = d.getUTCMonth();
-        if (w < weeks - 2) out += '<text x="' + x + '" y="' + (TOP - 4) + '">' + MONTHS[month] + '</text>';
+        if (w < weeks - 2 && w - lastLabel >= 3) lastLabel = w, out += '<text x="' + x + '" y="' + (TOP - 4) + '">' + MONTHS[month] + '</text>';
       }
       out += '<rect class="l' + c.level + '" x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL +
              '" rx="2" data-d="' + key + '" data-c="' + c.count + '"></rect>';
@@ -431,12 +431,6 @@
     });
   }
 
-  // same falloff as the base-layer gradient, for lines drawn per frame
-  function fade(x) {
-    var d = Math.abs(x - W / 2) - Math.min(340, W / 2);
-    return d <= 0 ? 0.45 : d >= 80 ? 1 : 0.45 + 0.55 * d / 80;
-  }
-
   function build() {
     dpr = window.devicePixelRatio || 1;
     W = innerWidth; H = innerHeight;
@@ -528,17 +522,6 @@
       bctx.stroke();
     });
 
-    // keep the roads faint where the text sits
-    var g = bctx.createLinearGradient(0, 0, W, 0);
-    var c = W / 2, half = Math.min(340, W / 2);
-    g.addColorStop(Math.max(0, (c - half - 80) / W), 'rgba(0,0,0,0)');
-    g.addColorStop(Math.max(0, (c - half) / W), 'rgba(0,0,0,0.55)');
-    g.addColorStop(Math.min(1, (c + half) / W), 'rgba(0,0,0,0.55)');
-    g.addColorStop(Math.min(1, (c + half + 80) / W), 'rgba(0,0,0,0)');
-    bctx.globalCompositeOperation = 'destination-out';
-    bctx.fillStyle = g;
-    bctx.fillRect(0, 0, W, H);
-    bctx.globalCompositeOperation = 'source-over';
 
     if (narrow) return;
     bctx.font = 'italic 12px ' + SERIF;
@@ -620,7 +603,6 @@
       for (var y = 0; y < rows - 1; y++) for (var x = 0; x < cols - 1; x++) {
         var a = y * cols + x, b = a + 1, c = a + cols, d = c + 1;
         if (owner[a] !== k || owner[b] !== k || owner[c] !== k || owner[d] !== k) continue;
-        ctx.globalAlpha = fade(nodes[a].x);
         ctx.beginPath();
         ctx.moveTo(nodes[a].x, nodes[a].y); ctx.lineTo(nodes[b].x, nodes[b].y);
         ctx.lineTo(nodes[d].x, nodes[d].y); ctx.lineTo(nodes[c].x, nodes[c].y);
@@ -630,7 +612,6 @@
       ctx.lineWidth = 1.2;
       edges.forEach(function (e) {
         if (owner[e[0]] !== k || owner[e[1]] !== k) return;
-        ctx.globalAlpha = fade((nodes[e[0]].x + nodes[e[1]].x) / 2);
         ctx.beginPath();
         ctx.moveTo(nodes[e[0]].x, nodes[e[0]].y);
         ctx.lineTo(nodes[e[1]].x, nodes[e[1]].y);
