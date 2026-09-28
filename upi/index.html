@@ -147,7 +147,7 @@ try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dat
         </div>
 
         <div data-panel="text" hidden>
-          <textarea id="rawText" placeholder="Paste bank details, for example:&#10;&#10;Name: Riviera Springs CHS&#10;A/C No: 107017465652&#10;IFSC: GSCB0ADC134"></textarea>
+          <textarea id="rawText" placeholder="Paste bank details, for example:&#10;&#10;A/C No: 107017465652&#10;IFSC: GSCB0ADC134"></textarea>
           <div class="status">Details are read as you type.</div>
         </div>
       </section>
@@ -163,9 +163,6 @@ try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dat
         <input id="ifsc" class="mono" autocomplete="off" placeholder="ABCD0123456" maxlength="11" style="text-transform: uppercase">
         <div class="hint" id="ifscHint"></div>
 
-        <label for="name">Account holder name</label>
-        <input id="name" autocomplete="off" placeholder="Shown to the payer">
-
         <div class="row">
           <div>
             <label for="amount">Amount (optional)</label>
@@ -173,7 +170,7 @@ try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dat
           </div>
           <div>
             <label for="note">Note (optional)</label>
-            <input id="note" maxlength="50" placeholder="e.g. Maintenance">
+            <input id="note" maxlength="30" placeholder="e.g. Maintenance">
           </div>
         </div>
       </section>
@@ -271,22 +268,12 @@ function parseDetails(text) {
   });
   const accs = [...cands].sort((a, b) => b[1] - a[1]).map(c => c[0]);
 
-  let name = '';
-  const nameLine = lines.find(l => /\b(NAME|BENEFICIARY|PAYEE|HOLDER)\b/i.test(l));
-  if (nameLine) name = nameLine.replace(/^.*\b(NAME|BENEFICIARY|PAYEE|HOLDER)\b\s*[:\-]?\s*/i, '');
-  if (!name) {
-    const org = lines.find(l => /\b(LTD|LIMITED|SOC|SOCIETY|TRUST|PVT|LLP|ASSOCIATION|ENTERPRISES?|TRADERS)\b/i.test(l) && !/BANK/i.test(l));
-    if (org) name = org;
-  }
-  name = name.replace(/[^\w .&'()-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60);
-
-  return { ifsc, accs, name };
+  return { ifsc, accs };
 }
 
 function applyParsed(p) {
   if (p.accs[0]) $('acc').value = p.accs[0];
   if (p.ifsc) $('ifsc').value = p.ifsc;
-  if (p.name) $('name').value = p.name;
   const chips = $('accChips');
   chips.innerHTML = '';
   if (p.accs.length > 1) {
@@ -379,28 +366,20 @@ async function lookupIfsc(code) {
 // ---------- QR ----------
 qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
 
-function upiUri({ acc, ifsc, name, amount, note }) {
-  const q = [`pa=${acc}@${ifsc}.ifsc.npci`];
-  if (name) q.push('pn=' + encodeURIComponent(name));
+// Payee name is fixed, not user-typed, so a QR can't pose as someone else.
+function upiUri({ acc, ifsc, amount, note }) {
+  const q = [`pa=${acc}@${ifsc}.ifsc.npci`, 'pn=' + encodeURIComponent('Account ending ' + acc.slice(-4))];
   if (amount) q.push('am=' + amount);
   if (note) q.push('tn=' + encodeURIComponent(note));
   q.push('cu=INR');
   return 'upi://pay?' + q.join('&');
 }
 
-function wrap(ctx, text, maxW) {
-  const words = text.split(' '), out = [];
-  let line = '';
-  for (const w of words) {
-    const t = line ? line + ' ' + w : w;
-    if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
-  }
-  if (line) out.push(line);
-  return out.slice(0, 2);
-}
+const WARNING = ['CHECK NAME', 'IN YOUR APP', 'BEFORE', 'PAYING'];
 
 function drawCard(d) {
-  const qr = qrcode(0, 'M');
+  // High error correction lets the warning sit inside the code without breaking scans.
+  const qr = qrcode(0, 'H');
   qr.addData(upiUri(d)); qr.make();
   const n = qr.getModuleCount(), quiet = 3;
   const W = 900, pad = 60, cell = Math.floor((W - pad * 2) / (n + quiet * 2));
@@ -408,9 +387,7 @@ function drawCard(d) {
   const font = '"Inter", system-ui, sans-serif';
 
   const c = $('qrCanvas'), ctx = c.getContext('2d');
-  ctx.font = `600 30px ${font}`;
-  const nameLines = d.name ? wrap(ctx, d.name, W - pad * 2) : [];
-  const H = qrY + qrSize + 40 + nameLines.length * 40 + 40 + (d.bankLine ? 34 : 0) + (d.amount ? 44 : 0) + 50;
+  const H = qrY + qrSize + 40 + 36 + (d.bankLine ? 34 : 0) + (d.amount ? 44 : 0) + 50;
   c.width = W; c.height = H;
 
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
@@ -422,11 +399,24 @@ function drawCard(d) {
   for (let r = 0; r < n; r++) for (let col = 0; col < n; col++)
     if (qr.isDark(r, col)) ctx.fillRect(qrX + (col + quiet) * cell, qrY + (r + quiet) * cell, cell, cell);
 
+  // Warning badge over the centre ~26% of modules, snapped to the module grid.
+  let k = Math.round(n * 0.26); if (k % 2 !== n % 2) k++;
+  const bx = qrX + (quiet + (n - k) / 2) * cell, by = qrY + (quiet + (n - k) / 2) * cell, bs = k * cell;
+  ctx.fillStyle = '#fff'; ctx.fillRect(bx, by, bs, bs);
+  const inset = cell * 0.6;
+  ctx.strokeStyle = '#b3261e'; ctx.lineWidth = cell * 0.5;
+  ctx.strokeRect(bx + inset, by + inset, bs - inset * 2, bs - inset * 2);
+  const fit = bs - inset * 2 - cell * 1.6;
+  let size = 41;
+  do ctx.font = `800 ${--size}px ${font}`;
+  while (size > 10 && Math.max(...WARNING.map(l => ctx.measureText(l).width)) > fit);
+  const lh = size * 1.18, ty = by + bs / 2 - (lh * (WARNING.length - 1)) / 2;
+  ctx.fillStyle = '#b3261e'; ctx.textBaseline = 'middle';
+  WARNING.forEach((l, i) => ctx.fillText(l, W / 2, ty + i * lh));
+  ctx.textBaseline = 'alphabetic';
+
   let y = qrY + qrSize + 40;
   ctx.fillStyle = '#16171a';
-  ctx.font = `600 30px ${font}`;
-  for (const l of nameLines) { y += 34; ctx.fillText(l, W / 2, y); y += 6; }
-  y += 40;
   ctx.font = `500 26px ui-monospace, Menlo, monospace`;
   ctx.fillText(`A/C ${d.acc}   IFSC ${d.ifsc}`, W / 2, y);
   if (d.bankLine) {
@@ -444,7 +434,6 @@ let current = null;
 async function update() {
   const acc = $('acc').value.replace(/\D/g, '');
   const ifsc = $('ifsc').value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  const name = $('name').value.trim();
   const amountRaw = $('amount').value.trim();
   const amount = /^\d+(\.\d{1,2})?$/.test(amountRaw) && +amountRaw > 0 ? (+amountRaw).toFixed(2).replace(/\.00$/, '') : '';
   const note = $('note').value.trim();
@@ -481,7 +470,7 @@ async function update() {
   if (!ready) { current = null; return; }
 
   const bankLine = bank ? `${bank.BANK}, ${titleCase(bank.CENTRE || bank.CITY || '')}`.replace(/, $/, '') : '';
-  current = { acc, ifsc, name, amount, note, bankLine };
+  current = { acc, ifsc, amount, note, bankLine };
   drawCard(current);
   $('upiId').innerHTML = 'UPI ID: <span class="mono"></span><button class="link" id="copyId">Copy</button>';
   $('upiId').querySelector('.mono').textContent = `${acc}@${ifsc}.ifsc.npci`;
@@ -490,7 +479,7 @@ async function update() {
 
 function titleCase(s) { return s.replace(/\s+/g, ' ').trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()); }
 
-['acc', 'ifsc', 'name', 'amount', 'note'].forEach(id => $(id).addEventListener('input', update));
+['acc', 'ifsc', 'amount', 'note'].forEach(id => $(id).addEventListener('input', update));
 
 function canvasBlob() { return new Promise(r => $('qrCanvas').toBlob(r, 'image/png')); }
 function fileName() { return `upi-qr-${current.acc.slice(-4)}.png`; }
