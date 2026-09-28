@@ -84,8 +84,14 @@ label:first-of-type { margin-top: 0; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: inherit; font-weight: 600; border-radius: 9px; padding: 10px 14px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
-.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-.actions .wide { grid-column: 1 / -1; }
+.actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.link { font: inherit; font-size: 13px; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0 0 0 6px; cursor: pointer; }
+dialog { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); padding: 20px; width: min(360px, calc(100vw - 32px)); }
+dialog::backdrop { background: rgba(0, 0, 0, .45); }
+dialog h3 { margin: 0 0 4px; font-size: 17px; }
+dialog p { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; }
+.apps { display: grid; gap: 8px; }
+.apps .btn { width: 100%; }
 
 .qr-empty { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; border: 1.5px dashed var(--border); border-radius: 12px; color: var(--muted); text-align: center; padding: 24px; font-size: 14px; }
 #qrCanvas { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); display: none; }
@@ -164,14 +170,20 @@ footer a { color: inherit; }
       <canvas id="qrCanvas" aria-label="UPI QR code"></canvas>
       <div class="upi-id" id="upiId" hidden></div>
       <div class="actions">
-        <button class="btn primary" id="download" disabled>Download</button>
+        <button class="btn" id="download" disabled>Download</button>
         <button class="btn" id="share" disabled>Share</button>
-        <button class="btn wide" id="copyId" disabled>Copy UPI ID</button>
-        <a class="btn wide" id="payNow" hidden>Pay now in a UPI app</a>
+        <button class="btn primary" id="pay" disabled>Pay</button>
       </div>
       <div class="note">Test with ₹1 before printing. The payer's app should show the account holder's name before the PIN screen. If it does not, recheck the numbers.</div>
     </section>
   </div>
+
+  <dialog id="paySheet">
+    <h3 id="payTitle">Pay with</h3>
+    <p id="payMsg"></p>
+    <div class="apps" id="payApps"></div>
+    <form method="dialog"><button class="btn" id="payClose" style="width: 100%; margin-top: 8px">Cancel</button></form>
+  </dialog>
 
   <footer>
     <strong>How it works</strong>
@@ -442,16 +454,15 @@ async function update() {
   $('qrEmpty').hidden = ready;
   $('qrCanvas').style.display = ready ? 'block' : 'none';
   $('upiId').hidden = !ready;
-  ['download', 'share', 'copyId'].forEach(id => $(id).disabled = !ready);
-  $('payNow').hidden = !ready || !matchMedia('(pointer: coarse)').matches;
+  ['download', 'share', 'pay'].forEach(id => $(id).disabled = !ready);
   if (!ready) { current = null; return; }
 
   const bankLine = bank ? `${bank.BANK}, ${titleCase(bank.CENTRE || bank.CITY || '')}`.replace(/, $/, '') : '';
   current = { acc, ifsc, name, amount, note, bankLine };
   drawCard(current);
-  $('upiId').innerHTML = 'UPI ID: <span class="mono"></span>';
-  $('upiId').lastChild.textContent = `${acc}@${ifsc}.ifsc.npci`;
-  $('payNow').href = upiUri(current);
+  $('upiId').innerHTML = 'UPI ID: <span class="mono"></span><button class="link" id="copyId">Copy</button>';
+  $('upiId').querySelector('.mono').textContent = `${acc}@${ifsc}.ifsc.npci`;
+  $('copyId').onclick = copyId;
 }
 
 function titleCase(s) { return s.replace(/\s+/g, ' ').trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()); }
@@ -474,10 +485,43 @@ $('share').onclick = async () => {
     $('download').click();
   }
 };
-$('copyId').onclick = async () => {
+async function copyId() {
   await navigator.clipboard.writeText(`${current.acc}@${current.ifsc}.ifsc.npci`);
-  const b = $('copyId'), t = b.textContent;
-  b.textContent = 'Copied'; setTimeout(() => b.textContent = t, 1200);
+  const b = $('copyId');
+  b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1200);
+}
+
+// Android shows its own chooser of installed UPI apps for upi:// links.
+// iOS has no chooser and opens a random app, so we list app-specific schemes.
+const IOS_APPS = [
+  ['Google Pay', 'gpay://upi/'],
+  ['PhonePe', 'phonepe://'],
+  ['Paytm', 'paytmmp://'],
+  ['Other UPI app', 'upi://'],
+];
+const isAndroid = /Android/i.test(navigator.userAgent);
+const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+
+$('pay').onclick = () => {
+  const uri = upiUri(current);
+  if (isAndroid) { location.href = uri; return; }
+  const apps = $('payApps');
+  apps.innerHTML = '';
+  if (isIOS) {
+    $('payTitle').textContent = 'Pay with';
+    $('payMsg').textContent = 'Nothing happens if the app is not installed.';
+    for (const [label, prefix] of IOS_APPS) {
+      const a = document.createElement('a');
+      a.className = 'btn'; a.textContent = label;
+      a.href = uri.replace('upi://', prefix);
+      apps.appendChild(a);
+    }
+  } else {
+    $('payTitle').textContent = 'Open this on your phone';
+    $('payMsg').textContent = 'UPI apps only run on phones. Scan the QR with any UPI app to pay.';
+  }
+  $('payClose').textContent = isIOS ? 'Cancel' : 'OK';
+  $('paySheet').showModal();
 };
 
 document.fonts?.ready.then(() => current && drawCard(current));
