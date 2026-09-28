@@ -102,13 +102,45 @@
 
   .listening { margin: -4px 0 0; font-size: 0.85em; color: var(--soft); }
   .listening[hidden] { display: none; }
-  .listening span { display: block; }
-  .eq { display: inline-flex !important; align-items: flex-end; gap: 2px; height: 0.75em; margin-right: 7px; }
+  .listening > span { display: block; margin-top: 3px; }
+  .disc {
+    position: relative;
+    display: inline-block;
+    width: 1.45em;
+    height: 1.45em;
+    margin-right: 8px;
+    vertical-align: -0.42em;
+    border-radius: 50%;
+    background:
+      conic-gradient(from 30deg, transparent, rgba(255, 255, 255, 0.22) 8%, transparent 16%, transparent 50%, rgba(255, 255, 255, 0.22) 58%, transparent 66%),
+      repeating-radial-gradient(circle, #121212 0 1px, #2a2a2a 1px 2px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    transition: transform 0.6s ease;
+  }
+  .disc::before {
+    content: "";
+    position: absolute;
+    inset: 20%;
+    border-radius: 50%;
+    background: var(--art, #1db954) center / cover;
+  }
+  .disc::after {
+    content: "";
+    position: absolute;
+    inset: 45%;
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  [data-theme="dark"] .disc { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 1px 3px rgba(0, 0, 0, 0.5); }
+  .disc.spin { animation: spin 3.2s linear infinite; }
+  .listening > span:hover .disc:not(.spin) { transform: rotate(120deg); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 0.75em; margin-left: 8px; }
   .eq i { width: 3px; height: 100%; border-radius: 1px; background: #1db954; animation: eq 0.9s ease-in-out infinite alternate; }
   .eq i:nth-child(2) { animation-delay: -0.35s; }
   .eq i:nth-child(3) { animation-delay: -0.7s; }
   @keyframes eq { from { height: 25%; } to { height: 100%; } }
-  @media (prefers-reduced-motion: reduce) { .eq i { animation: none; height: 70%; } }
+  @media (prefers-reduced-motion: reduce) { .eq i { animation: none; height: 70%; } .disc.spin { animation: none; } }
 
   .contrib { position: relative; margin: 0 0 20px; }
   .contrib[hidden] { display: none; }
@@ -366,6 +398,12 @@
     function n(v, u) { return v + ' ' + u + (v === 1 ? '' : 's') + ' ago'; }
     return m < 1 ? 'just now' : m < 60 ? n(m, 'minute') : h < 24 ? n(h, 'hour') : n(d, 'day');
   }
+  function disc(t, spin) {
+    var img = (t.image || []).filter(function (i) { return i.size === 'medium'; })[0];
+    var url = img && img['#text'];
+    var art = url && /^https:\/\/[\w.-]+\/[\w\/.-]+$/.test(url) ? ' style="--art:url(' + url + ')"' : '';
+    return '<span class="disc' + (spin ? ' spin' : '') + '"' + art + ' aria-hidden="true"></span>';
+  }
   function song(t) {
     var artist = t.artist['#text'];
     return '<a href="https://open.spotify.com/search/' + encodeURIComponent(t.name + ' ' + artist) + '">' +
@@ -380,8 +418,9 @@
         var now = tracks[0] && tracks[0]['@attr'] && tracks[0]['@attr'].nowplaying === 'true' ? tracks[0] : null;
         var last = tracks.filter(function (t) { return t.date; })[0];
         var html = '';
-        if (now) html += '<span><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Listening to ' + song(now) + '</span>';
-        if (last) html += '<span>Last played ' + song(last) + ', ' + ago(+last.date.uts) + '</span>';
+        if (now) html += '<span>' + disc(now, true) + 'Listening to ' + song(now) +
+                         '<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>';
+        if (last) html += '<span>' + disc(last) + 'Last played ' + song(last) + ', ' + ago(+last.date.uts) + '</span>';
         box.innerHTML = html;
         box.hidden = !html;
       })
