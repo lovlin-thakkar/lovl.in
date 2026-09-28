@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank to UPI QR</title>
+<meta name="description" content="Turn a bank account number and IFSC into a UPI QR code any app can scan. Free, runs in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --text: #16171a;
+  --muted: #62656d;
+  --border: #e3e3df;
+  --accent: #1f6f5c;
+  --accent-text: #ffffff;
+  --accent-soft: #e4f1ed;
+  --warn-bg: #fff6e0;
+  --warn-text: #7a5300;
+  --err-text: #b3261e;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111214;
+    --surface: #1a1b1e;
+    --text: #ececea;
+    --muted: #9a9ca3;
+    --border: #2c2e33;
+    --accent: #4fb89c;
+    --accent-text: #0d1512;
+    --accent-soft: #1b2d28;
+    --warn-bg: #2e2612;
+    --warn-text: #f0c96a;
+    --err-text: #f2958d;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 960px; margin: 0 auto; padding: 40px 16px 64px; }
+header h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 6px; }
+header p { margin: 0; color: var(--muted); max-width: 560px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 28px; align-items: start; }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.card + .card { margin-top: 20px; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 14px; font-weight: 600; }
+
+.tabs { display: flex; gap: 4px; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 14px; }
+.tabs button { flex: 1; border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 500; padding: 8px; border-radius: 7px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+.drop { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 170px; border: 1.5px dashed var(--border); border-radius: 12px; text-align: center; padding: 16px; cursor: pointer; color: var(--muted); transition: border-color .15s, background .15s; }
+.drop:hover, .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop strong { color: var(--text); font-weight: 600; }
+.drop img { max-width: 100%; max-height: 220px; border-radius: 8px; }
+.progress { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 12px; }
+.progress > div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+.status { font-size: 13px; color: var(--muted); margin-top: 8px; min-height: 20px; }
+
+textarea, input { width: 100%; font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; outline: none; }
+textarea { min-height: 170px; resize: vertical; }
+textarea:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+label { display: block; font-size: 13px; font-weight: 500; margin: 14px 0 6px; }
+label:first-of-type { margin-top: 0; }
+.row label { margin-top: 14px; }
+.hint { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
+.hint.ok { color: var(--accent); }
+.hint.err { color: var(--err-text); }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.02em; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.chips button { font: 12.5px ui-monospace, Menlo, monospace; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: inherit; font-weight: 600; border-radius: 9px; padding: 10px 14px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.actions .wide { grid-column: 1 / -1; }
+
+.qr-empty { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; border: 1.5px dashed var(--border); border-radius: 12px; color: var(--muted); text-align: center; padding: 24px; font-size: 14px; }
+#qrCanvas { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); display: none; }
+.upi-id { margin-top: 12px; font-size: 13px; color: var(--muted); word-break: break-all; }
+.note { background: var(--warn-bg); color: var(--warn-text); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 14px; }
+footer { margin-top: 36px; color: var(--muted); font-size: 13px; }
+footer ul { margin: 6px 0 0; padding: 0; list-style: none; }
+footer li { position: relative; padding-left: 14px; margin: 4px 0; }
+footer li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+footer a { color: inherit; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Bank to UPI QR</h1>
+    <p>Turn an account number and IFSC into a QR code that GPay, PhonePe, Paytm or any UPI app can scan. Snap a photo of your bank details or paste them as text.</p>
+  </header>
+
+  <div class="grid">
+    <div>
+      <section class="card">
+        <h2>1. Bank details</h2>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="photo">Photo</button>
+          <button role="tab" aria-selected="false" data-tab="text">Text</button>
+        </div>
+
+        <div data-panel="photo">
+          <label class="drop" id="drop" for="file">
+            <strong>Tap to take or choose a photo</strong>
+            <span>or drop / paste an image. Cheque, passbook, sticker, screenshot.</span>
+          </label>
+          <input type="file" id="file" accept="image/*" hidden>
+          <div class="progress" id="progress" hidden><div></div></div>
+          <div class="status" id="ocrStatus"></div>
+        </div>
+
+        <div data-panel="text" hidden>
+          <textarea id="rawText" placeholder="Paste bank details, for example:&#10;&#10;Name: Riviera Springs CHS&#10;A/C No: 107017465652&#10;IFSC: GSCB0ADC134"></textarea>
+          <div class="status">Details are read as you type.</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Check and edit</h2>
+        <label for="acc">Account number</label>
+        <input id="acc" class="mono" inputmode="numeric" autocomplete="off" placeholder="9 to 18 digits">
+        <div class="chips" id="accChips"></div>
+        <div class="hint" id="accHint"></div>
+
+        <label for="ifsc">IFSC</label>
+        <input id="ifsc" class="mono" autocomplete="off" placeholder="ABCD0123456" maxlength="11" style="text-transform: uppercase">
+        <div class="hint" id="ifscHint"></div>
+
+        <label for="name">Account holder name</label>
+        <input id="name" autocomplete="off" placeholder="Shown to the payer">
+
+        <div class="row">
+          <div>
+            <label for="amount">Amount (optional)</label>
+            <input id="amount" inputmode="decimal" placeholder="Payer enters it">
+          </div>
+          <div>
+            <label for="note">Note (optional)</label>
+            <input id="note" maxlength="50" placeholder="e.g. Maintenance">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>3. Your QR</h2>
+      <div class="qr-empty" id="qrEmpty">Fill in a valid account number and IFSC to see the QR.</div>
+      <canvas id="qrCanvas" aria-label="UPI QR code"></canvas>
+      <div class="upi-id" id="upiId" hidden></div>
+      <div class="actions">
+        <button class="btn primary" id="download" disabled>Download</button>
+        <button class="btn" id="share" disabled>Share</button>
+        <button class="btn wide" id="copyId" disabled>Copy UPI ID</button>
+        <a class="btn wide" id="payNow" hidden>Pay now in a UPI app</a>
+      </div>
+      <div class="note">Test with ₹1 before printing. The payer's app should show the account holder's name before the PIN screen. If it does not, recheck the numbers.</div>
+    </section>
+  </div>
+
+  <footer>
+    <strong>How it works</strong>
+    <ul>
+      <li>UPI accepts any bank account as <span class="mono">ACCOUNT@IFSC.ifsc.npci</span>. The QR holds that address.</li>
+      <li>Text is read on your device with Tesseract. Images and details are never uploaded.</li>
+      <li>Only the IFSC is sent to Razorpay's public IFSC directory, to show the bank name.</li>
+      <li>Works only if the bank accepts UPI transfers. Some small co-op banks do not.</li>
+    </ul>
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const IFSC_RE = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+const ACC_RE = /^\d{9,18}$/;
+
+// Tabs
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  document.querySelectorAll('[data-panel]').forEach(p => p.hidden = p.dataset.panel !== b.dataset.tab);
+});
+
+// ---------- Parsing ----------
+// OCR misreads digits as look-alike letters, so fix those only inside mostly-numeric tokens.
+function fixDigits(tok) {
+  const digits = (tok.match(/\d/g) || []).length;
+  if (digits < tok.length * 0.7) return tok;
+  return tok.replace(/[Oo]/g, '0').replace(/[Il|]/g, '1').replace(/S/g, '5').replace(/B/g, '8');
+}
+
+function parseDetails(text) {
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const up = lines.map(l => l.toUpperCase());
+
+  let ifsc = '';
+  for (const l of up) {
+    const m = l.replace(/[\s:.-]+(?=[A-Z0-9])/g, ' ').match(/\b([A-Z]{4})[0O]([A-Z0-9O]{6})\b/);
+    // Branch codes are usually numeric, so a stray O among digits is a zero.
+    if (m) { ifsc = m[1] + '0' + (/^[\dO]+$/.test(m[2]) ? m[2].replace(/O/g, '0') : m[2]); break; }
+  }
+
+  const accKey = /\b(A\s*\/?\s*C|ACC(OUNT)?|SB|CA|CURRENT|SAVINGS?)\b/;
+  const phoneKey = /\b(MOB|MOBILE|PH|PHONE|TEL|CONTACT|MICR|PIN)\b/;
+  const cands = new Map();
+  up.forEach((l, i) => {
+    const toks = l.replace(/[\s-]/g, m => m === '-' ? '' : ' ').split(/\s+/).map(fixDigits);
+    // Rejoin digit groups split by OCR spacing, e.g. "1070 1746 5652".
+    const joined = toks.join(' ').replace(/(\d)\s(?=\d)/g, '$1');
+    for (const m of joined.matchAll(/\d{9,18}/g)) {
+      const n = m[0];
+      if (ifsc.includes(n)) continue;
+      let score = 0;
+      if (accKey.test(l)) score += 10;
+      if (i > 0 && accKey.test(up[i - 1]) && !/\d{6}/.test(up[i - 1])) score += 5;
+      if (phoneKey.test(l)) score -= 20;
+      if (n.length === 10 && /^[6-9]/.test(n) && !accKey.test(l)) score -= 5;
+      cands.set(n, Math.max(cands.get(n) ?? -99, score));
+    }
+  });
+  const accs = [...cands].sort((a, b) => b[1] - a[1]).map(c => c[0]);
+
+  let name = '';
+  const nameLine = lines.find(l => /\b(NAME|BENEFICIARY|PAYEE|HOLDER)\b/i.test(l));
+  if (nameLine) name = nameLine.replace(/^.*\b(NAME|BENEFICIARY|PAYEE|HOLDER)\b\s*[:\-]?\s*/i, '');
+  if (!name) {
+    const org = lines.find(l => /\b(LTD|LIMITED|SOC|SOCIETY|TRUST|PVT|LLP|ASSOCIATION|ENTERPRISES?|TRADERS)\b/i.test(l) && !/BANK/i.test(l));
+    if (org) name = org;
+  }
+  name = name.replace(/[^\w .&'()-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60);
+
+  return { ifsc, accs, name };
+}
+
+function applyParsed(p) {
+  if (p.accs[0]) $('acc').value = p.accs[0];
+  if (p.ifsc) $('ifsc').value = p.ifsc;
+  if (p.name) $('name').value = p.name;
+  const chips = $('accChips');
+  chips.innerHTML = '';
+  if (p.accs.length > 1) {
+    p.accs.slice(0, 4).forEach(a => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = a;
+      b.onclick = () => { $('acc').value = a; update(); };
+      chips.appendChild(b);
+    });
+  }
+  update();
+}
+
+// ---------- OCR ----------
+let worker;
+async function getWorker(onProgress) {
+  if (!worker) {
+    worker = await Tesseract.createWorker('eng', 1, {
+      logger: m => m.status === 'recognizing text' && onProgress(m.progress)
+    });
+  }
+  return worker;
+}
+
+// Downscale big phone photos: faster OCR, same accuracy.
+function loadImage(file) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, 2200 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = img.width * s; c.height = img.height * s;
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      res(c);
+    };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+async function runOcr(file) {
+  const bar = $('progress'), fill = bar.firstElementChild, status = $('ocrStatus');
+  const drop = $('drop');
+  drop.innerHTML = '';
+  const prev = new Image(); prev.src = URL.createObjectURL(file); drop.appendChild(prev);
+  bar.hidden = false; fill.style.width = '5%';
+  status.textContent = 'Loading text reader (first time only)...';
+  try {
+    const canvas = await loadImage(file);
+    const w = await getWorker(p => { fill.style.width = Math.max(5, p * 100) + '%'; status.textContent = 'Reading text... ' + Math.round(p * 100) + '%'; });
+    const { data } = await w.recognize(canvas);
+    fill.style.width = '100%';
+    $('rawText').value = data.text.trim();
+    const p = parseDetails(data.text);
+    applyParsed(p);
+    status.textContent = p.accs.length || p.ifsc
+      ? 'Done. Check the numbers below against the photo.'
+      : 'Could not find bank details. Try a sharper, straight-on photo or use Text.';
+  } catch (e) {
+    status.textContent = 'Could not read the image: ' + e.message;
+  } finally {
+    setTimeout(() => bar.hidden = true, 600);
+  }
+}
+
+$('file').onchange = e => e.target.files[0] && runOcr(e.target.files[0]);
+const drop = $('drop');
+['dragover', 'dragenter'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => drop.addEventListener(t, () => drop.classList.remove('over')));
+drop.addEventListener('drop', e => { e.preventDefault(); const f = e.dataTransfer.files[0]; f && f.type.startsWith('image/') && runOcr(f); });
+document.addEventListener('paste', e => {
+  const f = [...e.clipboardData.files].find(f => f.type.startsWith('image/'));
+  if (f) { e.preventDefault(); document.querySelector('[data-tab=photo]').click(); runOcr(f); }
+});
+
+let typing;
+$('rawText').oninput = () => { clearTimeout(typing); typing = setTimeout(() => applyParsed(parseDetails($('rawText').value)), 250); };
+
+// ---------- IFSC lookup ----------
+const bankCache = {};
+let bank = null;
+async function lookupIfsc(code) {
+  if (!(code in bankCache)) {
+    bankCache[code] = fetch('https://ifsc.razorpay.com/' + code)
+      .then(r => r.ok ? r.json() : null).catch(() => undefined);
+  }
+  return bankCache[code];
+}
+
+// ---------- QR ----------
+qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+
+function upiUri({ acc, ifsc, name, amount, note }) {
+  const q = [`pa=${acc}@${ifsc}.ifsc.npci`];
+  if (name) q.push('pn=' + encodeURIComponent(name));
+  if (amount) q.push('am=' + amount);
+  if (note) q.push('tn=' + encodeURIComponent(note));
+  q.push('cu=INR');
+  return 'upi://pay?' + q.join('&');
+}
+
+function wrap(ctx, text, maxW) {
+  const words = text.split(' '), out = [];
+  let line = '';
+  for (const w of words) {
+    const t = line ? line + ' ' + w : w;
+    if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
+  }
+  if (line) out.push(line);
+  return out.slice(0, 2);
+}
+
+function drawCard(d) {
+  const qr = qrcode(0, 'M');
+  qr.addData(upiUri(d)); qr.make();
+  const n = qr.getModuleCount(), quiet = 3;
+  const W = 900, pad = 60, cell = Math.floor((W - pad * 2) / (n + quiet * 2));
+  const qrSize = cell * (n + quiet * 2), qrX = (W - qrSize) / 2, qrY = 120;
+  const font = '"Inter", system-ui, sans-serif';
+
+  const c = $('qrCanvas'), ctx = c.getContext('2d');
+  ctx.font = `600 30px ${font}`;
+  const nameLines = d.name ? wrap(ctx, d.name, W - pad * 2) : [];
+  const H = qrY + qrSize + 40 + nameLines.length * 40 + 40 + (d.bankLine ? 34 : 0) + (d.amount ? 44 : 0) + 50;
+  c.width = W; c.height = H;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#16171a'; ctx.textAlign = 'center';
+  ctx.font = `700 40px ${font}`;
+  ctx.fillText('Scan with any UPI app', W / 2, 78);
+
+  ctx.fillStyle = '#000';
+  for (let r = 0; r < n; r++) for (let col = 0; col < n; col++)
+    if (qr.isDark(r, col)) ctx.fillRect(qrX + (col + quiet) * cell, qrY + (r + quiet) * cell, cell, cell);
+
+  let y = qrY + qrSize + 40;
+  ctx.fillStyle = '#16171a';
+  ctx.font = `600 30px ${font}`;
+  for (const l of nameLines) { y += 34; ctx.fillText(l, W / 2, y); y += 6; }
+  y += 40;
+  ctx.font = `500 26px ui-monospace, Menlo, monospace`;
+  ctx.fillText(`A/C ${d.acc}   IFSC ${d.ifsc}`, W / 2, y);
+  if (d.bankLine) {
+    y += 34; ctx.fillStyle = '#62656d'; ctx.font = `400 22px ${font}`;
+    ctx.fillText(d.bankLine, W / 2, y);
+  }
+  if (d.amount) {
+    y += 44; ctx.fillStyle = '#16171a'; ctx.font = `700 30px ${font}`;
+    ctx.fillText('₹ ' + d.amount, W / 2, y);
+  }
+}
+
+// ---------- State ----------
+let current = null;
+async function update() {
+  const acc = $('acc').value.replace(/\D/g, '');
+  const ifsc = $('ifsc').value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const name = $('name').value.trim();
+  const amountRaw = $('amount').value.trim();
+  const amount = /^\d+(\.\d{1,2})?$/.test(amountRaw) && +amountRaw > 0 ? (+amountRaw).toFixed(2).replace(/\.00$/, '') : '';
+  const note = $('note').value.trim();
+
+  const accOk = ACC_RE.test(acc), ifscOk = IFSC_RE.test(ifsc);
+  $('accHint').textContent = !acc ? '' : accOk ? `${acc.length} digits` : 'Account numbers are 9 to 18 digits.';
+  $('accHint').className = 'hint' + (acc && !accOk ? ' err' : '');
+
+  const ifscHint = $('ifscHint');
+  bank = null;
+  if (!ifsc) { ifscHint.textContent = ''; ifscHint.className = 'hint'; }
+  else if (!ifscOk) { ifscHint.textContent = 'IFSC is 11 characters, 5th is always zero.'; ifscHint.className = 'hint err'; }
+  else {
+    ifscHint.textContent = 'Looking up bank...'; ifscHint.className = 'hint';
+    const info = await lookupIfsc(ifsc);
+    if ($('ifsc').value.toUpperCase().replace(/[^A-Z0-9]/g, '') !== ifsc) return;
+    if (info) {
+      bank = info;
+      const noUpi = info.UPI === false && info.IMPS === false;
+      ifscHint.textContent = `${info.BANK}, ${titleCase(info.BRANCH)}` + (noUpi ? '. This branch may not accept UPI transfers.' : '');
+      ifscHint.className = 'hint ' + (noUpi ? 'err' : 'ok');
+    } else if (info === null) {
+      ifscHint.textContent = 'IFSC not found. Check each character.'; ifscHint.className = 'hint err';
+    } else {
+      ifscHint.textContent = 'Could not look up bank (offline?). QR still works.'; ifscHint.className = 'hint';
+    }
+  }
+
+  const ready = accOk && ifscOk;
+  $('qrEmpty').hidden = ready;
+  $('qrCanvas').style.display = ready ? 'block' : 'none';
+  $('upiId').hidden = !ready;
+  ['download', 'share', 'copyId'].forEach(id => $(id).disabled = !ready);
+  $('payNow').hidden = !ready || !matchMedia('(pointer: coarse)').matches;
+  if (!ready) { current = null; return; }
+
+  const bankLine = bank ? `${bank.BANK}, ${titleCase(bank.CENTRE || bank.CITY || '')}`.replace(/, $/, '') : '';
+  current = { acc, ifsc, name, amount, note, bankLine };
+  drawCard(current);
+  $('upiId').innerHTML = 'UPI ID: <span class="mono"></span>';
+  $('upiId').lastChild.textContent = `${acc}@${ifsc}.ifsc.npci`;
+  $('payNow').href = upiUri(current);
+}
+
+function titleCase(s) { return s.replace(/\s+/g, ' ').trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()); }
+
+['acc', 'ifsc', 'name', 'amount', 'note'].forEach(id => $(id).addEventListener('input', update));
+
+function canvasBlob() { return new Promise(r => $('qrCanvas').toBlob(r, 'image/png')); }
+function fileName() { return `upi-qr-${current.acc.slice(-4)}.png`; }
+
+$('download').onclick = async () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(await canvasBlob());
+  a.download = fileName(); a.click();
+};
+$('share').onclick = async () => {
+  const file = new File([await canvasBlob()], fileName(), { type: 'image/png' });
+  if (navigator.canShare?.({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: 'UPI QR' }); } catch {}
+  } else {
+    $('download').click();
+  }
+};
+$('copyId').onclick = async () => {
+  await navigator.clipboard.writeText(`${current.acc}@${current.ifsc}.ifsc.npci`);
+  const b = $('copyId'), t = b.textContent;
+  b.textContent = 'Copied'; setTimeout(() => b.textContent = t, 1200);
+};
+
+document.fonts?.ready.then(() => current && drawCard(current));
+</script>
+</body>
+</html>
