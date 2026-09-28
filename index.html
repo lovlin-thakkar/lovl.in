@@ -1,6 +1,8 @@
 ---
 # front matter so Jekyll runs the includes and the posts list below
 ---
+{%- comment -%} drafts (local preview only) never count as posts {%- endcomment -%}
+{% assign published = site.posts | where_exp: "p", "p.draft != true" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -221,7 +223,7 @@
     <a href="https://github.com/lovlin-thakkar" rel="me">GitHub</a>
     <a href="https://in.linkedin.com/in/lovlin-thakkar" rel="me">LinkedIn</a>
     <a href="https://x.com/lovlin_t" rel="me">X</a>
-    {%- if site.posts.size > 0 %}
+    {%- if published.size > 0 %}
     <a target="_self" href="/blog/">Blog</a>
     {%- endif %}
   </p>
@@ -315,14 +317,14 @@
   <dd class="stack">Node.js, MongoDB</dd>
 </dl>
 
-{% if site.posts.size > 0 -%}
+{% if published.size > 0 -%}
 <h2>Writing</h2>
 <ul class="posts">
-  {%- for post in site.posts limit: 3 %}
+  {%- for post in published limit: 3 %}
   <li><a target="_self" href="{{ post.url }}">{{ post.title }}</a> <span class="quiet">{{ post.date | date: "%b %Y" }}</span></li>
   {%- endfor %}
 </ul>
-{%- if site.posts.size > 3 %}
+{%- if published.size > 3 %}
 <p><a target="_self" href="/blog/">All posts</a></p>
 {%- endif %}
 

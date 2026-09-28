@@ -3,11 +3,12 @@ layout: default
 title: Blog
 description: Writing by Lovlin Thakkar, a backend engineer.
 ---
+{% assign published = site.posts | where_exp: "p", "p.draft != true" %}
 <h1>Blog</h1>
 
-{% if site.posts.size > 0 %}
+{% if published.size > 0 %}
 <ul class="posts">
-  {%- for post in site.posts %}
+  {%- for post in published %}
   <li>
     <a href="{{ post.url }}">{{ post.title }}</a>
     <span class="quiet">{{ post.date | date: "%-d %B %Y" }}{% if post.description %}. {{ post.description }}{% endif %}</span>

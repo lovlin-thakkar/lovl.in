@@ -1,19 +1,20 @@
 ---
 layout: null
 ---
+{% assign published = site.posts | where_exp: "p", "p.draft != true" %}
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ site.url }}/</loc>
     <lastmod>{{ site.time | date: "%Y-%m-%d" }}</lastmod>
   </url>
-  {%- if site.posts.size > 0 %}
+  {%- if published.size > 0 %}
   <url>
     <loc>{{ site.url }}/blog/</loc>
-    <lastmod>{{ site.posts.first.date | date: "%Y-%m-%d" }}</lastmod>
+    <lastmod>{{ published.first.date | date: "%Y-%m-%d" }}</lastmod>
   </url>
   {%- endif %}
-  {%- for post in site.posts %}
+  {%- for post in published %}
   <url>
     <loc>{{ site.url }}{{ post.url }}</loc>
     <lastmod>{{ post.last_modified_at | default: post.date | date: "%Y-%m-%d" }}</lastmod>
