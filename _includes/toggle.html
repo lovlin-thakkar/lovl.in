@@ -1,25 +1,20 @@
-<div class="themes" role="group" aria-label="Colour theme">
-  <button type="button" data-set="white" aria-label="White theme" style="background:#ffffff"></button>
-  <button type="button" data-set="paper" aria-label="Paper theme" style="background:#f2f3ee"></button>
-  <button type="button" data-set="dark" aria-label="Dark theme" style="background:#171c21"></button>
-</div>
+<button class="themes" type="button" aria-label="Switch to dark mode">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
+</button>
 <script>
   (function () {
     var root = document.documentElement;
-    var buttons = document.querySelectorAll('.themes button');
-    function mark() {
-      buttons.forEach(function (b) {
-        b.setAttribute('aria-pressed', String(b.dataset.set === root.dataset.theme));
-      });
+    var btn = document.querySelector('.themes');
+    function label() {
+      btn.setAttribute('aria-label', root.dataset.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
     }
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () {
-        root.dataset.theme = b.dataset.set;
-        try { localStorage.setItem('theme', b.dataset.set); } catch (e) {}
-        mark();
-        dispatchEvent(new Event('themechange'));
-      });
+    btn.addEventListener('click', function () {
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      label();
+      dispatchEvent(new Event('themechange'));
     });
-    mark();
+    label();
   })();
 </script>

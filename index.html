@@ -72,6 +72,14 @@
   .projects dd { margin: 2px 0 0; }
   .projects .stack { color: var(--soft); font-size: 0.9em; }
 
+  .logo {
+    width: 22px;
+    height: 22px;
+    margin-right: 9px;
+    border-radius: 5px;
+    vertical-align: -5px;
+    box-shadow: 0 0 0 1px var(--line);
+  }
   .ext { color: var(--soft); margin-left: 3px; }
   .ext:visited { color: var(--soft); }
   .ext:hover, .ext:focus-visible { color: var(--link); }
@@ -92,6 +100,8 @@
 
   .contrib { position: relative; margin: 0 0 20px; }
   .contrib[hidden] { display: none; }
+  .contrib .scroll { overflow-x: auto; scrollbar-width: none; }
+  .contrib .scroll::-webkit-scrollbar { display: none; }
   .contrib svg { display: block; width: 100%; height: auto; }
   .contrib svg text { font: 9px ui-sans-serif, system-ui, sans-serif; fill: var(--soft); }
   .contrib rect { cursor: pointer; }
@@ -135,12 +145,54 @@
     font-variant-numeric: lining-nums tabular-nums;
   }
 
-  @media (max-width: 560px) {
-    body { padding: 0; }
-    .sheet { padding: 48px 20px 32px; border-radius: 0; border: 0; box-shadow: none; }
+  .themes { z-index: 2; }
+  /* tablets: stores sit under the panel, so keep text on a more solid surface */
+  @media (max-width: 1000px) {
+    .sheet { background: color-mix(in srgb, var(--paper) 82%, transparent); }
   }
-  @media (max-width: 480px) {
-    .me { width: 84px; height: 84px; }
+
+  @media (max-width: 560px) {
+    body { padding: 210px 0 0; }
+    .themes { background: color-mix(in srgb, var(--paper) 85%, transparent); }
+    .sheet {
+      position: relative;
+      padding: 54px 20px 32px;
+      border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+      border-bottom: 0;
+      border-radius: 20px 20px 0 0;
+      background: color-mix(in srgb, var(--paper) 50%, transparent);
+      -webkit-backdrop-filter: blur(4px) saturate(1.1);
+      backdrop-filter: blur(4px) saturate(1.1);
+      box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="dark"] .sheet { box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45); }
+    /* grab handle, as on a map app's bottom sheet */
+    .sheet::before {
+      content: "";
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      width: 38px;
+      height: 4px;
+      margin-left: -19px;
+      border-radius: 2px;
+      background: var(--line);
+    }
+    .me {
+      position: absolute;
+      top: -38px;
+      right: 20px;
+      float: none;
+      width: 80px;
+      height: 80px;
+      margin: 0;
+      border: 3px solid var(--paper);
+      border-radius: 16px;
+    }
+    h1 { font-size: 1.75rem; padding-right: 92px; }
+    h2 { margin-top: 44px; }
+    .contrib svg { min-width: 640px; }
+    .numbers td:first-child { padding-right: 12px; }
   }
   @media print {
     #map { display: none; }
@@ -180,7 +232,7 @@
 <h2>Numbers</h2>
 
 <figure class="contrib" hidden>
-  <svg id="contrib" role="img" aria-label="GitHub contributions calendar"></svg>
+  <div class="scroll"><svg id="contrib" role="img" aria-label="GitHub contributions calendar"></svg></div>
   <div class="tip" hidden></div>
   <figcaption id="contrib-cap"></figcaption>
   <div class="years" role="group" aria-label="Contribution year"></div>
@@ -199,12 +251,12 @@
 
 <h2>Work</h2>
 
-<h3 class="job"><span>Zenarate <a class="ext" href="https://www.zenarate.com" aria-label="Zenarate website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Jul 2026 - now</span></h3>
+<h3 class="job"><span><img class="logo" src="/assets/logos/zenarate.png" alt="" width="22" height="22">Zenarate <a class="ext" href="https://www.zenarate.com" aria-label="Zenarate website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Jul 2026 - now</span></h3>
 <p class="role">Senior Software Engineer II</p>
 
 <h3 class="job"><span>Career break</span><span class="when">Feb - Jun 2026</span></h3>
 
-<h3 class="job"><span>HeyMarvin AI <a class="ext" href="https://heymarvin.com" aria-label="HeyMarvin AI website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Nov 2024 - Jan 2026</span></h3>
+<h3 class="job"><span><img class="logo" src="/assets/logos/heymarvin.png" alt="" width="22" height="22">HeyMarvin AI <a class="ext" href="https://heymarvin.com" aria-label="HeyMarvin AI website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Nov 2024 - Jan 2026</span></h3>
 <p class="role">Senior Software Engineer<span class="team">Equafin Corp</span></p>
 <ul>
   <li>Built a data archival system that unblocked sales to 10+ enterprise customers and kept 30+ organisations compliant on data sovereignty.</li>
@@ -214,7 +266,7 @@
   <li>Worked with Product to turn compliance requirements into a phased roadmap.</li>
 </ul>
 
-<h3 class="job"><span>Swiggy <a class="ext" href="https://www.swiggy.com" aria-label="Swiggy website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">May 2022 - Oct 2024</span></h3>
+<h3 class="job"><span><img class="logo" src="/assets/logos/swiggy.png" alt="" width="22" height="22">Swiggy <a class="ext" href="https://www.swiggy.com" aria-label="Swiggy website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">May 2022 - Oct 2024</span></h3>
 <p class="role">Software Engineer II<span class="team">Instamart, Insanely Good, SuprDaily</span></p>
 <p>The one I remember best: Insanely Good had a big marketing launch coming and needed new dark store slots within a week. Capacity was tracked per zone, which was too coarse to hand out individual delivery slots without overcommitting. I moved it to slot-level tracking in 7 days. Expansion lead time went from 4 weeks to 1, and the launch went out on schedule with no order failures.</p>
 <ul>
@@ -223,7 +275,7 @@
   <li>Integrated delivery tracking end to end while the product migrated into the main Swiggy app.</li>
 </ul>
 
-<h3 class="job"><span>Goldman Sachs <a class="ext" href="https://www.goldmansachs.com" aria-label="Goldman Sachs website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Jun 2018 - May 2022</span></h3>
+<h3 class="job"><span><img class="logo" src="/assets/logos/goldman.png" alt="" width="22" height="22">Goldman Sachs <a class="ext" href="https://www.goldmansachs.com" aria-label="Goldman Sachs website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></span><span class="when">Jun 2018 - May 2022</span></h3>
 <p class="role">Associate and Analyst<span class="team">Intern from Jun 2018 to Apr 2019</span></p>
 <ul>
   <li>Reworked trade allocation to handle 10x the throughput on 80% less infrastructure.</li>
@@ -233,20 +285,20 @@
   <li>Tuned Kafka processors for real-time trade data over the FIX protocol.</li>
 </ul>
 
-<h3>Nirma University <a class="ext" href="https://nirmauni.ac.in/" aria-label="Nirma University website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></h3>
+<h3><img class="logo" src="/assets/logos/nirma.png" alt="" width="22" height="22">Nirma University <a class="ext" href="https://nirmauni.ac.in/" aria-label="Nirma University website"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></h3>
 <p class="role">B.Tech, Information Technology</p>
 
 <h2>Things I've made</h2>
 
 <dl class="projects">
-  <dt>Muffle <a class="ext" href="https://usemuffle.com" aria-label="Muffle"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></dt>
+  <dt><img class="logo" src="/assets/logos/muffle.png" alt="" width="22" height="22">Muffle <a class="ext" href="https://usemuffle.com" aria-label="Muffle"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></dt>
   <dd>A browser extension that turns off the feed on X but keeps posting, replies and messages working. It also filters posts by keyword, shows who unfollowed you and makes bookmarks searchable.</dd>
   <dd class="stack">Chrome extension</dd>
 
   <dt>Bamboozled <a class="ext" href="https://playbamboozled.com" aria-label="Bamboozled"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></dt>
   <dd>Joey's game show from Friends, playable in the browser. Spin the wheel, answer trivia about the show and race Chandler up the ladder. A new wheel every day, with a leaderboard.</dd>
   <dd class="stack">Browser game</dd>
-  <dt>Kharcha <a class="ext" href="https://kharcha.webvue.co.in" aria-label="Kharcha"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></dt>
+  <dt><img class="logo" src="/assets/logos/kharcha.png" alt="" width="22" height="22">Kharcha <a class="ext" href="https://kharcha.webvue.co.in" aria-label="Kharcha"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chain"/></svg></a></dt>
   <dd>A personal finance tracker, still in progress. Flutter app, FastAPI and Postgres backend, all self-hosted on EC2. The AI features run on my own Ollama model, so no spending data goes to a third party.</dd>
   <dd class="stack">Flutter, FastAPI, PostgreSQL, Ollama</dd>
 
@@ -343,20 +395,33 @@
     years.querySelectorAll('button').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.dataset.view === view));
     });
+    // narrow screens scroll the calendar; start at the most recent weeks
+    var sc = svg.parentNode;
+    sc.scrollLeft = (view === 'last' || view === today.slice(0, 4)) ? sc.scrollWidth : 0;
+    tip.hidden = true;
   }
 
-  svg.addEventListener('pointermove', function (e) {
-    var r = e.target.closest('rect');
-    if (!r) { tip.hidden = true; return; }
+  var touch = false, shown = null;
+  function show(r) {
     var n = +r.dataset.c, box = r.getBoundingClientRect(), f = fig.getBoundingClientRect();
     tip.textContent = (n ? fmt(n) : 'No') + ' contribution' + (n === 1 ? '' : 's') + ' on ' + nice(r.dataset.d);
     tip.style.left = Math.min(Math.max(box.left - f.left + box.width / 2, 90), f.width - 90) + 'px';
     tip.style.top = (box.top - f.top - 6) + 'px';
     tip.hidden = false;
+    shown = r;
+  }
+  svg.addEventListener('pointerdown', function (e) { touch = e.pointerType !== 'mouse'; });
+  svg.addEventListener('pointermove', function (e) {
+    if (touch) return;
+    var r = e.target.closest('rect');
+    if (r) show(r); else tip.hidden = true;
   });
-  svg.addEventListener('pointerleave', function () { tip.hidden = true; });
+  svg.addEventListener('pointerleave', function () { if (!touch) tip.hidden = true; });
+  svg.parentNode.addEventListener('scroll', function () { tip.hidden = true; shown = null; }, { passive: true });
   svg.addEventListener('click', function (e) {
     var r = e.target.closest('rect');
+    // touch: first tap shows the count, a second tap on the same day opens GitHub
+    if (r && touch && (tip.hidden || shown !== r)) { show(r); return; }
     if (r) open('https://github.com/' + USER + '?tab=overview&from=' + r.dataset.d + '&to=' + r.dataset.d, '_blank');
   });
   years.addEventListener('click', function (e) {
@@ -394,6 +459,10 @@
     ['Indiranagar', 0.86, 0.18], ['Koramangala', 0.8, 0.56], ['HSR Layout', 0.88, 0.88]
   ];
   var LAKES = [['Sankey Tank', 0.05, 0.33, 1.5], ['Ulsoor Lake', 0.95, 0.38, 1.7]];
+  // phones: the map is a band above the content sheet, like a delivery app
+  var BAND = 210;
+  var STORES_M = [['Malleshwaram', 0.16, 0.3], ['Indiranagar', 0.8, 0.42], ['Koramangala', 0.58, 0.82], ['Jayanagar', 0.14, 0.8]];
+  var SET;
   var RIDERS = 6;
 
   var W, H, dpr, narrow, step, cols, rows, col;
@@ -434,8 +503,8 @@
   function build() {
     dpr = window.devicePixelRatio || 1;
     W = innerWidth; H = innerHeight;
-    // on phones the text spans the screen, so the map stays scenery
-    narrow = W < 760;
+    narrow = W <= 560;
+    SET = narrow ? STORES_M : STORES;
     [cv, base].forEach(function (c) { c.width = W * dpr; c.height = H * dpr; });
     col = getComputedStyle(document.documentElement);
 
@@ -443,7 +512,7 @@
     var r = rng(1947);
     step = W < 600 ? 44 : 58;
     cols = Math.ceil(W / step) + 2; rows = Math.ceil(H / step) + 2;
-    lakes = LAKES.map(function (l) {
+    lakes = (narrow ? [] : LAKES).map(function (l) {
       return { name: l[0], x: l[1] * W, y: l[2] * H, r: l[3] * step, p: r() * 6, q: r() * 6 };
     });
     var mainRow = Math.floor(rows * 0.45), mainCol = Math.floor(cols * 0.3);
@@ -470,7 +539,7 @@
     }
 
     // multi-source dijkstra: every junction learns its store, distance and route home
-    stores = STORES.map(function (s) { return nearest(s[1] * W, s[2] * H); });
+    stores = SET.map(function (s) { return nearest(s[1] * W, s[2] * (narrow ? BAND : H)); });
     dist = nodes.map(function () { return Infinity; });
     prev = nodes.map(function () { return -1; });
     owner = nodes.map(function () { return -1; });
@@ -492,9 +561,9 @@
     paintBase();
     riders = [];
     pings = [];
-    if (!narrow) for (var q = 0; q < RIDERS; q++) riders.push(spawn(Math.random() * 4));
+    for (var q = 0; q < RIDERS; q++) riders.push(spawn(Math.random() * 4));
     target = -1;
-    aimAt(W * 0.9, H * 0.36, true);
+    if (narrow) aimAt(W * 0.45, BAND * 0.5, true); else aimAt(W * 0.9, H * 0.36, true);
     start();
   }
 
@@ -522,8 +591,6 @@
       bctx.stroke();
     });
 
-
-    if (narrow) return;
     bctx.font = 'italic 12px ' + SERIF;
     bctx.fillStyle = col.getPropertyValue('--soft');
     bctx.textAlign = 'center';
@@ -531,11 +598,16 @@
     bctx.textAlign = 'left';
     tags = [];
     stores.forEach(function (n, k) {
-      var label = STORES[k][0], w = bctx.measureText(label).width, x = nodes[n].x + 9;
+      var label = SET[k][0], w = bctx.measureText(label).width, x = nodes[n].x + 9;
       if (x + w > W - 8) x = nodes[n].x - 9 - w;
-      bctx.fillText(label, x, nodes[n].y + 16);
-      tags.push({ x: x, y: nodes[n].y + 4, w: w, h: 14 });
+      tags.push({ x: x, y: nodes[n].y + 4, w: w, h: 14, label: label });
     });
+  }
+
+  function storeNames() {
+    ctx.font = 'italic 12px ' + SERIF;
+    ctx.fillStyle = col.getPropertyValue('--soft');
+    tags.forEach(function (t) { ctx.fillText(t.label, t.x, t.y + 12); });
   }
 
   function route(n) {
@@ -591,13 +663,15 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
     ctx.drawImage(base, 0, 0, W, H);
-    if (narrow) { loop = 0; return; }
 
     var soft = col.getPropertyValue('--soft'), ink = col.getPropertyValue('--link');
+    // phones: labels, stores and your order fade as the sheet scrolls over them
+    var band = narrow ? Math.max(0, 1 - scrollY / (BAND * 0.7)) : 1;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    if (order) {
+    if (order && band > 0) {
+      ctx.globalAlpha = band;
       var k = order.k;
       ctx.fillStyle = col.getPropertyValue('--zonefill');
       for (var y = 0; y < rows - 1; y++) for (var x = 0; x < cols - 1; x++) {
@@ -608,6 +682,7 @@
         ctx.lineTo(nodes[d].x, nodes[d].y); ctx.lineTo(nodes[c].x, nodes[c].y);
         ctx.fill();
       }
+      ctx.globalAlpha = band;
       ctx.strokeStyle = col.getPropertyValue('--zone');
       ctx.lineWidth = 1.2;
       edges.forEach(function (e) {
@@ -639,7 +714,8 @@
       }
     });
 
-    if (order) {
+    if (order && band > 0) {
+      ctx.globalAlpha = band;
       var o = order, rt = o.rt;
       o.t += dt;
       var shown = Math.min(1, o.t / 0.45);
@@ -663,8 +739,8 @@
       ctx.strokeStyle = ink;
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(end.x, end.y, 5, 0, 7); ctx.stroke();
-      if (shown >= 1) label(end, o.done ? 'Delivered from ' + STORES[o.k][0]
-                                        : STORES[o.k][0] + ', ' + mins(left) + ' min');
+      if (shown >= 1) label(end, o.done ? 'Delivered from ' + SET[o.k][0]
+                                        : SET[o.k][0] + ', ' + mins(left) + ' min');
     }
 
     pings = pings.filter(function (p) {
@@ -678,10 +754,15 @@
       return true;
     });
 
-    ctx.fillStyle = col.getPropertyValue('--ink');
-    stores.forEach(function (n) {
-      ctx.beginPath(); ctx.arc(nodes[n].x, nodes[n].y, 4, 0, 7); ctx.fill();
-    });
+    ctx.globalAlpha = band;
+    if (band > 0) {
+      storeNames();
+      ctx.fillStyle = col.getPropertyValue('--ink');
+      stores.forEach(function (n) {
+        ctx.beginPath(); ctx.arc(nodes[n].x, nodes[n].y, 4, 0, 7); ctx.fill();
+      });
+    }
+    ctx.globalAlpha = 1;
 
     loop = requestAnimationFrame(frame);
   }
@@ -714,13 +795,12 @@
 
   function start() {
     cancelAnimationFrame(loop);
-    if (still.matches || narrow) { still1(); return; }
+    if (still.matches) { still1(); return; }
     last = 0;
     loop = requestAnimationFrame(frame);
   }
 
   function aimAt(x, y, quiet) {
-    if (narrow) return;
     var n = nearest(x, y);
     if (n < 0 || n === target || owner[n] < 0) return;
     target = n;
@@ -728,10 +808,21 @@
     if (still.matches) still1();
   }
 
-  addEventListener('pointermove', function (e) { aimAt(e.clientX, e.clientY); }, { passive: true });
-  addEventListener('pointerdown', function (e) { aimAt(e.clientX, e.clientY); }, { passive: true });
+  function onPointer(e) {
+    // on phones only taps on the visible map place an order
+    if (narrow && e.target.closest('.sheet, .themes')) return;
+    aimAt(e.clientX, e.clientY);
+  }
+  addEventListener('pointermove', onPointer, { passive: true });
+  addEventListener('pointerdown', onPointer, { passive: true });
+  // reduced motion has no animation loop, so redraw the fade on scroll
+  addEventListener('scroll', function () { if (narrow && still.matches) still1(); }, { passive: true });
   var rt;
-  addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 150); });
+  addEventListener('resize', function () {
+    // mobile browsers resize as the address bar hides; only a width change needs a new map
+    if (narrow && innerWidth === W) return;
+    clearTimeout(rt); rt = setTimeout(build, 150);
+  });
   addEventListener('themechange', build);
   still.addEventListener('change', start);
   build();

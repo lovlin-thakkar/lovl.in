@@ -1,13 +1,13 @@
 <script>
-  // set before first paint so a saved theme never flashes white
+  // set before first paint so a saved dark theme never flashes light
   (function () {
     var t;
     try { t = localStorage.getItem('theme'); } catch (e) {}
-    document.documentElement.dataset.theme = /^(white|paper|dark)$/.test(t) ? t : 'white';
+    document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light';
   })();
 </script>
 <style>
-  :root, [data-theme="white"] {
+  :root, [data-theme="light"] {
     --paper: #ffffff;
     --ink: #1a1c1e;
     --soft: #62676c;
@@ -19,16 +19,6 @@
     --zonefill: rgba(31, 69, 163, 0.04);
     --water: #e6eef3;
     color-scheme: light;
-  }
-  [data-theme="paper"] {
-    --paper: #f2f3ee;
-    --ink: #1d2320;
-    --soft: #5f6862;
-    --line: #d6dacf;
-    --road: #d9ddd2;
-    --zone: #aab2a0;
-    --zonefill: rgba(31, 69, 163, 0.05);
-    --water: #dde6e4;
   }
   [data-theme="dark"] {
     --paper: #171c21;
@@ -70,21 +60,23 @@
 
   .themes {
     position: absolute;
-    top: 18px;
-    right: 20px;
+    top: 16px;
+    right: 18px;
     display: flex;
-    gap: 8px;
-  }
-  .themes button {
-    width: 16px;
-    height: 16px;
+    width: 30px;
+    height: 30px;
     padding: 0;
-    border: 1px solid var(--soft);
+    align-items: center;
+    justify-content: center;
+    border: 0;
     border-radius: 50%;
+    background: none;
+    color: var(--ink);
     cursor: pointer;
   }
-  .themes button[aria-pressed="true"] { outline: 1.5px solid var(--ink); outline-offset: 2px; }
-  .themes button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  .themes:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+  .themes:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  .themes svg { width: 18px; height: 18px; }
 
   footer {
     margin-top: 64px;
@@ -97,7 +89,7 @@
 
   @media (max-width: 480px) {
     body { font-size: 17px; padding-top: 44px; }
-    .themes { top: 14px; }
+    .themes { top: 12px; }
   }
   @media print {
     html { background: #fff; }
