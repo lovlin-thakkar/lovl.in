@@ -166,3 +166,117 @@ Endmyopia openly disclaims medical status. Jake is "not a medical doctor or opto
 
 ### Gaps
 - I could not capture the full verbatim text of the site's formal medical and legal disclaimer page. I also could not confirm whether it advises against the method for children, high myopia or retinal pathology.
+
+## 6. Glasses setup and powers (coordinator priority question)
+
+**Question:** How many pairs should a person who does NOT drive at night own, and what power is each pair relative to full prescription?
+
+**Sourcing caveat:** As above, endmyopia.org and the wiki were blocked to direct fetch. Every quote here is search-engine extract text from the cited Endmyopia page (3 Oct 2026). Wiki pages are community-edited ("can be added on and updated by everyone"), not always Jake's own words. Where the text is attributed to Jake ("Jake recommends…"), that is noted.
+
+### Takeaway
+**Two pairs, both reduced from full correction:**
+- **"Normalized" distance glasses.** Normally 0.25 D under the 20/20 prescription, which is about 0.25–0.50 D under the "full" optometrist prescription. Target acuity is about 20/25; wiki tables extend to -0.75 or -1.00 D under, which is about 20/40.
+- **"Differentials" for close-up and screens.** Normally about 1.0–2.0 D under full. Jake's commonly cited default is about 1.25 D under. The exact amount is set by the working distance in cm: diopters = 100/cm, subtracted from full.
+
+**A third, full-correction pair** is "strongly recommended" for night driving, and the beginner's guide also mentions it for driving in general. Endmyopia's "only two reduced pairs" guidance implies that someone who never drives at night can do without it. I found no explicit sentence saying "non-night-drivers may skip full correction".
+
+**Other rules:**
+- Myopes under about -2 D generally need no glasses for close-up.
+- Reductions come every 4–6 weeks at minimum, typically 0.25 D every 3–4 months, which is about 1 D per year.
+- People at 7 D or more may take 0.5 D steps.
+- Change sphere and cylinder separately, never both at once.
+
+### Cited Findings
+
+**(0) Number of pairs**
+- "You only need two reduced pairs of glasses – don't wear loads of different pairs of normalised and differentials for different focal distances." — [Endmyopia Wiki – FAQ/FFAQ](https://wiki.endmyopia.org/index.php?title=Frequently_Asked_Questions%2FFFAQ&mobileaction=toggle_view_desktop)
+- "Normalized are worn for all distance vision activities (except night driving), while differentials are worn exclusively for close-up work with a fixed focal distance." — [Endmyopia Wiki – FAQ/FFAQ](https://wiki.endmyopia.org/index.php?title=Frequently_Asked_Questions%2FFFAQ&mobileaction=toggle_view_desktop); [Endmyopia Wiki – Normalized](https://wiki.endmyopia.org/wiki/Normalized)
+- The beginner's glasses guide lists three types: Normalized, Full Correction and Differentials. — [Wiki – Guide: How to choose your glasses for Endmyopia journey](https://wiki.endmyopia.org/wiki/Guide:How_to_choose_your_glasses_for_Endmyopia_journey)
+
+**(1) Normalized (distance) glasses: power and how to choose**
+- "Normalized should be slightly (0.25 or 0.5 D) reduced from a 20/20 correction, unless you are near the end of a reduction or trying to clear blur adaptation, in which case they are equivalent to 20/20 correction." — [Wiki – Normalized](https://wiki.endmyopia.org/wiki/Normalized)
+- "It is recommended that you reduce no more than 0.25 diopters from 20/20 correction, or 0.5 D from full correction." — [Wiki – Normalized](https://wiki.endmyopia.org/wiki/Normalized); [Wiki – Reduction](https://wiki.endmyopia.org/wiki/Reduction)
+  - This distinguishes "20/20 correction" from "full correction". Optometrist prescriptions are often slightly stronger than needed for 20/20, so 0.25 D under 20/20 is treated as about 0.5 D under the full prescription.
+- Other wiki pages simplify this to "Normalized glasses are slightly undercorrected for distance vision, usually no more than 0.25 diopters." — [Wiki – FAQ/Normalized](https://wiki.endmyopia.org/index.php?title=Frequently_Asked_Questions%2FNormalized&mobileaction=toggle_view_desktop)
+- **Purpose:** "Normalized lenses reduce the blur horizon by just enough to give good stimulus from blur and double vision challenge, but definitely not enough to make the world significantly blurry." — [Wiki – Normalized](https://wiki.endmyopia.org/wiki/Normalized)
+- **Acuity targets (wiki):**
+  - "a normalized is typically 20/20 to 20/50, and a differential is typically 20/40 to 20/150"
+  - -0.25 D under gives about 20/25
+  - -0.50 D under gives about 20/30
+  - -0.75 D under gives about 20/40
+  
+  — [Wiki – Guide: How to choose your glasses](https://wiki.endmyopia.org/wiki/Guide:How_to_choose_your_glasses_for_Endmyopia_journey) / [Wiki – Normalized](https://wiki.endmyopia.org/wiki/Normalized)
+
+  The search tool attributed these figures to these wiki pages. The exact table was not viewed directly. I found no Endmyopia source using an "~80% of the Snellen chart" target.
+- The beginner's guide gives normalized under-correction "ranging from -0.25D to -1.00D depending on desired clear vision distance". — [Wiki – Guide: How to choose your glasses](https://wiki.endmyopia.org/wiki/Guide:How_to_choose_your_glasses_for_Endmyopia_journey)
+- **How to choose:** Selection relies on home Snellen-chart checks plus the centimetre measurement (diopters = -100/cm), testing whether a 0.25 D-weaker lens still allows near-20/20 with "active focus" in good light. A dedicated page covers testing whether you need cylinder in normalized. — [Wiki – Measurement](https://wiki.endmyopia.org/index.php?title=Measurement&mobileaction=toggle_view_desktop); [How To: Test If You Need Astigmatism Correction (for Normalized Prescriptions)](https://endmyopia.org/test-need-astigmatism-correction-normalized-prescriptions/)
+  - The exact selection procedure wording was not captured.
+
+**(2) Differentials (close-up and screens): how they're calculated**
+- "Differentials are glasses for close up." "1.00 - 2.00 (1.50) diopters less than full correction is generally a useful reduced lens power for differentials worn in close-up activity." — [Wiki – FAQ/Differentials](https://wiki.endmyopia.org/wiki/Frequently_Asked_Questions/Differentials)
+- "The differential prescription tends to be around between -1 and -2 diopters lower than your previous full prescription." — [Differential vs Normalized](https://endmyopia.org/differential-prescription-vs-normalized-prescription-considerations/)
+- **Jake's own default:** "Jake recommends you reduce from your glasses prescription by about 1.25 diopters. However, this will depend on the distance you work from the screen, so reduce it by less if you work farther from the screen." — [How To Choose A Reduced Glasses Prescription (Differential Glasses)](https://endmyopia.org/choose-reduced-glasses-prescription-differential-close-friendly-glasses/) / [Wiki – Guide: Reducing differentials](https://wiki.endmyopia.org/wiki/Guide:Reducing_differentials)
+- **Low myopes:** "For myopes less than 2 diopters: No glasses should be necessary for close-up. For myopes greater than 2 diopters: Often a reduction of 1 to 2 diopters makes sense for close-up." — [How To Choose A Reduced Glasses Prescription](https://endmyopia.org/choose-reduced-glasses-prescription-differential-close-friendly-glasses/)
+- **Distance-based calculation:** "Measure the distance to your monitor (in centimeters), convert that number to diopters, and subtract the number you just got from your full prescription."
+  - **Rule:** diopters = 100/cm.
+  - **Worked example (my illustration, not Endmyopia's text):** A screen at 67 cm is about 1.5 D, so a -4.00 full prescription gives about -2.50 differentials. Screens at 60–80 cm work out to about 1.25–1.67 D under full.
+  
+  — [How To Choose A Reduced Glasses Prescription](https://endmyopia.org/choose-reduced-glasses-prescription-differential-close-friendly-glasses/)
+- **Reading-glasses method:** "Measure your approximate primary close-up distance… Somewhere between +1 and +2 you will find the right amount of reduced correction." This means testing plus lenses over full correction to find the reduction amount. A "test lens kit", "a rehab sympathetic optometrist", or "the centimeter calculator" are named as alternatives. — [How To Choose A Reduced Glasses Prescription](https://endmyopia.org/choose-reduced-glasses-prescription-differential-close-friendly-glasses/); [Wiki – Differentials](https://wiki.endmyopia.org/index.php?title=Differentials&mobileaction=toggle_view_desktop)
+- **Blur-horizon framing:** "You minimize the prescription to where you can only see as far as your comfortable ergonomic viewing distance… Beyond that primary distance, you want to encounter some blur." — [Defined: The Blur Horizon](https://endmyopia.org/frauenfeld-method-key-concepts-the-blur-horizon/)
+- The beginner's guide table gives differentials "ranging from -1.25D to -2.00D depending on how far your eyes are from your computer". — [Wiki – Guide: How to choose your glasses](https://wiki.endmyopia.org/wiki/Guide:How_to_choose_your_glasses_for_Endmyopia_journey)
+
+**(3) Full correction: night driving and safety**
+- "When driving at night, it is strongly recommended that you wear full correction glasses, that are more powerful than your normalized." — [Wiki – Night vision](https://wiki.endmyopia.org/wiki/Night_vision)
+- The beginner's guide describes full correction as "the standard 20/20 correction that you would normally get from a licensed optician", which "should be used from afar when clear vision is needed, such as when driving". It says "driving", not specifically night driving. — [Wiki – Guide: How to choose your glasses](https://wiki.endmyopia.org/wiki/Guide:How_to_choose_your_glasses_for_Endmyopia_journey)
+- The FFAQ excludes only night driving from normalized use ("all distance vision activities (except night driving)"). By that reading, daytime driving in normalized is acceptable. — [Wiki – FAQ/FFAQ](https://wiki.endmyopia.org/index.php?title=Frequently_Asked_Questions%2FFFAQ&mobileaction=toggle_view_desktop)
+
+**(4a) Astigmatism (cylinder)**
+- "Astigmatism should be tackled in small steps when selecting lenses for differential or normalized glasses." — [Wiki – Astigmatism](https://wiki.endmyopia.org/wiki/Astigmatism)
+- "If sphere is being reduced, cylinder should not be changed at the same time, and conversely, if cylinder is being reduced then sphere should not be changed." — [Wiki – Astigmatism](https://wiki.endmyopia.org/wiki/Astigmatism)
+- "If only a small amount of cylinder correction is present, say 0.25 diopters, the cylinder correction can be dropped, with no other changes." — [Wiki – Astigmatism](https://wiki.endmyopia.org/wiki/Astigmatism)
+- "Maximum reduction for cylinder in close-up situations (start there since astigmatism is less apparent in close-up) is 1 diopter. A more conservative drop would be half diopter (which is about equivalent of 0.25 diopters spherical)." — [Wiki – Astigmatism](https://wiki.endmyopia.org/wiki/Astigmatism)
+- Never change the axis value "if it has been consistent for some time" when reducing cylinder. — [Wiki – Astigmatism](https://wiki.endmyopia.org/wiki/Astigmatism)
+- **Further site pages:**
+  - [Astigmatism: The Complete Guide & Summary](https://endmyopia.org/astigmatism-the-big-guide-summary/)
+  - [How To Choose a Differential Prescription If You Have High Astigmatism](https://endmyopia.org/how-to-choose-a-differential-prescription-if-you-have-high-astigmatism/)
+  - [(Q&A) High Astigmatism, Low Myopia – Sph. to Cyl. Ratio Control](https://endmyopia.org/qa-high-astigmatism-low-myopia-sph-to-cyl-ratio-control/)
+  
+  I did not capture their content beyond titles.
+
+**(4b) High myopes**
+- "If your myopia is higher (7 diopter+) or you need more challenge for stimulus, you may consider doing a 0.5 D reduction (0.75 D from full correction)." — [Wiki – Normalized](https://wiki.endmyopia.org/wiki/Normalized); [Wiki – Reduction](https://wiki.endmyopia.org/wiki/Reduction)
+  - The threshold given is 7 D or more, not 6 D.
+- For high myopes, no-correction days are replaced with differentials: "take a day you can manage with no correction (or differentials in the case of high myopia)". — [Wiki – Normalized / Reduction](https://wiki.endmyopia.org/wiki/Reduction)
+- The site's stated scope is "low to moderate nearsightedness". — [About Endmyopia](https://endmyopia.org/about-endmyopia/)
+
+**(4c) Step-down frequency**
+- "Alternate between differentials and normalized with 4-6 weeks of adjustment period between changes to your focal plane." — [Wiki – Normalized](https://wiki.endmyopia.org/wiki/Normalized)
+- Pace is "roughly a quarter-diopter every 3-4 months, which amounts to about a diopter a year". The minimum between changes is 4–6 weeks. — [How Fast Can I Improve My Vision?](https://endmyopia.org/how-fast-can-i-improve-my-vision/)
+- **On a plateau:** give it "an extra month at the current prescription where there's no notable change, then [take] a step down regardless", and change habits. — [How Fast Can I Improve My Vision?](https://endmyopia.org/how-fast-can-i-improve-my-vision/)
+- **Sequencing:** Differentials first, then normalized 4–6 weeks later. — [Pro Topic: Differential Now, Normalized In 4-6 Weeks](https://endmyopia.org/pro-topic-differential-now-normalized-in-4-6-weeks/)
+- A "Zero diopter reset" wiki page also exists. Its content was not captured. — [Wiki – Zero diopter reset](https://wiki.endmyopia.org/wiki/Zero_diopter_reset)
+
+**(4d) Contact lenses**
+- The site says contacts "can be helpful to reduce costs" because you are "reducing your correction every 3-4 months". It publishes a page on converting between glasses and contact-lens prescriptions (vertex distance). — [Convert Glasses Prescription To Contacts (And Back)](https://endmyopia.org/convert-contact-lens-prescription-glasses-prescription/)
+
+### Inferences
+- **Practical answer for a non-night-driver per Endmyopia:**
+  - Pair 1: normalized at about full minus 0.25–0.50 D (about 20/25), worn for all distance tasks including daytime driving.
+  - Pair 2: differentials at about full minus 1.0–1.5 D (Jake's default 1.25 D), fine-tuned so the screen distance in cm is just inside the blur horizon.
+  - Old full-correction glasses are kept only for night driving or other safety-critical clear vision. A non-night-driver would, by the "two reduced pairs" rule, not need a dedicated full pair.
+  - **Caveat 1:** The beginner's guide ties full correction to "driving" generally.
+  - **Caveat 2:** Legal driving acuity standards (often 20/40, though jurisdictions vary) should be checked. That is my note, not Endmyopia's.
+- **Guidance has drifted and conflicts across sources:**
+  - **Normalized reduction size:** "no more than 0.25 D" (FAQ) vs "0.25 or 0.5 D" from 20/20 (Normalized page) vs a -0.25 to -1.00 D table (beginner's guide).
+  - **Differential default:** 1.25 D (Jake) vs "1.00–2.00 (1.50)" (wiki FAQ) vs "-1.25 to -2.00" (guide table).
+  - **Full correction:** night driving only (FFAQ) vs driving generally (beginner's guide).
+  - **Axial length:** The wiki says normalized-induced myopic defocus "has been shown to reduce axial length in a clinical study". The 2026 site says adult axial-length reversal "has not been demonstrated in a trial". These are internally inconsistent.
+- **The "Reduced Lens" wiki domain:** A "Reduced Lens Wiki" exists at wiki.reducedlens.org with parallel guides, such as "Guide: Reducing close-up glasses". The method may be migrating to or rebranding as "Reduced Lens Method" branding and domains. I did not verify this. — [Reduced Lens Wiki – Guide: Reducing close-up glasses](https://wiki.reducedlens.org/wiki/Guide:Reducing_close-up_glasses)
+
+### Gaps
+- **Unverified tables and wording:** I could not read the full tables on the beginner's glasses guide or the exact acuity-per-diopter table. The figures come from search extracts.
+- **No explicit skip-full-correction statement:** No source found explicitly states "non-night-drivers can skip full correction". That conclusion is inferred from the "two reduced pairs" and "except night driving" wording.
+- **No 80%-of-chart criterion:** No Endmyopia source found uses an "80% of the Snellen chart" criterion for normalized.
+- **Contact-lens rules not found:** No explicit Endmyopia guidance was found on whether contacts are acceptable for differentials, or on daily-wear vs glasses preference.
+- **Undated guidance:** The dates of the individual guideline changes could not be established, because archive.org was blocked.
