@@ -65,6 +65,8 @@
   .share { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
   .share button { padding:11px 8px; font-size:14px; background:transparent; color:var(--ink); border:1.5px solid var(--ink); }
   .share button.x { background:#000; color:#fff; border-color:#000; }
+  .share .hint { grid-column:1 / -1; font-size:13px; font-weight:700; text-align:center; color:var(--terracotta); }
+  .share .hint:empty { display:none; }
   .share .wide { grid-column:1 / -1; border:0; padding:4px; font-size:12px; font-weight:600; text-decoration:underline; opacity:.75; }
   .challenge { margin:-4px 0 14px; padding:8px 12px; border-radius:10px; background:var(--terracotta); color:#fff; font-size:14px; font-weight:700; }
   .challenge:empty { display:none; }
@@ -122,6 +124,7 @@
       <button class="x" id="shareX">Post on X</button>
       <button id="shareCard">Share card</button>
       <button class="wide" id="copyLink">Copy a challenge link</button>
+      <div class="hint" id="shareHint" role="status" aria-live="polite"></div>
     </div>
   </div>
 </div>
@@ -1778,10 +1781,6 @@
     clearTimeout(btn._flash);
     btn._flash = setTimeout(() => { btn.textContent = btn.dataset.label; }, 1600);
   }
-  el('shareX').addEventListener('click', () => {
-    const u = 'https://x.com/intent/tweet?text=' + encodeURIComponent(shareText()) + '&url=' + encodeURIComponent(challengeUrl());
-    window.open(u, '_blank', 'noopener');
-  });
   const canShareFiles = (() => { try { return !!(navigator.canShare && navigator.canShare({ files: [new File([''], 'x.png', { type: 'image/png' })] })); } catch (e) { return false; } })();
   if (!canShareFiles) el('shareCard').textContent = 'Save card';
   // the card is rendered as soon as the over screen opens, so the click can call share() synchronously
@@ -1802,6 +1801,35 @@
     const file = new File([blob], 'jantar-mantar-run.png', { type: 'image/png' });
     navigator.share({ files: [file], text: shareText() + ' ' + challengeUrl() })
       .catch(e => { if (e.name !== 'AbortError') saveCard(blob); });
+  });
+  // X's post link can't carry attachments, so the card travels another way:
+  // phones hand it to the share sheet (pick X and the image is attached); desktops copy it to the
+  // clipboard first, so a single paste in X's composer attaches it
+  const touchFirst = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+  const pasteKey = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent) ? 'Cmd+V' : 'Ctrl+V';
+  function openIntent(text) {
+    window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(challengeUrl()), '_blank', 'noopener');
+  }
+  function shareHint(msg) {
+    const h = el('shareHint');
+    h.textContent = msg;
+    clearTimeout(h._t); h._t = setTimeout(() => { h.textContent = ''; }, 12000);
+  }
+  el('shareX').addEventListener('click', () => {
+    const text = shareText(), blob = cardBlob;
+    if (blob && touchFirst && canShareFiles) {
+      const file = new File([blob], 'jantar-mantar-run.png', { type: 'image/png' });
+      navigator.share({ files: [file], text: text + ' ' + challengeUrl() })
+        .catch(e => { if (e.name !== 'AbortError') openIntent(text); });
+      return;
+    }
+    // start the clipboard write while this page still has focus and the click's user activation, then open X
+    let copied = null;
+    if (blob && navigator.clipboard && window.ClipboardItem) {
+      try { copied = navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]); } catch (e) { copied = null; }
+    }
+    openIntent(text);
+    if (copied) copied.then(() => shareHint('Score card copied. Press ' + pasteKey + ' in the X post to attach it.'), () => {});
   });
   el('copyLink').addEventListener('click', async () => {
     const btn = el('copyLink'), txt = shareText() + ' ' + challengeUrl();
@@ -1913,7 +1941,7 @@
     toastEl.classList.remove('on'); hud.classList.remove('on'); el('pauseBtn').classList.remove('on'); gasEl.style.opacity = 0;
     gorilla.visible = false;
     el('over').classList.add('on');
-    prepareCard();
+    prepareCard(); el('shareHint').textContent = '';
     el('againBtn').focus({ preventScroll: true });
     overAt = performance.now();
   }
