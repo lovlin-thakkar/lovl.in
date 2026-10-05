@@ -157,16 +157,20 @@
 
   /* ================= renderer / scene ================= */
   const canvas = el('c');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // phones and low-memory/low-core machines get a lighter tier: lower starting resolution, no MSAA
+  // (expensive on mobile GPUs at high pixel density), cheaper shadows, a thinner crowd, shorter draw distance
+  const touchFirst = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+  const LOW = touchFirst || (navigator.deviceMemory || 8) <= 4 || (navigator.hardwareConcurrency || 8) <= 4;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !LOW, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, LOW ? 1.5 : 2));
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.92;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = LOW ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(lin(0x9fb3c0), 60, 190);
-  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 300);
+  scene.fog = new THREE.Fog(lin(0x9fb3c0), LOW ? 50 : 60, LOW ? 150 : 190);
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, LOW ? 175 : 300);
 
   // hazy Delhi sky, also used as the lighting environment
   const skyCanvas = document.createElement('canvas');
@@ -205,7 +209,7 @@
   sun.position.set(-18, 26, 2);
   sun.target.position.set(0, 0, -8);
   sun.castShadow = true;
-  const smSize = Math.min(window.innerWidth, window.innerHeight) < 600 ? 1024 : 2048;
+  const smSize = LOW || Math.min(window.innerWidth, window.innerHeight) < 600 ? 1024 : 2048;
   sun.shadow.mapSize.set(smSize, smSize);
   Object.assign(sun.shadow.camera, { left: -24, right: 24, top: 36, bottom: -36, near: 1, far: 90 });
   sun.shadow.bias = -0.0005;
@@ -213,13 +217,15 @@
 
   // portrait screens get a wider lens and a higher, farther camera so the lanes ahead stay readable
   const calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let baseFov = 60, camBaseY = 4.6, camBaseZ = 9.6;
+  let baseFov = 60, camBaseY = 4.6, camBaseZ = 9.6, lookY = 1.4, lookZ = -6, chaseK = 1;
   function resize() {
     const w = window.innerWidth, h = window.innerHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const tall = camera.aspect < 1;
-    baseFov = tall ? 74 : 60; camBaseY = tall ? 5.8 : 4.6; camBaseZ = tall ? 11.2 : 9.6;
+    baseFov = tall ? 72 : 60; camBaseY = tall ? 6.0 : 4.6; camBaseZ = tall ? 10.5 : 9.6;
+    lookY = tall ? 1.1 : 1.4; lookZ = tall ? -1.5 : -6;
+    chaseK = tall ? 1.3 : 1; // resting chasers sit further back, below the tilted frame
     camera.fov = baseFov;
     camera.updateProjectionMatrix();
   }
@@ -811,7 +817,7 @@
       sp('tap', tx, 1.6 * sc, tz, 0.55 * sc, 3.2 * sc, 0.55 * sc, 0x4f4337);
       sp('tap', tx + 0.5 * sc, 3.4 * sc, tz, 0.26 * sc, 1.6 * sc, 0.26 * sc, 0x4f4337, 0, 0, -0.6);
       sp('tap', tx - 0.5 * sc, 3.3 * sc, tz + 0.2, 0.26 * sc, 1.5 * sc, 0.26 * sc, 0x4f4337, 0, 0, 0.6);
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0, n = LOW ? 6 : 8; i < n; i++) {
         const cc = flower && chance(0.5) ? pick([0xc9461f, 0xdc5a28]) : pick([0x35552a, 0x3f6030, 0x2f4d26, 0x486b35]);
         const bs = rand(2.0, 3.4) * sc;
         // canopies may shade the pavement but stop short of the carriageway (jetpack height)
@@ -861,7 +867,7 @@
       for (let zi = 0; zi < 26; zi++) {
         const z = -SEG / 2 + 0.8 + zi * 1.5;
         for (const cx of cols) {
-          if (!chance(0.36)) continue;
+          if (!chance(LOW ? 0.26 : 0.36)) continue;
           const px = s * (cx + rand(-0.2, 0.2)), pz = z + rand(-0.25, 0.25);
           if (!free(px, pz, 0.9)) continue;
           const pose = pick(['placard', 'placard', 'fist', 'fist', 'phone', 'idle', 'clap', 'flag', 'flower', 'book']);
@@ -1102,6 +1108,7 @@
     const r = makeRig({ kind: 'kurta', skin: 0xb27a52, hair: 0x15110e, hairStyle: 'long', top: 0xe0702a, bottom: 0x3a4a6b, dupatta: 0xc23a30, chant: true, longSleeve: true }, null);
     g.add(r);
     const flow = part(r, 'cloth', 0, 1.4, 0.55, 0.45, 1.1, 1, clothMat(0xc23a30), PI / 2, 0, 0, false);
+    flow.userData.dyn = true;
     const sp = new THREE.Sprite(bubbleMat('RUN!'));
     sp.scale.set(1.5, 0.66, 1); sp.position.set(0, 2.7, 0); sp.renderOrder = 10;
     g.add(sp);
@@ -1178,6 +1185,7 @@
   player.add(playerRig);
   playerRig.scale.setScalar(1.06);
   const scarfTail = part(playerRig, 'cloth', 0, 1.45, 0.4, 0.16, 0.6, 1, clothMat(0xc23a30), PI / 2, 0, 0, false);
+  scarfTail.userData.dyn = true;
   const jetpack = new THREE.Group();
   for (const sx of [-0.13, 0.13]) {
     part(jetpack, 'cyl', sx, 1.2, 0.3, 0.2, 0.6, 0.2, paint(0xc23a30));
@@ -1199,6 +1207,7 @@
   const garland = garlandRing(0.27, 16, 0.1);
   garland.position.set(0, 1.42, -0.02); garland.rotation.x = -0.35; garland.visible = false;
   playerRig.add(garland);
+  mergeDeep(playerRig);
   scene.add(player);
 
   const bubbleCache = {};
@@ -1239,6 +1248,7 @@
   // gaps keep the bellies apart; ax/az is where each one stands once you're caught
   function makeChaser(kind, off, follow, gap0, gap1, fail, ax, az) {
     const g = kind === 'dog' ? makeDogRig() : makeRig(policeOpts(kind === 'riot'));
+    mergeDeep(g);
     if (kind !== 'dog') { g.scale.setScalar(1.04); g.userData.armR.rotation.x = 2.0; }
     const holder = new THREE.Group();
     holder.add(g);
@@ -1257,6 +1267,7 @@
 
   // the dancing gorilla who joins you on a dance break
   const gorilla = rigFromSpec(gorillaSpec(false));
+  mergeDeep(gorilla);
   gorilla.scale.setScalar(0.95);
   gorilla.visible = false;
   scene.add(gorilla);
@@ -1504,6 +1515,13 @@
   // fold an obstacle's static meshes into one mesh per material: a bus goes from ~100 draw calls to ~10,
   // which matters twice over because the shadow pass draws everything again. Rigs, groups and anything
   // animated (userData.dyn) stay separate.
+  // the same, for every group in a hierarchy: each rig part (arm, leg, body) keeps its own pivot and
+  // still animates, but draws as one mesh per material instead of dozens of primitives
+  function mergeDeep(root) {
+    const groups = [];
+    root.traverse(o => { if (!o.isMesh && !o.isSprite) groups.push(o); });
+    groups.forEach(mergeStatic);
+  }
   function mergeStatic(g) {
     const byMat = new Map();
     for (const m of g.children) {
@@ -1572,7 +1590,7 @@
 
   function addObstacle(kind, laneIdx, z) {
     const o = BUILD[kind]();
-    mergeStatic(o.g);
+    mergeDeep(o.g);
     o.g.position.set(kind === 'gate' ? 0 : LANES[laneIdx], 0, z);
     o.x = o.g.position.x; o.hit = false;
     scene.add(o.g); obstacles.push(o);
@@ -1805,7 +1823,6 @@
   // X's post link can't carry attachments, so the card travels another way:
   // phones hand it to the share sheet (pick X and the image is attached); desktops copy it to the
   // clipboard first, so a single paste in X's composer attaches it
-  const touchFirst = window.matchMedia && matchMedia('(pointer: coarse)').matches;
   const pasteKey = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent) ? 'Cmd+V' : 'Ctrl+V';
   function openIntent(text) {
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(challengeUrl()), '_blank', 'noopener');
@@ -1867,7 +1884,7 @@
   function startDetain() {
     state = 'detain';
     const b = mkBus(pick(['dtc', 'police']));
-    mergeStatic(b.g);
+    mergeDeep(b.g);
     b.g.rotation.y = PI;
     // pull up alongside, preferring the side whose lane is empty so nothing has to be cleared
     const px = player.position.x, li = laneOf(px);
@@ -2100,7 +2117,7 @@
     const dancing = danceT > 0 && state === 'play';
     const away = jetOn && state === 'play';
     const arrest = state === 'caught' || state === 'detain' || state === 'over';
-    const gapTarget = arrest ? c.az : dancing ? 7.5 + c.id * 1.2 : away ? 19 : hits > 0 || gasT > 0 ? c.gap1 : c.gap0;
+    const gapTarget = arrest ? c.az : dancing ? 7.5 + c.id * 1.2 : away ? 19 : hits > 0 || gasT > 0 ? c.gap1 : c.gap0 * chaseK;
     if (c.state === 'run' || c.state === 'jump') {
       if (arrest) c.x += (caughtX + c.ax - c.x) * Math.min(1, dt * c.follow);
       else {
@@ -2389,7 +2406,7 @@
     if (Math.abs(camera.fov - camFov) > 0.01) { camera.fov = camFov; camera.updateProjectionMatrix(); }
     if (camOverride) { camera.position.fromArray(camOverride[0]); camera.lookAt(...camOverride[1]); return; }
     camera.position.set(player.position.x * 0.6 + sx, camY + sy, camZ);
-    camera.lookAt(player.position.x * 0.5, 1.4 + py * 0.55, -6);
+    camera.lookAt(player.position.x * 0.5, lookY + py * 0.55, lookZ);
   }
 
   // adaptive resolution: if the device can't hold ~45 fps while running, render fewer pixels
@@ -2397,10 +2414,12 @@
   function adapt(dt) {
     if (state !== 'play' || paused) return;
     perfN++; perfSum += dt;
-    if (perfN < 120) return;
+    if (perfN < 90) return;
     const avg = perfSum / perfN, pr = renderer.getPixelRatio();
     perfN = 0; perfSum = 0;
-    if (avg > 0.022 && pr > 1) { renderer.setPixelRatio(Math.max(1, pr - 0.5)); resize(); }
+    const floor = LOW ? 0.75 : 1;
+    if (avg > 0.022 && pr > floor) { renderer.setPixelRatio(Math.max(floor, pr - 0.25 * Math.ceil((pr - floor) / 0.5))); resize(); }
+    else if (avg > 0.028 && sun.castShadow) sun.castShadow = false;
   }
   function frame(now) {
     const raw = (now - last) / 1000, dt = Math.min(0.05, raw);
@@ -2418,7 +2437,7 @@
     clear: () => { for (const o of obstacles) drop(o.g); obstacles.length = 0; spawnDist = 1e9; }, ob: () => obstacles.length,
     mag: () => { if (state === 'play') startMagnet(); }, card: () => makeCard().toDataURL('image/jpeg', 0.9),
     segTris: () => segments[0].children.filter(m => m.isMesh).map(m => Math.round((m.geometry.index ? m.geometry.index.count : m.geometry.attributes.position.count) / 3)).filter(n => n > 1000), cam: (p, l) => { camOverride = p ? [p, l] : null; }, pause: p => setPaused(p), paused: () => paused, side: l => sideBlocker(l), lane: () => lane,
-    info: () => ({ calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geos: renderer.info.memory.geometries, pr: renderer.getPixelRatio() }),
+    info: () => ({ low: LOW, shadows: sun.castShadow, calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geos: renderer.info.memory.geometries, pr: renderer.getPixelRatio() }),
     caught: () => { if (state === 'play') caught(); }, py: () => py, convoy: (l, z) => addConvoy('busdtc', l, z),
     spawn: (k, l, z) => addObstacle(k, l, z), jet: () => { if (state === 'play') startJet(); }, dance: () => { if (state === 'play') startDance(); },
     state: () => state, hits: () => hits, cops: () => CHASERS.map(c => c.state)
