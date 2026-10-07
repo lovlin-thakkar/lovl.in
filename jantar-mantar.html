@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Dharna Surfers</title>
-<meta name="description" content="A satirical endless runner down Jantar Mantar Road. Dodge barricades, fat cops, tear gas and detention buses. How far can you get before they put you on the bus?">
+<meta name="description" content="A satirical endless runner down Jantar Mantar Road. Dodge barricades, cops, tear gas and detention buses. How far can you get before they put you on the bus?">
 <link rel="canonical" href="https://lovl.in/jantar-mantar.html">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lovl.in/jantar-mantar.html">
 <meta property="og:title" content="Dharna Surfers">
-<meta property="og:description" content="Dodge barricades, fat cops, tear gas and detention buses. How far can you get before they put you on the bus?">
+<meta property="og:description" content="Dodge barricades, cops, tear gas and detention buses. How far can you get before they put you on the bus?">
 <meta property="og:image" content="https://lovl.in/assets/dharna-surfers-card.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -79,6 +79,12 @@
   .challenge:empty { display:none; }
   .fine { margin:12px 0 0 !important; font-size:11px !important; opacity:.6; text-align:center; }
   .fine a { color:inherit; }
+  .legal { margin-top:6px; font-size:11px; opacity:.6; text-align:center; }
+  .legal summary { cursor:pointer; text-decoration:underline; list-style:none; }
+  .legal summary::-webkit-details-marker { display:none; }
+  .legal p { margin:8px 0 0 !important; font-size:11px !important; line-height:1.45 !important; text-align:left; }
+  .legal a { color:inherit; }
+  #start .card { max-height:calc(100dvh - 32px); overflow-y:auto; }
 </style>
 </head>
 <body>
@@ -101,7 +107,7 @@
   <div class="card">
     <div class="tag">jantar mantar road, new delhi</div>
     <h1>Dharna Surfers</h1>
-    <p>Section 144 is in effect. Eleven layers of barricades, a very committed street dog, and tear gas drifting down the tree-lined road. Keep moving. Grab a jetpack, take the ramp onto the bus roofs, wear a marigold garland to pull in every flower, and if you spot a boombox, the gorilla will make everyone dance.</p>
+    <p>You are Gyanu, a made-up protester with a placard and a question. Section 144 is in effect. Eleven layers of barricades, a very committed street dog, and tear gas drifting down the tree-lined road. Keep moving. Grab a jetpack, take the ramp onto the bus roofs, wear a marigold garland to pull in every flower, and if you spot a boombox, the gorilla will make everyone dance.</p>
     <div class="keys">
       <span><b>&larr;</b><b>&rarr;</b> switch lane</span>
       <span><b>&uarr;</b> jump</span>
@@ -112,7 +118,14 @@
     <div class="challenge" id="startChallenge"></div>
     <div class="best" id="startBest"></div>
     <button id="startBtn">Start running</button>
-    <p class="fine">A work of satire and fiction. No real person, organisation or event is depicted, and any resemblance is coincidental. Not affiliated with Subway Surfers or SYBO. Music: <a href="https://soundcloud.com/d-watt-987365059/subway-surfers-indian-theme" target="_blank" rel="noopener">Subway Surfers Indian flip by DWatt</a>.</p>
+    <p class="fine">A work of satire and fiction. All characters, Gyanu included, are made up. Music: <a href="https://soundcloud.com/d-watt-987365059/subway-surfers-indian-theme" target="_blank" rel="noopener">Subway Surfers Indian flip by DWatt</a>.</p>
+    <details class="legal">
+      <summary>Legal notice</summary>
+      <p>Dharna Surfers is satire, parody and fiction, made as commentary. It makes no factual claim about any real person, police force, government body, political party or event. All characters, including the player character Gyanu, are fictional, and any resemblance to a real person of any name is coincidental. Real places are used only as a setting.</p>
+      <p>The national flag appears only upright, carried by the crowd, in keeping with the Flag Code of India. No disrespect is intended to the flag, to any community, religion or institution, or to anyone who serves in uniform. The game does not encourage breaking the law, violence or obstructing any public servant.</p>
+      <p>Not affiliated with or endorsed by Subway Surfers, SYBO, SoundCloud or any government body. The music streams through SoundCloud's official player and is credited to its uploader. The game is free and carries no ads. It collects no personal data itself; your best score stays on your device. The SoundCloud player follows SoundCloud's own privacy policy.</p>
+      <p>If you believe anything here is unlawful or concerns you, write to <a href="mailto:lovlinthakkar99@gmail.com">lovlinthakkar99@gmail.com</a>. Every request is reviewed, and anything found to be a problem is changed or removed promptly.</p>
+    </details>
   </div>
 </div>
 
@@ -2114,7 +2127,7 @@
   window.addEventListener('blur', () => setPaused(true));
   window.addEventListener('keydown', e => {
     const k = e.key;
-    if (e.target instanceof HTMLButtonElement && (k === 'Enter' || k === ' ')) return;
+    if ((e.target instanceof HTMLButtonElement || e.target.tagName === 'SUMMARY') && (k === 'Enter' || k === ' ')) return;
     if (e.repeat && k !== 'ArrowDown' && k !== 's' && k !== 'S') { if (k.startsWith('Arrow') || k === ' ') e.preventDefault(); return; }
     if (k === 'p' || k === 'P' || k === 'Escape') setPaused(!paused);
     else if (paused) { if (k === 'Enter' || k === ' ') setPaused(false); else return; }
@@ -2134,10 +2147,12 @@
   // swipes fire as soon as the finger has travelled far enough, not on release, so lane changes feel instant
   let tx = 0, ty = 0, tOn = false, swiped = false;
   window.addEventListener('touchstart', e => {
-    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || (e.target.closest && e.target.closest('.legal'))) return;
     const p = e.touches[0]; tx = p.clientX; ty = p.clientY; tOn = true; swiped = false;
   }, { passive: true });
   window.addEventListener('touchmove', e => {
+    // let a long card (the legal notice on a small phone) scroll
+    if (e.target.closest && e.target.closest('.card')) return;
     e.preventDefault();
     if (!tOn || swiped) return;
     const p = e.touches[0], dx = p.clientX - tx, dy = p.clientY - ty;
