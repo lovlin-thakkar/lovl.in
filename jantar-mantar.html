@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Jantar Mantar Run</title>
+<title>Dharna Surfers</title>
 <meta name="description" content="A satirical endless runner down Jantar Mantar Road. Dodge barricades, fat cops, tear gas and detention buses. How far can you get before they put you on the bus?">
 <link rel="canonical" href="https://lovl.in/jantar-mantar.html">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lovl.in/jantar-mantar.html">
-<meta property="og:title" content="Jantar Mantar Run">
+<meta property="og:title" content="Dharna Surfers">
 <meta property="og:description" content="Dodge barricades, fat cops, tear gas and detention buses. How far can you get before they put you on the bus?">
 <meta property="og:image" content="https://lovl.in/assets/jantar-mantar-card.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Jantar Mantar Run">
+<meta name="twitter:title" content="Dharna Surfers">
 <meta name="twitter:description" content="How far can you get before they put you on the bus?">
 <meta name="twitter:image" content="https://lovl.in/assets/jantar-mantar-card.jpg">
 <meta name="twitter:image:alt" content="A protester with a WHY? placard runs down a barricaded, tree-lined Delhi road past police, buses and a dancing gorilla">
@@ -39,8 +39,10 @@
   #jetwrap.dance #jetbar { background:linear-gradient(90deg,#e83e8c,#7a5cff); }
   #jetlabel { position:fixed; top:100px; left:50%; transform:translateX(-50%); padding:3px 12px; border-radius:8px; background:rgba(27,20,16,.7); font-size:11px; font-weight:800; letter-spacing:.16em; color:#fff; opacity:0; pointer-events:none; white-space:nowrap; }
   #jetlabel.on { opacity:1; }
-  #toast { position:fixed; top:32%; left:50%; width:max-content; max-width:92vw; text-align:center; padding:10px 24px; border-radius:14px; background:rgba(27,20,16,.84); box-shadow:0 6px 24px rgba(0,0,0,.35); font-weight:900; font-size:clamp(20px,4.6vw,34px); letter-spacing:.06em; text-transform:uppercase; color:#fff; opacity:0; transform:translate(-50%,0) scale(.9); transition:opacity .18s, transform .18s; pointer-events:none; }
-  #toast.on { opacity:1; transform:translate(-50%,0) scale(1); }
+  /* sits in the sky under the score row, clear of the road; drops below the power-up bar while it shows */
+  #toast { position:fixed; top:76px; left:50%; width:max-content; max-width:min(92vw,520px); text-align:center; padding:6px 16px; border-radius:10px; background:rgba(27,20,16,.6); font-weight:900; font-size:clamp(14px,3.4vw,22px); letter-spacing:.06em; text-transform:uppercase; color:#fff; opacity:0; transform:translate(-50%,-6px); transition:opacity .18s, transform .18s, top .18s; pointer-events:none; }
+  #jetwrap.on ~ #toast { top:128px; }
+  #toast.on { opacity:1; transform:translate(-50%,0); }
   #jetwrap.mag #jetbar { background:linear-gradient(90deg,#f08a24,#ffd23a); }
   #mute, #pauseBtn { position:fixed; bottom:12px; right:12px; width:40px; height:40px; padding:0; border-radius:50%; background:rgba(27,20,16,.55); color:#fff; font-size:18px; display:none; z-index:5; }
   #pauseBtn { right:auto; left:12px; font-size:15px; font-weight:900; letter-spacing:.06em; }
@@ -91,7 +93,7 @@
 <div id="start" class="screen on">
   <div class="card">
     <div class="tag">jantar mantar road, new delhi</div>
-    <h1>Jantar Mantar Run</h1>
+    <h1>Dharna Surfers</h1>
     <p>Section 144 is in effect. Eleven layers of barricades, a very committed street dog, and tear gas drifting down the tree-lined road. Keep moving. Grab a jetpack, take the ramp onto the bus roofs, wear a marigold garland to pull in every flower, and if you spot a boombox, the gorilla will make everyone dance.</p>
     <div class="keys">
       <span><b>&larr;</b><b>&rarr;</b> switch lane</span>
@@ -1336,6 +1338,23 @@
     const lg = ac.createGain(); lg.gain.value = 0.06;
     lfo.connect(lg); lg.connect(c2.g.gain); lfo.start();
     jetGain = loop(1100, 0.9, 0).g;
+    loadSamples();
+  }
+  // optional audio files: set a url and it replaces the procedural sound of the same name
+  const SAMPLE_URLS = {
+    music: '', coin: '', jump: '', slide: '', lane: '', hit: '', crash: '', whistle: '',
+    bark: '', pickup: '', caught: '', horn: '', door: '', cough: '', hiss: ''
+  };
+  const samples = {};
+  function loadSamples() {
+    for (const [k, url] of Object.entries(SAMPLE_URLS)) if (url)
+      fetch(url).then(r => r.arrayBuffer()).then(b => ac.decodeAudioData(b)).then(buf => { samples[k] = buf; }).catch(() => {});
+  }
+  function playSample(k) {
+    if (!ac || muted || !samples[k]) return false;
+    const s = ac.createBufferSource(); s.buffer = samples[k];
+    s.connect(master); s.start();
+    return true;
   }
   function tone(freq, dur, type = 'sine', vol = 0.15, slideTo = 0) {
     if (!ac || muted) return;
@@ -1370,6 +1389,7 @@
     cough() { burst(0.2, 1800, 0.6); setTimeout(() => burst(0.2, 1500, 0.6), 220); tone(200, 0.2, 'sawtooth', 0.05, 120); },
     hiss() { burst(0.5, 3000, 0.5); }
   };
+  for (const k of Object.keys(sfx)) if (k !== 'jet') { const fn = sfx[k]; sfx[k] = (...a) => { if (!playSample(k)) fn(...a); }; }
 
   /* ---- original procedural soundtrack: dhol-and-synth runner loop, 136 bpm ---- */
   const BPM = 136, STEP = 60 / BPM / 4;
@@ -1379,7 +1399,7 @@
     { root: 36, tones: [0, 4, 7, 12] }, { root: 34, tones: [0, 3, 7, 12] }
   ];
   const ARP = [0, 1, 2, 3, 2, 1, 2, 3, 0, 1, 2, 3, 2, 1, 3, 2];
-  let musicOn = false, musicGain = null, nextT = 0, stepI = 0;
+  let musicOn = false, musicGain = null, nextT = 0, stepI = 0, musicSrc = null;
   function mTone(time, freq, dur, type, vol, cutoff) {
     const o = ac.createOscillator(), g = ac.createGain(), f = ac.createBiquadFilter();
     o.type = type; o.frequency.value = freq;
@@ -1438,6 +1458,12 @@
   }
   function musicTick() {
     if (!ac || !musicOn) return;
+    // a loaded music file takes over from the procedural loop as soon as it decodes
+    if (samples.music) {
+      if (!musicSrc) { musicSrc = ac.createBufferSource(); musicSrc.buffer = samples.music; musicSrc.loop = true; musicSrc.connect(musicGain); musicSrc.start(); }
+      musicSrc.playbackRate.value = jetOn || danceT > 0 ? 1.06 : 1;
+      return;
+    }
     if (muted) { nextT = ac.currentTime + 0.05; return; }
     // after a throttled background tab, skip the missed steps instead of firing them all at once
     if (nextT < ac.currentTime - 0.1) nextT = ac.currentTime + 0.05;
@@ -1769,7 +1795,7 @@
     g.fillStyle = gr; g.fillRect(0, 0, 1200, 675);
     const font = (w, px) => w + ' ' + px + 'px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
     g.fillStyle = '#c8553d'; g.beginPath(); g.roundRect ? g.roundRect(56, 52, 330, 52, 12) : g.rect(56, 52, 330, 52); g.fill();
-    g.fillStyle = '#fff'; g.font = font(800, 26); g.textBaseline = 'middle'; g.fillText('JANTAR MANTAR RUN', 78, 79);
+    g.fillStyle = '#fff'; g.font = font(800, 26); g.textBaseline = 'middle'; g.fillText('DHARNA SURFERS', 78, 79);
     g.textBaseline = 'alphabetic';
     g.fillStyle = 'rgba(255,255,255,.85)'; g.font = font(700, 34); g.fillText('DETAINED AT', 60, 430);
     g.fillStyle = '#fff'; g.font = font(900, 150); g.fillText(fmtDist(lastRun.d), 52, 565);
@@ -1879,7 +1905,7 @@
     endDance();
     playerRig.scale.y = 1.06; slideT = 0;
     sfx.caught(); sfx.hit(); sfx.jet(false); duckMusic();
-    toast('detained', 1.4);
+    toast('Gyanu, it\'s done bro!', 2.2);
   }
   function startDetain() {
     state = 'detain';
