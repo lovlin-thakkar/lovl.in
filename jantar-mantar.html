@@ -10,13 +10,13 @@
 <meta property="og:url" content="https://lovl.in/jantar-mantar.html">
 <meta property="og:title" content="Dharna Surfers">
 <meta property="og:description" content="Dodge barricades, fat cops, tear gas and detention buses. How far can you get before they put you on the bus?">
-<meta property="og:image" content="https://lovl.in/assets/jantar-mantar-card.jpg">
+<meta property="og:image" content="https://lovl.in/assets/dharna-surfers-card.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Dharna Surfers">
 <meta name="twitter:description" content="How far can you get before they put you on the bus?">
-<meta name="twitter:image" content="https://lovl.in/assets/jantar-mantar-card.jpg">
+<meta name="twitter:image" content="https://lovl.in/assets/dharna-surfers-card.jpg">
 <meta name="twitter:image:alt" content="A protester with a WHY? placard runs down a barricaded, tree-lined Delhi road past police, buses and a dancing gorilla">
 <meta property="og:site_name" content="lovl.in">
 <style>
@@ -47,6 +47,10 @@
   #mute, #pauseBtn { position:fixed; bottom:12px; right:12px; width:40px; height:40px; padding:0; border-radius:50%; background:rgba(27,20,16,.55); color:#fff; font-size:18px; display:none; z-index:5; }
   #pauseBtn { right:auto; left:12px; font-size:15px; font-weight:900; letter-spacing:.06em; }
   #mute.on, #pauseBtn.on { display:block; }
+  /* soundcloud mini player, tucked beside the pause button; kept rendered (not display:none) so the widget can load */
+  #scWrap { position:fixed; left:60px; bottom:22px; width:150px; height:20px; border-radius:4px; overflow:hidden; opacity:0; visibility:hidden; z-index:5; transition:opacity .2s; }
+  #scWrap.on.ready { opacity:.7; visibility:visible; }
+  #scWrap iframe { display:block; width:100%; height:20px; border:0; }
   .best { font-size:13px; font-weight:700; margin:-6px 0 14px; color:var(--terracotta); }
   .best:empty { display:none; }
 
@@ -55,6 +59,7 @@
   .card { width:min(430px,100%); background:var(--cream); border-radius:16px; padding:26px 24px 22px; box-shadow:0 18px 50px rgba(27,20,16,.45); border-top:8px solid var(--terracotta); }
   .card h1 { margin:0 0 6px; font-size:32px; line-height:1.05; letter-spacing:-.01em; }
   .card p { margin:0 0 14px; font-size:15px; line-height:1.45; }
+  .card .sub { margin:-2px 0 8px; font-size:15px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--terracotta); }
   .card .tag { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--terracotta); font-weight:700; margin-bottom:6px; }
   .keys { display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; font-size:13px; margin:0 0 18px; }
   .keys span { display:flex; align-items:center; gap:8px; }
@@ -73,6 +78,7 @@
   .challenge { margin:-4px 0 14px; padding:8px 12px; border-radius:10px; background:var(--terracotta); color:#fff; font-size:14px; font-weight:700; }
   .challenge:empty { display:none; }
   .fine { margin:12px 0 0 !important; font-size:11px !important; opacity:.6; text-align:center; }
+  .fine a { color:inherit; }
 </style>
 </head>
 <body>
@@ -89,6 +95,7 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <button id="mute" aria-label="toggle sound">&#128266;</button>
 <button id="pauseBtn" aria-label="pause">II</button>
+<div id="scWrap"><iframe id="sc" title="Music: Subway Surfers Indian Theme by DWatt on SoundCloud" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F2003858683&amp;auto_play=false&amp;visual=false&amp;color=%23c8553d&amp;show_comments=false&amp;hide_related=true"></iframe></div>
 
 <div id="start" class="screen on">
   <div class="card">
@@ -105,14 +112,15 @@
     <div class="challenge" id="startChallenge"></div>
     <div class="best" id="startBest"></div>
     <button id="startBtn">Start running</button>
-    <p class="fine">A satire. No real people or events.</p>
+    <p class="fine">A work of satire and fiction. No real person, organisation or event is depicted, and any resemblance is coincidental. Not affiliated with Subway Surfers or SYBO. Music: <a href="https://soundcloud.com/d-watt-987365059/subway-surfers-indian-theme" target="_blank" rel="noopener">Subway Surfers Indian flip by DWatt</a>.</p>
   </div>
 </div>
 
 <div id="over" class="screen" role="dialog" aria-modal="true" aria-label="Game over">
   <div class="card">
     <div class="tag" id="overTag">game over</div>
-    <h1>Detained.</h1>
+    <h1>Gyanu, it's done bro!</h1>
+    <div class="sub">Detained.</div>
     <p id="overMsg"></p>
     <div class="stats">
       <div><span id="oDist">0 m</span><small>distance</small></div>
@@ -614,11 +622,14 @@
           add(A, 'box', 0, -1.55, -0.03, 0.8, 0.5, 0.03, o.board || 0xf4e9d8);
           for (let i = 0; i < 3; i++) add(A, 'box', 0, -1.43 - i * 0.11, -0.05, 0.6 - i * 0.1, 0.045, 0.02, 0x2a2420);
         } else if (o.hold === 'flag') {
-          add(A, 'cyl', 0, -1.15, 0, 0.035, 1.3, 0.035, 0x6b4a2a);
+          add(A, 'cyl', 0, -1.2, 0, 0.035, 1.4, 0.035, 0x6b4a2a);
           if (o.flag3) {
-            add(A, 'cloth', 0.4, -1.5, 0, 0.75, 0.16, 1, 0xe0702a);
-            add(A, 'cloth', 0.4, -1.66, 0, 0.75, 0.16, 1, 0xf4f4f0);
-            add(A, 'cloth', 0.4, -1.82, 0, 0.75, 0.16, 1, 0x2e7a3a);
+            // the national flag, 3:2 with the chakra; flags are only carried with the arm raised, which turns
+            // the arm upside down, so saffron sits furthest from the hand to end up on top
+            add(A, 'cloth', 0.4, -1.82, 0, 0.72, 0.16, 1, 0xff9933);
+            add(A, 'cloth', 0.4, -1.66, 0, 0.72, 0.16, 1, 0xffffff);
+            add(A, 'cloth', 0.4, -1.5, 0, 0.72, 0.16, 1, 0x138808);
+            add(A, 'cyl', 0.4, -1.66, 0, 0.13, 0.03, 0.13, 0x000080, PI / 2, 0, 0);
           } else add(A, 'cloth', 0.4, -1.65, 0, 0.75, 0.46, 1, o.flag || 0xe0702a);
         } else if (o.hold === 'phone') add(A, 'box', 0, -0.66, -0.05, 0.07, 0.11, 0.02, 0x111111);
         else if (o.hold === 'baton') add(A, 'cyl', 0, -0.85, 0, 0.045, 1.0, 0.045, 0x4a2e18);
@@ -682,13 +693,14 @@
     return P;
   }
 
-  function civilianOpts(hold, chant, lo) {
+  // only the static crowd behind the barricades carries the national flag; nothing on the road you can crash into does
+  function civilianOpts(hold, chant, lo, national = false) {
     const female = chance(0.35);
     const kind = female ? pick(['kurta', 'saree', 'tshirt']) : pick(['tshirt', 'tshirt', 'kurta']);
     return {
       lo, kind, skin: pick(SKINS), hair: pick(HAIRS), top: pick(TOPS),
       bottom: kind === 'saree' ? pick([0xc8553d, 0x2e5aa8, 0x8a4a7a, 0x3f7f8a, 0xe0a030]) : pick(BOTTOMS),
-      hold, chant, board: pick(BOARDS), flag: pick([0xe0702a, 0x2e5aa8, 0xc23a30, 0x2e7a3a, 0xf2d95c]), flag3: chance(0.35),
+      hold, chant, board: pick(BOARDS), flag: pick([0xe0702a, 0x2e5aa8, 0xc23a30, 0x2e7a3a, 0xf2d95c]), flag3: national && chance(0.35),
       hairStyle: female ? (chance(0.75) ? 'long' : 'short') : pick(['short', 'short', 'short', 'topi', 'turban', 'short']),
       turban: pick([0xe0702a, 0xf2f0e6, 0x2e5aa8, 0xc23a30]),
       scarf: chance(0.25) ? pick([0xc23a30, 0xe0a030, 0xf2f0e6]) : null,
@@ -874,7 +886,7 @@
           if (!free(px, pz, 0.9)) continue;
           const pose = pick(['placard', 'placard', 'fist', 'fist', 'phone', 'idle', 'clap', 'flag', 'flower', 'book']);
           const hold = { placard: 'placard', flag: 'flag', phone: 'phone', flower: 'flower', book: 'book' }[pose] || null;
-          const o = civilianOpts(hold, chance(0.5), true);
+          const o = civilianOpts(hold, chance(0.5), true, true);
           const ry = (s > 0 ? PI / 2 : -PI / 2) + rand(-0.6, 0.6);
           const P = {
             idle: { armL: [0, -0.08], armR: [0, 0.08] }, placard: { armR: [0, 3.0], armL: [0, -0.1] }, fist: { armR: [0, 3.0], armL: [0, -0.1] },
@@ -959,7 +971,7 @@
   function mkBarricade() {
     const g = buildProps(new THREE.Group(), barricadeProps());
     for (const sz of [0.062, -0.062]) {
-      const s = sign(0.78, 0.2, 'DELHI POLICE', '#f6e27a', '#1b1b1d');
+      const s = sign(0.78, 0.2, 'POLICE', '#f6e27a', '#1b1b1d');
       s.position.set(0, 0.74, sz); if (sz < 0) s.rotation.y = PI; g.add(s);
     }
     return { g, w: 2.0, d: 0.8, y0: 0, y1: 1.2, kind: 'low' };
@@ -1021,7 +1033,7 @@
     dest.position.set(0, 2.78, 3.74); g.add(dest);
     for (const x of [-1.03, 1.03]) for (const z of [-2.4, 2.4]) wheel(g, x, z);
     for (const sx of [-1, 1]) {
-      const sg = sign(3.4, 0.46, dtc ? 'DELHI TRANSPORT' : 'DELHI POLICE', dtc ? '#2f9a4a' : '#23478f', '#ffffff');
+      const sg = sign(3.4, 0.46, dtc ? 'DELHI TRANSPORT' : 'POLICE', dtc ? '#2f9a4a' : '#23478f', '#ffffff');
       sg.position.set(sx * 1.225, 0.95, 0); sg.rotation.y = sx * PI / 2; g.add(sg);
       for (let i = 0; i < 6; i++) {
         const z = -2.9 + i * 1.15;
@@ -1457,7 +1469,7 @@
     if (s === 0) for (const tn of ch.tones.slice(0, 3)) mTone(time, mtof(ch.root + 12 + tn), STEP * 15, 'triangle', 0.04, 1200);
   }
   function musicTick() {
-    if (!ac || !musicOn) return;
+    if (!ac || !musicOn || scLive) return;
     // a loaded music file takes over from the procedural loop as soon as it decodes
     if (samples.music) {
       if (!musicSrc) { musicSrc = ac.createBufferSource(); musicSrc.buffer = samples.music; musicSrc.loop = true; musicSrc.connect(musicGain); musicSrc.start(); }
@@ -1470,6 +1482,8 @@
     while (nextT < ac.currentTime + 0.18) { playStep(stepI, nextT); nextT += STEP; stepI++; }
   }
   function startMusic() {
+    // a music file set in SAMPLE_URLS wins over SoundCloud
+    scWant = !SAMPLE_URLS.music; scDuck = false; scSync();
     if (!ac) return;
     if (!musicGain) { musicGain = ac.createGain(); musicGain.gain.value = 0.55; musicGain.connect(master); }
     musicGain.gain.setTargetAtTime(0.55, ac.currentTime, 0.15);
@@ -1477,11 +1491,32 @@
     musicOn = true; nextT = ac.currentTime + 0.08; stepI = 0;
     setInterval(musicTick, 30);
   }
-  function duckMusic() { if (musicGain && ac) musicGain.gain.setTargetAtTime(0.12, ac.currentTime, 0.2); }
+  function duckMusic() { scDuck = true; scSync(); if (musicGain && ac) musicGain.gain.setTargetAtTime(0.12, ac.currentTime, 0.2); }
+
+  /* ---- background music through SoundCloud's embed player; the procedural loop covers until it actually plays, and again if it fails ---- */
+  let scW = null, scLive = false, scWant = false, scDuck = false;
+  function scSync() {
+    if (!scW) return;
+    scW.setVolume(muted ? 0 : scDuck ? 12 : 55);
+    if (scWant && !paused && !document.hidden) scW.play(); else scW.pause();
+  }
+  (function loadSC() {
+    const s = document.createElement('script');
+    s.src = 'https://w.soundcloud.com/player/api.js';
+    s.onload = () => {
+      const w = SC.Widget(el('sc')), E = SC.Widget.Events;
+      w.bind(E.READY, () => { scW = w; el('scWrap').classList.add('ready'); scSync(); });
+      w.bind(E.PLAY, () => { scLive = true; });
+      w.bind(E.FINISH, () => { w.seekTo(0); w.play(); });
+      w.bind(E.ERROR, () => { scW = null; scLive = false; el('scWrap').classList.remove('ready'); });
+    };
+    document.head.appendChild(s);
+  })();
   function setMuted(m) {
     muted = m;
     try { localStorage.setItem('jm-muted', m ? '1' : '0'); } catch (e) {}
     if (master) master.gain.value = m ? 0 : 0.7;
+    scSync();
     el('mute').innerHTML = m ? '&#128263;' : '&#128266;';
     el('mute').setAttribute('aria-pressed', String(m));
   }
@@ -1797,7 +1832,8 @@
     g.fillStyle = '#c8553d'; g.beginPath(); g.roundRect ? g.roundRect(56, 52, 330, 52, 12) : g.rect(56, 52, 330, 52); g.fill();
     g.fillStyle = '#fff'; g.font = font(800, 26); g.textBaseline = 'middle'; g.fillText('DHARNA SURFERS', 78, 79);
     g.textBaseline = 'alphabetic';
-    g.fillStyle = 'rgba(255,255,255,.85)'; g.font = font(700, 34); g.fillText('DETAINED AT', 60, 430);
+    g.fillStyle = '#fff'; g.font = font(900, 58); g.fillText('Gyanu, it\'s done bro!', 56, 372);
+    g.fillStyle = 'rgba(255,255,255,.85)'; g.font = font(700, 30); g.fillText('DETAINED AT', 60, 432);
     g.fillStyle = '#fff'; g.font = font(900, 150); g.fillText(fmtDist(lastRun.d), 52, 565);
     g.fillStyle = '#ffd23a'; g.font = font(700, 34);
     g.fillText(lastRun.coins + ' marigolds  ·  ' + lastRun.cops + (lastRun.cops === 1 ? ' cop' : ' cops') + ' tripped', 60, 622);
@@ -1896,7 +1932,7 @@
     beatDone = false; hasShot = false;
     state = 'play';
     el('start').classList.remove('on'); el('over').classList.remove('on');
-    hud.classList.add('on'); el('mute').classList.add('on'); el('pauseBtn').classList.add('on');
+    hud.classList.add('on'); el('mute').classList.add('on'); el('pauseBtn').classList.add('on'); el('scWrap').classList.add('on');
   }
   function caught(by = null) {
     crashedInto = by; wantShot = true;
@@ -2067,13 +2103,14 @@
     el('paused').classList.toggle('on', p);
     if (p) el('resumeBtn').focus({ preventScroll: true }); else if (document.activeElement) document.activeElement.blur();
     if (ac) { if (p) ac.suspend(); else ac.resume(); }
+    scSync();
   }
   function press() {
     if (paused) setPaused(false);
     else if (state === 'ready') start();
     else if (state === 'over' && performance.now() - overAt > 500) start();
   }
-  document.addEventListener('visibilitychange', () => { if (document.hidden) setPaused(true); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) setPaused(true); scSync(); });
   window.addEventListener('blur', () => setPaused(true));
   window.addEventListener('keydown', e => {
     const k = e.key;
@@ -2097,7 +2134,7 @@
   // swipes fire as soon as the finger has travelled far enough, not on release, so lane changes feel instant
   let tx = 0, ty = 0, tOn = false, swiped = false;
   window.addEventListener('touchstart', e => {
-    if (e.target.tagName === 'BUTTON') return;
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
     const p = e.touches[0]; tx = p.clientX; ty = p.clientY; tOn = true; swiped = false;
   }, { passive: true });
   window.addEventListener('touchmove', e => {
