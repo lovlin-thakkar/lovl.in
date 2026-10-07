@@ -545,7 +545,8 @@
   const HAIRS = [0x15110e, 0x1c140e, 0x2a1d14, 0x3a2a1c];
   const TOPS = [0xe8e2d0, 0xc8553d, 0x2e5aa8, 0x5d8a4a, 0xe0a030, 0x8a4a7a, 0x1f1f24, 0xd9d4c4, 0x3f7f8a, 0xb8412b, 0x7a8a3a];
   const BOTTOMS = [0x3a4a6b, 0x2b2b30, 0x6b5a4a, 0x4a5a3a, 0xd9d4c4, 0x24304a];
-  const BOARDS = [0xf4e9d8, 0xf2d95c, 0xcfe3ee, 0xf3c6c0];
+  // placards without real text stay cream or white with dark 'writing' lines, so a coloured board can't pass for a striped flag
+  const BOARDS = [0xf4e9d8, 0xf6f6f2];
   // a flag with no text is either the national flag or plain white, so nothing reads as another country's or a party's flag
   const FLAG_WHITE = 0xf6f6f2;
   const SLOGANS = ['ENOUGH', 'LISTEN', 'WE ARE HERE', 'JUSTICE', 'HEAR US', 'NO MORE', 'RIGHT TO PROTEST', 'DIGNITY', 'ANSWERS NOW', 'SAVE OUR JOBS', 'WAGES NOW', 'FLOWERS NOT BATONS', 'PEACE', 'WE DANCE TOO'];
