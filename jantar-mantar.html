@@ -546,6 +546,8 @@
   const TOPS = [0xe8e2d0, 0xc8553d, 0x2e5aa8, 0x5d8a4a, 0xe0a030, 0x8a4a7a, 0x1f1f24, 0xd9d4c4, 0x3f7f8a, 0xb8412b, 0x7a8a3a];
   const BOTTOMS = [0x3a4a6b, 0x2b2b30, 0x6b5a4a, 0x4a5a3a, 0xd9d4c4, 0x24304a];
   const BOARDS = [0xf4e9d8, 0xf2d95c, 0xcfe3ee, 0xf3c6c0];
+  // a flag with no text is either the national flag or plain white, so nothing reads as another country's or a party's flag
+  const FLAG_WHITE = 0xf6f6f2;
   const SLOGANS = ['ENOUGH', 'LISTEN', 'WE ARE HERE', 'JUSTICE', 'HEAR US', 'NO MORE', 'RIGHT TO PROTEST', 'DIGNITY', 'ANSWERS NOW', 'SAVE OUR JOBS', 'WAGES NOW', 'FLOWERS NOT BATONS', 'PEACE', 'WE DANCE TOO'];
 
   function personSpec(o) {
@@ -642,7 +644,7 @@
             add(A, 'cloth', 0.4, -1.66, 0, 0.72, 0.16, 1, 0xffffff);
             add(A, 'cloth', 0.4, -1.5, 0, 0.72, 0.16, 1, 0x138808);
             add(A, 'cyl', 0.4, -1.66, 0, 0.13, 0.03, 0.13, 0x000080, PI / 2, 0, 0);
-          } else add(A, 'cloth', 0.4, -1.65, 0, 0.75, 0.46, 1, o.flag || 0xe0702a);
+          } else add(A, 'cloth', 0.4, -1.65, 0, 0.72, 0.48, 1, FLAG_WHITE);
         } else if (o.hold === 'phone') add(A, 'box', 0, -0.66, -0.05, 0.07, 0.11, 0.02, 0x111111);
         else if (o.hold === 'baton') add(A, 'cyl', 0, -0.85, 0, 0.045, 1.0, 0.045, 0x4a2e18);
         else if (o.hold === 'flower') {
@@ -712,7 +714,7 @@
     return {
       lo, kind, skin: pick(SKINS), hair: pick(HAIRS), top: pick(TOPS),
       bottom: kind === 'saree' ? pick([0xc8553d, 0x2e5aa8, 0x8a4a7a, 0x3f7f8a, 0xe0a030]) : pick(BOTTOMS),
-      hold, chant, board: pick(BOARDS), flag: pick([0xe0702a, 0x2e5aa8, 0xc23a30, 0x2e7a3a, 0xf2d95c]), flag3: national && chance(0.35),
+      hold, chant, board: pick(BOARDS), flag3: national && chance(0.35),
       hairStyle: female ? (chance(0.75) ? 'long' : 'short') : pick(['short', 'short', 'short', 'topi', 'turban', 'short']),
       turban: pick([0xe0702a, 0xf2f0e6, 0x2e5aa8, 0xc23a30]),
       scarf: chance(0.25) ? pick([0xc23a30, 0xe0a030, 0xf2f0e6]) : null,
@@ -924,7 +926,7 @@
       }
       for (const [fx, fz] of flagSpots) {
         sp('cyl', fx, 2.2, fz, 0.05, 4.4, 0.05, 0x6b4a2a);
-        sp('cloth', fx, 3.95, fz + 0.5, 0.02, 0.6, 1.0, pick([0xe0702a, 0x2e5aa8, 0xc23a30, 0x2e7a3a, 0xf2d95c]), 0, PI / 2, 0);
+        sp('cloth', fx, 3.95, fz + 0.5, 0.02, 0.6, 1.0, FLAG_WHITE, 0, PI / 2, 0);
       }
       // a bus parked well behind the crowd (right side only; the left is the compound)
       if (s > 0 && chance(0.55)) {
@@ -937,7 +939,7 @@
       sp('sph', s * 5.7, 9.4, lampZ, 0.5, 0.2, 0.3, 0xfff1c8);
     }
     // bunting strung from lamp to lamp, high enough that a jetpack passes under it
-    for (let i = 0; i < 22; i++) sp('cloth', -6.4 + i * 0.6, 9.35 - 0.45 * Math.sin(PI * i / 21), lampZ, 0.34, 0.4, 1, pick([0xe0702a, 0xf2f0e6, 0x2e7a3a, 0xc23a30, 0xf2d95c]), 0, PI / 2, 0.15);
+    for (let i = 0; i < 22; i++) sp('cloth', -6.4 + i * 0.6, 9.35 - 0.45 * Math.sin(PI * i / 21), lampZ, 0.34, 0.4, 1, FLAG_WHITE, 0, PI / 2, 0.15);
     if (chance(0.7)) {
       const sg = sign(3.6, 1.2, pick(['SANSAD MARG', 'JANTAR MANTAR RD', 'CONNAUGHT PLACE', 'NEW DELHI 1 KM', 'PARLIAMENT ST']), '#1f6a46', '#ffffff');
       sg.position.set(6.65, 5.5, lampZ + 0.2); g.add(sg);
