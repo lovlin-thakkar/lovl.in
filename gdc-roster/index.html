@@ -42,10 +42,18 @@ h1 { font: 700 clamp(40px, 8vw, 72px)/1 var(--display); letter-spacing: -0.02em;
 .lede { margin: 0; max-width: 60ch; color: var(--muted); font-size: 18px; }
 
 .index { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
-.index a { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); text-decoration: none; color: var(--fg); height: 100%; }
+.index a { display: grid; gap: 8px; align-content: start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); text-decoration: none; color: var(--fg); height: 100%; }
 .index a:hover { border-color: var(--accent); }
 .index b { font: 700 16px var(--display); }
 .index small { color: var(--muted); font-size: 13px; line-height: 1.4; }
+.yoe { display: flex; align-items: baseline; gap: 8px; }
+.yoe strong { font: 700 28px/1 var(--display); color: var(--accent); }
+.yoe span { font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 700 12px var(--body); padding: 3px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--fg); }
+.tag.main { background: var(--badge-bg); color: var(--badge-fg); }
+.stack { font: 500 12px/1.5 var(--mono); color: var(--muted); }
+.glance { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
 
 .profiles { display: grid; gap: 24px; }
 .profile { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 24px; scroll-margin-top: 16px; }
@@ -94,31 +102,31 @@ footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line)
 
 <script>
 const P = [
-  { id: "pranali-rasal", name: "Pranali Rasal", track: "Java & backend development",
+  { id: "pranali-rasal", yoe: "9+ yrs", level: "Senior", tags: ["Backend"], stack: "Java · Spring Boot · Microservices", city: "Pune", name: "Pranali Rasal", track: "Java & backend development",
     summary: "Java developer with 9+ years of experience across QuinStreet, Sincro Digital and CDK Global. Her work spans REST APIs, microservices, production debugging and code reviews.",
     rows: [["Role", "Senior Java Developer, QuinStreet, Pune"], ["Experience", "9+ years"],
       ["Technologies", "Java 8/11/17, Spring Boot, Oracle, MySQL, Redshift, Elasticsearch, RabbitMQ"],
       ["Highlights", "Backend API development, production support, code reviews and technical interviews"]],
     phone: "+91 75079 38970", email: "pranalirasal@gmail.com" },
-  { id: "keyur-patel", name: "Keyur Patel", track: "Full-stack development & web AR",
+  { id: "keyur-patel", yoe: "4+ yrs", level: "Mid", tags: ["Full-stack", "Frontend", "Web AR"], stack: "React · TypeScript · Node.js · Three.js", city: "Ahmedabad", name: "Keyur Patel", track: "Full-stack development & web AR",
     summary: "Full-stack developer with 4+ years of experience, bringing together web applications and interactive 3D experiences. His work includes browser-based AR jewellery try-on, an e-commerce admin platform and ERPNext-backed REST services.",
     rows: [["Role", "Full Stack Developer, Plushvie Retail, Ahmedabad"], ["Experience", "4+ years"],
       ["Technologies", "React, TypeScript, Three.js, Node.js, Express, PHP, Python (Frappe), MySQL, MongoDB, GCP"],
       ["Highlights", "AR product experiences, e-commerce tooling and end-to-end feature delivery"]],
     phone: "+91 98245 08857", email: "keyur823827@gmail.com" },
-  { id: "harshal-bhavsar", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
+  { id: "harshal-bhavsar", yoe: "Student", level: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
     summary: "Computer science student building experience in backend services and self-hosted infrastructure. His internship work includes Python Azure Functions and MySQL schema design, alongside a Raspberry Pi server project using Docker.",
     rows: [["Education", "B.Tech CSE, Parul University, Vadodara; expected 2027"], ["Experience", "Backend Developer Intern, Consult Anubhav, May - Aug 2023"],
       ["Technologies", "Java, Python, Rust, Flask, FastAPI, MySQL, MongoDB, Docker, Linux, Cloudflare"],
       ["Highlights", "Harvard CS50x; 900+ DSA problems across coding platforms"]],
     phone: "+91 98751 42750", email: "harshalbhavsar213@gmail.com" },
-  { id: "dhairya-khatri", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
+  { id: "dhairya-khatri", yoe: "Student", level: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
     summary: "Final-year computer science student with projects spanning AI code review and retrieval-augmented financial guidance. His builds include CodeOrbit, using GitHub webhooks, and Zen Wealth, using MongoDB Atlas vector search.",
     rows: [["Education", "Final-year B.Tech CSE, Parul University, Vadodara; CGPA 7.91"],
       ["Technologies", "JavaScript, TypeScript, Java, Python, React, Node.js, Express, FastAPI, MongoDB, MySQL, Firebase, Supabase"],
       ["Projects", "CodeOrbit and Zen Wealth"], ["Highlights", "1000+ DSA problems; LeetCode rating 1625; CodeChef 2-star"]],
     phone: "+91 94263 69041", email: "dhairyakhatri83@gmail.com" },
-  { id: "mann-dahiya", name: "Mann Dahiya", track: "Unity, games & XR experiences",
+  { id: "mann-dahiya", yoe: "2+ yrs", level: "Mid", tags: ["Game dev", "XR"], stack: "Unity · C# · VR/AR", city: "", name: "Mann Dahiya", track: "Unity, games & XR experiences",
     summary: "Unity engineer with 2+ years of experience in gameplay systems, multiplayer experiences and VR/AR training simulations. His projects include workplace POSH training and VR fire-safety training, with experience leading a team of five developers and two designers.",
     rows: [["Role", "Unity Engineer, Twin Reality Technologies"], ["Experience", "2+ years; previously Lead Game Developer at Jabsz Gaming"],
       ["Technologies", "Unity, C#, Mirror networking, WebGL, VR/XR, AR face tracking, REST APIs"],
@@ -129,15 +137,20 @@ const P = [
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const initials = n => n.split(" ").map(w => w[0]).join("");
 const first = n => n.split(" ")[0];
+const tagHtml = p => `<span class="tags">${p.tags.map((t, i) => `<span class="tag${i ? "" : " main"}">${esc(t)}</span>`).join("")}</span>`;
 
 document.getElementById("index").innerHTML = P.map(p =>
-  `<li><a href="#${p.id}"><b>${esc(p.name)}</b><small>${esc(p.track)}</small></a></li>`).join("");
+  `<li><a href="#${p.id}">
+    <span class="yoe"><strong>${p.yoe}</strong><span>${esc(p.level)}</span></span>
+    <b>${esc(p.name)}</b>${tagHtml(p)}
+    <span class="stack">${esc(p.stack)}</span>${p.city ? `<small>${esc(p.city)}</small>` : ""}</a></li>`).join("");
 
 document.getElementById("profiles").innerHTML = P.map(p => `
   <article class="profile" id="${p.id}">
     <div class="arch" aria-hidden="true">${initials(p.name)}</div>
     <div class="body">
       <div><p class="track">${esc(p.track)}</p><h2>${esc(p.name)}</h2></div>
+      <div class="glance"><span class="yoe"><strong>${p.yoe}</strong><span>${esc(p.level)}${p.city ? " · " + esc(p.city) : ""}</span></span>${tagHtml(p)}</div>
       <p class="summary">${esc(p.summary)}</p>
       <dl>${p.rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}
         <dt>Contact</dt><dd class="contact">
