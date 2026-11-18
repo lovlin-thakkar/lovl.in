@@ -55,6 +55,7 @@ h1 { font: 700 clamp(40px, 8vw, 72px)/1 var(--display); letter-spacing: -0.02em;
 .stack { font: 500 12px/1.5 var(--mono); color: var(--muted); }
 .glance { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
 
+.join { margin: 0; color: var(--muted); font-size: 15px; }
 .profiles { display: grid; gap: 24px; }
 .profile { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 24px; scroll-margin-top: 16px; }
 .arch { width: 88px; height: 112px; background: var(--badge-bg); color: var(--badge-fg); border-radius: 44px 44px 8px 8px; display: grid; place-items: center; font: 700 30px var(--display); }
@@ -65,13 +66,9 @@ h2 { font: 700 32px/1.1 var(--display); margin: 4px 0 0; letter-spacing: -0.01em
 dl { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 8px 16px; margin: 0; padding-top: 16px; border-top: 1px solid var(--line); }
 dt { font: 500 12px/1.9 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 dd { margin: 0; }
-.contact { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
-.contact code { font: 500 14px var(--mono); user-select: all; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .btn { font: 700 14px var(--body); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .btn.primary { background: var(--badge-bg); color: var(--badge-fg); border-color: var(--badge-bg); }
-.btn.wa { background: var(--accent-soft); color: var(--fg); border-color: transparent; }
-.mini { font: 500 12px var(--mono); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
 
 
 @media (max-width: 560px) {
@@ -92,6 +89,7 @@ dd { margin: 0; }
     </div>
     <h1>Meet the talent</h1>
     <ul class="index" id="index"></ul>
+    <p class="join">Hiring or have a lead? Join the <a href="https://chat.whatsapp.com/FIu380MAQNqBNgo23MlkdC" target="_blank" rel="noopener">GDC Referrals &amp; Leads group</a>. Candidate contact details are in each resume.</p>
   </header>
   <section class="profiles" id="profiles" aria-label="Candidate profiles"></section>
 </div>
@@ -103,33 +101,28 @@ const P = [
     summary: "Java developer with 9+ years of experience across QuinStreet, Sincro Digital and CDK Global. Her work spans REST APIs, microservices, production debugging and code reviews.",
     rows: [["Role", "Senior Java Developer, QuinStreet, Pune"], ["Experience", "9+ years"],
       ["Technologies", "Java 8/11/17, Spring Boot, Oracle, MySQL, Redshift, Elasticsearch, RabbitMQ"],
-      ["Highlights", "Backend API development, production support, code reviews and technical interviews"]],
-    phone: "+91 75079 38970", email: "pranalirasal@gmail.com" },
+      ["Highlights", "Backend API development, production support, code reviews and technical interviews"]] },
   { id: "keyur-patel", seek: "Full-time", yoe: "4+ yrs", level: "Mid", tags: ["Full-stack", "Frontend", "Web AR"], stack: "React · TypeScript · Node.js · Three.js", city: "Ahmedabad", name: "Keyur Patel", track: "Full-stack development & web AR",
     summary: "Full-stack developer with 4+ years of experience, bringing together web applications and interactive 3D experiences. His work includes browser-based AR jewellery try-on, an e-commerce admin platform and ERPNext-backed REST services.",
     rows: [["Role", "Full Stack Developer, Plushvie Retail, Ahmedabad"], ["Experience", "4+ years"],
       ["Technologies", "React, TypeScript, Three.js, Node.js, Express, PHP, Python (Frappe), MySQL, MongoDB, GCP"],
-      ["Highlights", "AR product experiences, e-commerce tooling and end-to-end feature delivery"]],
-    phone: "+91 98245 08857", email: "keyur823827@gmail.com" },
+      ["Highlights", "AR product experiences, e-commerce tooling and end-to-end feature delivery"]] },
   { id: "harshal-bhavsar", seek: "Internship", yoe: "Student", level: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
     summary: "Computer science student building experience in backend services and self-hosted infrastructure. His internship work includes Python Azure Functions and MySQL schema design, alongside a Raspberry Pi server project using Docker.",
     rows: [["Education", "B.Tech CSE, Parul University, Vadodara; expected 2027"], ["Experience", "Backend Developer Intern, Consult Anubhav, May - Aug 2023"],
       ["Technologies", "Java, Python, Rust, Flask, FastAPI, MySQL, MongoDB, Docker, Linux, Cloudflare"],
-      ["Highlights", "Harvard CS50x; 900+ DSA problems across coding platforms"]],
-    phone: "+91 98751 42750", email: "harshalbhavsar213@gmail.com" },
+      ["Highlights", "Harvard CS50x; 900+ DSA problems across coding platforms"]] },
   { id: "dhairya-khatri", seek: "Intern or full-time", yoe: "Student", level: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
     summary: "Final-year computer science student with projects spanning AI code review and retrieval-augmented financial guidance. His builds include CodeOrbit, using GitHub webhooks, and Zen Wealth, using MongoDB Atlas vector search.",
     rows: [["Education", "Final-year B.Tech CSE, Parul University, Vadodara; CGPA 7.91"],
       ["Technologies", "JavaScript, TypeScript, Java, Python, React, Node.js, Express, FastAPI, MongoDB, MySQL, Firebase, Supabase"],
-      ["Projects", "CodeOrbit and Zen Wealth"], ["Highlights", "1000+ DSA problems; LeetCode rating 1625; CodeChef 2-star"]],
-    phone: "+91 94263 69041", email: "dhairyakhatri83@gmail.com" },
-  { id: "mann-dahiya", seek: "Full-time", yoe: "2+ yrs", level: "Mid", tags: ["Game dev", "XR"], stack: "Unity · C# · VR/AR", city: "", name: "Mann Dahiya", track: "Unity, games & XR experiences",
+      ["Projects", "CodeOrbit and Zen Wealth"], ["Highlights", "1000+ DSA problems; LeetCode rating 1625; CodeChef 2-star"]] },
+  { id: "mann-dahiya", seek: "Full-time", yoe: "2+ yrs", level: "Mid", tags: ["Game dev", "XR", "Open to non-game roles"], stack: "Unity · C# · VR/AR", city: "", name: "Mann Dahiya", track: "Unity, games & XR experiences",
     summary: "Unity engineer with 2+ years of experience in gameplay systems, multiplayer experiences and VR/AR training simulations. His projects include workplace POSH training and VR fire-safety training, with experience leading a team of five developers and two designers.",
     rows: [["Role", "Unity Engineer, Twin Reality Technologies"], ["Experience", "2+ years; previously Lead Game Developer at Jabsz Gaming"],
       ["Technologies", "Unity, C#, Mirror networking, WebGL, VR/XR, AR face tracking, REST APIs"],
       ["Education", "B.E. IT, Charutar Vidya Mandal University; CGPA 8.49"],
-      ["Highlights", "LAN multiplayer, WebGL applications, interactive simulations and team leadership"]],
-    phone: "+91 63553 99935", email: "mannlakra10@gmail.com" },
+      ["Highlights", "LAN multiplayer, WebGL applications, interactive simulations and team leadership"]] },
 ];
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const initials = n => n.split(" ").map(w => w[0]).join("");
@@ -147,25 +140,13 @@ document.getElementById("profiles").innerHTML = P.map(p => `
       <div class="glance"><span class="yoe"><strong>${p.yoe}</strong><span>${esc(p.level)}${p.city ? " · " + esc(p.city) : ""}</span></span><span class="seek">${esc(p.seek)}</span>${tagHtml(p)}</div>
       <p class="summary">${esc(p.summary)}</p>
       <dl>${p.rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}
-        <dt>Contact</dt><dd class="contact">
-          <span><code>${p.phone}</code> <button class="mini" type="button" data-copy="${p.phone}">Copy</button></span>
-          <span><code>${p.email}</code> <button class="mini" type="button" data-copy="${p.email}">Copy</button></span></dd>
       </dl>
       <div class="actions">
         <a class="btn primary" href="pdf/${p.id}.pdf" target="_blank" rel="noopener">${esc(first(p.name))}'s resume (PDF)</a>
-        <a class="btn wa" href="https://wa.me/${p.phone.replace(/\D/g, "")}" target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
   </article>`).join("");
 
-document.addEventListener("click", e => {
-  const c = e.target.closest("[data-copy]");
-  if (c) {
-    const done = () => { c.textContent = "Copied"; setTimeout(() => c.textContent = "Copy", 1500); };
-    const sel = () => { const r = document.createRange(); r.selectNodeContents(c.previousElementSibling); getSelection().removeAllRanges(); getSelection().addRange(r); };
-    try { navigator.clipboard.writeText(c.dataset.copy).then(done, sel); } catch { sel(); }
-  }
-});
 
 </script>
 </body>
