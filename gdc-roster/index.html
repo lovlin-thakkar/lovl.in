@@ -28,7 +28,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { background: var(--bg); color: var(--fg); font: 16px/1.6 var(--body); }
-.wrap { max-width: 920px; margin: 0 auto; padding-block: 40px 64px;
+.wrap { max-width: 1200px; margin: 0 auto; padding-block: 40px 64px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid; gap: 48px; }
 a { color: var(--accent); }
@@ -37,25 +37,25 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 header { display: grid; gap: 20px; }
 .logos { display: flex; gap: 12px; align-items: center; }
 .logos img { width: 64px; height: 64px; border-radius: 14px; }
-.logos span { font: 500 12px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.logos span { font: 500 14px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 h1 { font: 700 clamp(40px, 8vw, 72px)/1 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
 
 .index { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
 .index a { display: grid; gap: 2px; align-content: start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); text-decoration: none; color: var(--fg); height: 100%; }
 .index a:hover { border-color: var(--accent); }
 .index b { font: 700 16px var(--display); }
-.index small { color: var(--muted); font-size: 13px; line-height: 1.4; }
+.index small { color: var(--muted); font-size: 15px; line-height: 1.4; }
 .yoe { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
 .yoe strong { font: 700 28px/1 var(--display); color: var(--accent); }
-.yoe span { font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.yoe span { font: 500 13px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font: 700 12px var(--body); padding: 3px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--fg); }
+.tag { font: 700 14px var(--body); padding: 3px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--fg); }
 .tag.main { background: var(--badge-bg); color: var(--badge-fg); }
-.seek { justify-self: start; font: 700 12px var(--body); padding: 3px 10px; border-radius: 999px; border: 1.5px solid var(--accent); color: var(--accent); }
-.stack { font: 500 12px/1.5 var(--mono); color: var(--muted); }
+.seek { justify-self: start; font: 700 14px var(--body); padding: 3px 10px; border-radius: 999px; border: 1.5px solid var(--accent); color: var(--accent); }
+.stack { font: 500 14px/1.5 var(--mono); color: var(--muted); }
 .glance { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
 
-.join { margin: 0; color: var(--muted); font-size: 15px; }
+.join { margin: 0; color: var(--muted); font-size: 17px; }
 .profiles { display: grid; gap: 24px; }
 .profile { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 24px; scroll-margin-top: 16px; }
 .arch { width: 88px; height: 112px; background: var(--badge-bg); color: var(--badge-fg); border-radius: 44px 44px 8px 8px; display: grid; place-items: center; font: 700 30px var(--display); }
@@ -64,10 +64,10 @@ h1 { font: 700 clamp(40px, 8vw, 72px)/1 var(--display); letter-spacing: -0.02em;
 h2 { font: 700 32px/1.1 var(--display); margin: 4px 0 0; letter-spacing: -0.01em; }
 .summary { margin: 0; max-width: 65ch; }
 dl { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 8px 16px; margin: 0; padding-top: 16px; border-top: 1px solid var(--line); }
-dt { font: 500 12px/1.9 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+dt { font: 500 14px/1.9 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 dd { margin: 0; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-.btn { font: 700 14px var(--body); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn { font: 700 16px var(--body); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .btn.primary { background: var(--badge-bg); color: var(--badge-fg); border-color: var(--badge-bg); }
 
 
@@ -107,22 +107,22 @@ const P = [
     rows: [["Role", "Full Stack Developer, Plushvie Retail, Ahmedabad"], ["Experience", "4+ years"],
       ["Technologies", "React, TypeScript, Three.js, Node.js, Express, PHP, Python (Frappe), MySQL, MongoDB, GCP"],
       ["Highlights", "AR product experiences, e-commerce tooling and end-to-end feature delivery"]] },
-  { id: "harshal-bhavsar", seek: "Internship", yoe: "Student", level: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
-    summary: "Computer science student building experience in backend services and self-hosted infrastructure. His internship work includes Python Azure Functions and MySQL schema design, alongside a Raspberry Pi server project using Docker.",
-    rows: [["Education", "B.Tech CSE, Parul University, Vadodara; expected 2027"], ["Experience", "Backend Developer Intern, Consult Anubhav, May - Aug 2023"],
-      ["Technologies", "Java, Python, Rust, Flask, FastAPI, MySQL, MongoDB, Docker, Linux, Cloudflare"],
-      ["Highlights", "Harvard CS50x; 900+ DSA problems across coding platforms"]] },
-  { id: "dhairya-khatri", seek: "Intern or full-time", yoe: "Student", level: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
-    summary: "Final-year computer science student with projects spanning AI code review and retrieval-augmented financial guidance. His builds include CodeOrbit, using GitHub webhooks, and Zen Wealth, using MongoDB Atlas vector search.",
-    rows: [["Education", "Final-year B.Tech CSE, Parul University, Vadodara; CGPA 7.91"],
-      ["Technologies", "JavaScript, TypeScript, Java, Python, React, Node.js, Express, FastAPI, MongoDB, MySQL, Firebase, Supabase"],
-      ["Projects", "CodeOrbit and Zen Wealth"], ["Highlights", "1000+ DSA problems; LeetCode rating 1625; CodeChef 2-star"]] },
   { id: "mann-dahiya", seek: "Full-time", yoe: "2+ yrs", level: "Mid", tags: ["Game dev", "XR", "Open to non-game roles"], stack: "Unity · C# · VR/AR", city: "", name: "Mann Dahiya", track: "Unity, games & XR experiences",
     summary: "Unity engineer with 2+ years of experience in gameplay systems, multiplayer experiences and VR/AR training simulations. His projects include workplace POSH training and VR fire-safety training, with experience leading a team of five developers and two designers.",
     rows: [["Role", "Unity Engineer, Twin Reality Technologies"], ["Experience", "2+ years; previously Lead Game Developer at Jabsz Gaming"],
       ["Technologies", "Unity, C#, Mirror networking, WebGL, VR/XR, AR face tracking, REST APIs"],
       ["Education", "B.E. IT, Charutar Vidya Mandal University; CGPA 8.49"],
       ["Highlights", "LAN multiplayer, WebGL applications, interactive simulations and team leadership"]] },
+  { id: "dhairya-khatri", seek: "Intern or full-time", yoe: "Student", level: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
+    summary: "Final-year computer science student with projects spanning AI code review and retrieval-augmented financial guidance. His builds include CodeOrbit, using GitHub webhooks, and Zen Wealth, using MongoDB Atlas vector search.",
+    rows: [["Education", "Final-year B.Tech CSE, Parul University, Vadodara; CGPA 7.91"],
+      ["Technologies", "JavaScript, TypeScript, Java, Python, React, Node.js, Express, FastAPI, MongoDB, MySQL, Firebase, Supabase"],
+      ["Projects", "CodeOrbit and Zen Wealth"], ["Highlights", "1000+ DSA problems; LeetCode rating 1625; CodeChef 2-star"]] },
+  { id: "harshal-bhavsar", seek: "Internship", yoe: "Student", level: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
+    summary: "Computer science student building experience in backend services and self-hosted infrastructure. His internship work includes Python Azure Functions and MySQL schema design, alongside a Raspberry Pi server project using Docker.",
+    rows: [["Education", "B.Tech CSE, Parul University, Vadodara; expected 2027"], ["Experience", "Backend Developer Intern, Consult Anubhav, May - Aug 2023"],
+      ["Technologies", "Java, Python, Rust, Flask, FastAPI, MySQL, MongoDB, Docker, Linux, Cloudflare"],
+      ["Highlights", "Harvard CS50x; 900+ DSA problems across coding platforms"]] },
 ];
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const initials = n => n.split(" ").map(w => w[0]).join("");
