@@ -97,7 +97,7 @@ dd { margin: 0; }
 
 <script>
 const P = [
-  { id: "pranali-rasal", seek: "Full-time", yoe: "9+ yrs", level: "Senior", tags: ["Backend"], stack: "Java · Spring Boot · Microservices", city: "Pune", name: "Pranali Rasal", track: "Java & backend development",
+  { id: "pranali-rasal", open: "remote", seek: "Full-time", yoe: "9+ yrs", level: "Senior", tags: ["Backend"], stack: "Java · Spring Boot · Microservices", city: "Pune", name: "Pranali Rasal", track: "Java & backend development",
     summary: "Java developer with 9+ years of experience across QuinStreet, Sincro Digital and CDK Global. Her work spans REST APIs, microservices, production debugging and code reviews.",
     rows: [["Role", "Senior Java Developer, QuinStreet, Pune"], ["Experience", "9+ years"],
       ["Technologies", "Java 8/11/17, Spring Boot, Oracle, MySQL, Redshift, Elasticsearch, RabbitMQ"],
@@ -113,12 +113,12 @@ const P = [
       ["Technologies", "Unity, C#, Mirror networking, WebGL, VR/XR, AR face tracking, REST APIs"],
       ["Education", "B.E. IT, Charutar Vidya Mandal University; CGPA 8.49"],
       ["Highlights", "LAN multiplayer, WebGL applications, interactive simulations and team leadership"]] },
-  { id: "dhairya-khatri", seek: "Intern or full-time", yoe: "Student", level: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
+  { id: "dhairya-khatri", open: "relocation", seek: "Intern or full-time", yoe: "Student", level: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
     summary: "Final-year computer science student with projects spanning AI code review and retrieval-augmented financial guidance. His builds include CodeOrbit, using GitHub webhooks, and Zen Wealth, using MongoDB Atlas vector search.",
     rows: [["Education", "Final-year B.Tech CSE, Parul University, Vadodara; CGPA 7.91"],
       ["Technologies", "JavaScript, TypeScript, Java, Python, React, Node.js, Express, FastAPI, MongoDB, MySQL, Firebase, Supabase"],
       ["Projects", "CodeOrbit and Zen Wealth"], ["Highlights", "1000+ DSA problems; LeetCode rating 1625; CodeChef 2-star"]] },
-  { id: "harshal-bhavsar", seek: "Internship", yoe: "Student", level: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
+  { id: "harshal-bhavsar", open: "relocation", seek: "Internship", yoe: "Student", level: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
     summary: "Computer science student building experience in backend services and self-hosted infrastructure. His internship work includes Python Azure Functions and MySQL schema design, alongside a Raspberry Pi server project using Docker.",
     rows: [["Education", "B.Tech CSE, Parul University, Vadodara; expected 2027"], ["Experience", "Backend Developer Intern, Consult Anubhav, May - Aug 2023"],
       ["Technologies", "Java, Python, Rust, Flask, FastAPI, MySQL, MongoDB, Docker, Linux, Cloudflare"],
@@ -130,14 +130,14 @@ const first = n => n.split(" ")[0];
 const tagHtml = p => `<span class="tags">${p.tags.map((t, i) => `<span class="tag${i ? "" : " main"}">${esc(t)}</span>`).join("")}</span>`;
 
 document.getElementById("index").innerHTML = P.map(p =>
-  `<li><a href="#${p.id}"><b>${esc(p.name)}</b><small>${p.yoe} · ${esc(p.seek)}<br>${esc(p.tags.join(", "))}</small></a></li>`).join("");
+  `<li><a href="#${p.id}"><b>${esc(p.name)}</b><small>${p.yoe} · ${esc(p.seek)}${p.open ? `<br>Open to ${p.open}` : ""}<br>${esc(p.tags.join(", "))}</small></a></li>`).join("");
 
 document.getElementById("profiles").innerHTML = P.map(p => `
   <article class="profile" id="${p.id}">
     <div class="arch" aria-hidden="true">${initials(p.name)}</div>
     <div class="body">
       <h2>${esc(p.name)}</h2>
-      <div class="glance"><span class="yoe"><strong>${p.yoe}</strong><span>${esc(p.level)}${p.city ? " · " + esc(p.city) : ""}</span></span><span class="seek">${esc(p.seek)}</span>${tagHtml(p)}</div>
+      <div class="glance"><span class="yoe"><strong>${p.yoe}</strong><span>${esc(p.level)}${p.city ? " · " + esc(p.city) : ""}</span></span><span class="seek">${esc(p.seek)}</span>${p.open ? `<span class="seek">Open to ${p.open}</span>` : ""}${tagHtml(p)}</div>
       <p class="summary">${esc(p.summary)}</p>
       <dl>${p.rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}
       </dl>
