@@ -56,8 +56,60 @@ h1 { font: 700 clamp(40px, 8vw, 72px)/1 var(--display); letter-spacing: -0.02em;
 .glance { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
 
 .join { margin: 0; color: var(--muted); font-size: 17px; }
-.profiles { display: grid; gap: 24px; }
-.profile { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 24px; scroll-margin-top: 16px; }
+.results { display: grid; gap: 20px; }
+.profiles { display: grid; gap: 24px; margin-top: 28px; }
+.profile { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 24px; scroll-margin-top: calc(var(--barh, 0px) + 16px); }
+
+/* Filters: sticky bar with dropdowns on desktop, bottom sheet on phones. */
+.wrap > .bar { margin-block: -24px; }
+.bar { position: sticky; top: 0; z-index: 20; padding: 12px 0; display: grid; gap: 10px; }
+.bar::before { content: ""; position: absolute; inset: 0 -16px; z-index: -1; background: var(--bg); border-bottom: 1px solid var(--line); }
+.bar-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+#q { flex: 1 1 280px; min-width: 0; font: 16px var(--body); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px; }
+#q:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.sheet, .groups { display: contents; }
+.sheet-head, .sheet-foot, .bar .fbtn { display: none; }
+.grp { position: relative; }
+.grp-btn { padding-block: 9px; }
+.grp-btn::after { content: ""; width: 7px; height: 7px; border: solid currentColor; border-width: 0 2px 2px 0; transform: translateY(-2px) rotate(45deg); margin-left: 2px; }
+.grp.open .grp-btn, .grp.on .grp-btn { border-color: var(--accent); }
+.n { font: 700 13px var(--body); min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--badge-bg); color: var(--badge-fg); display: inline-grid; place-items: center; }
+.grp-opts { display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 30; width: max-content; max-width: min(340px, 90vw); padding: 12px; gap: 6px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 32px rgb(0 0 0 / 0.14); }
+.grp.open .grp-opts { display: flex; }
+.grp.flip .grp-opts { left: auto; right: 0; }
+.grp-opts hr { flex-basis: 100%; border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+.opt { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); cursor: pointer; font-size: 15px; user-select: none; }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt small { color: var(--muted); font-size: 13px; }
+.opt:has(input:checked) { background: var(--badge-bg); color: var(--badge-fg); border-color: var(--badge-bg); }
+.opt:has(input:checked) small { color: inherit; opacity: 0.75; }
+.opt:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.status { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 15px; }
+.count { color: var(--muted); }
+.chips { display: contents; }
+.chip { font: 15px var(--body); display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--fg); border: 0; cursor: pointer; }
+.chip span { font-size: 18px; line-height: 1; color: var(--muted); }
+.chip:hover span { color: var(--fg); }
+.clear { font: 700 15px var(--body); background: none; border: 0; color: var(--accent); cursor: pointer; text-decoration: underline; padding: 3px 4px; }
+.empty { margin: 0; padding: 32px; text-align: center; border: 1px dashed var(--line); border-radius: 18px; color: var(--muted); font-size: 17px; }
+.backdrop { position: fixed; inset: 0; z-index: 40; background: rgb(10 15 35 / 0.45); }
+
+@media (max-width: 720px) {
+  .bar .fbtn { display: inline-flex; }
+  .sheet { display: grid; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; max-height: 85vh; overflow: auto; overscroll-behavior: contain;
+    background: var(--surface); border-radius: 18px 18px 0 0; padding: 0 16px; gap: 20px;
+    transform: translateY(105%); visibility: hidden; }
+  .sheet.open { transform: none; visibility: visible; }
+  .sheet-head { display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1; background: var(--surface); padding: 16px 0 8px; font: 700 22px var(--display); }
+  .groups { display: grid; gap: 18px; }
+  .sheet .grp-btn { pointer-events: none; border: 0; padding: 0; font: 500 13px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .sheet .grp-btn::after, .sheet .grp-btn .n { display: none; }
+  .grp-opts, .grp.open .grp-opts { display: flex; position: static; width: auto; max-width: none; padding: 8px 0 0; border: 0; box-shadow: none; background: none; }
+  .sheet-foot { display: flex; gap: 10px; position: sticky; bottom: 0; z-index: 1; background: var(--surface); padding: 12px 0 max(16px, env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
+  .sheet-foot .primary { flex: 1; justify-content: center; }
+}
+@media (prefers-reduced-motion: no-preference) { .sheet { transition: transform 0.25s ease, visibility 0.25s; } }
 .arch { width: 88px; height: 112px; background: var(--badge-bg); color: var(--badge-fg); border-radius: 44px 44px 8px 8px; display: grid; place-items: center; font: 700 30px var(--display); }
 .body { display: grid; gap: 16px; min-width: 0; }
 .track { font: 500 12px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0; }
@@ -88,16 +140,32 @@ dd { margin: 0; }
       <span>Gujarat Developer Community<br>Referrals &amp; Leads</span>
     </div>
     <h1>Meet the talent</h1>
-    <ul class="index" id="index"></ul>
-    <p class="join">Hiring or have a lead? Join the <a href="https://chat.whatsapp.com/FIu380MAQNqBNgo23MlkdC" target="_blank" rel="noopener">GDC Referrals &amp; Leads group</a>. Candidate contact details are in each resume.</p>
   </header>
-  <section class="profiles" id="profiles" aria-label="Candidate profiles"></section>
+  <div class="bar" id="bar">
+    <div class="bar-row">
+      <input type="search" id="q" placeholder="Search name, role or tech, like React or C++" aria-label="Search candidates" autocomplete="off">
+      <button type="button" class="btn fbtn" id="fopen" aria-expanded="false" aria-controls="sheet">Filters<span class="n" id="fn" hidden></span></button>
+      <div class="sheet" id="sheet" aria-label="Filters">
+        <div class="sheet-head"><b>Filters</b><button type="button" class="btn" id="fclose">Done</button></div>
+        <div class="groups" id="groups"></div>
+        <div class="sheet-foot"><button type="button" class="btn" data-clear>Clear all</button><button type="button" class="btn primary" id="fshow">Show results</button></div>
+      </div>
+    </div>
+    <div class="status"><span class="count" id="count" aria-live="polite"></span><span class="chips" id="chips"></span><button type="button" class="clear" data-clear hidden>Clear all</button></div>
+    <div class="backdrop" id="backdrop" hidden></div>
+  </div>
+  <main class="results">
+    <ul class="index" id="index"></ul>
+    <p class="empty" id="empty" hidden>No matches. Try removing a filter.</p>
+    <p class="join">Hiring or have a lead? Join the <a href="https://chat.whatsapp.com/FIu380MAQNqBNgo23MlkdC" target="_blank" rel="noopener">GDC Referrals &amp; Leads group</a>. Candidate contact details are in each resume.</p>
+    <section class="profiles" id="profiles" aria-label="Candidate profiles"></section>
+  </main>
 </div>
 
 
 <script>
 const P = [
-  { id: "dwijkumar-mistry", open: "relocation", seek: "Full-time", yoe: "8+ yrs", level: "Senior", tags: ["Medical imaging", "AI", "C++"], stack: "C++ · Python · PyTorch · Qt · VTK", city: "Vadodara", name: "Dwijkumar Mistry", track: "Medical imaging & AI software",
+  { id: "dwijkumar-mistry", open: "relocation", seek: "Full-time", yoe: "8+ yrs", level: "Senior", tags: ["Medical imaging", "AI"], stack: "C++ · Python · PyTorch · Qt · VTK", city: "Vadodara", name: "Dwijkumar Mistry", track: "Medical imaging & AI software",
     summary: "Senior engineer with 8+ years building regulated medical imaging and AI software. Leads engineering across the 3D Surgical portfolio, including MySegmenter, an FDA 510(k) cleared segmentation suite.",
     rows: [["Role", "Senior Project Lead, 3D Surgical (Jajal Medical Services), Vadodara"], ["Experience", "8+ years"],
       ["Technologies", "C++, Python, PyTorch, MONAI, nnU-Net, VTK, ITK, Qt, DICOM, React, Next.js, Flutter, AWS"],
@@ -108,35 +176,35 @@ const P = [
     rows: [["Role", "Senior Java Developer, QuinStreet, Pune"], ["Experience", "9+ years"],
       ["Technologies", "Java 8/11/17, Spring Boot, Oracle, MySQL, Redshift, Elasticsearch, RabbitMQ"],
       ["Highlights", "Backend API development, production support, code reviews and technical interviews"]] },
-  { id: "keyur-patel", seek: "Full-time", yoe: "4+ yrs", level: "Mid", tags: ["Full-stack", "Frontend", "Web AR"], stack: "React · TypeScript · Node.js · Three.js", city: "Ahmedabad", name: "Keyur Patel", track: "Full-stack development & web AR",
+  { id: "keyur-patel", seek: "Full-time", yoe: "4+ yrs", level: "Mid", tags: ["Full-stack", "Frontend", "XR"], stack: "React · TypeScript · Node.js · Three.js", city: "Ahmedabad", name: "Keyur Patel", track: "Full-stack development & web AR",
     summary: "Full-stack developer with 4+ years of experience, bringing together web applications and interactive 3D experiences. His work includes browser-based AR jewellery try-on, an e-commerce admin platform and ERPNext-backed REST services.",
     rows: [["Role", "Full Stack Developer, Plushvie Retail, Ahmedabad"], ["Experience", "4+ years"],
       ["Technologies", "React, TypeScript, Three.js, Node.js, Express, PHP, Python (Frappe), MySQL, MongoDB, GCP"],
       ["Highlights", "AR product experiences, e-commerce tooling and end-to-end feature delivery"]] },
-  { id: "mann-dahiya", seek: "Full-time", yoe: "2+ yrs", level: "Mid", tags: ["Game dev", "XR", "Open to non-game roles as well"], stack: "Unity · C# · VR/AR", city: "", name: "Mann Dahiya", track: "Unity, games & XR experiences",
+  { id: "mann-dahiya", seek: "Full-time", yoe: "2+ yrs", level: "Mid", also: "Open to non-game roles as well", tags: ["Game dev", "XR"], stack: "Unity · C# · VR/AR", city: "", name: "Mann Dahiya", track: "Unity, games & XR experiences",
     summary: "Unity engineer with 2+ years of experience in gameplay systems, multiplayer experiences and VR/AR training simulations. His projects include workplace POSH training and VR fire-safety training, with experience leading a team of five developers and two designers.",
     rows: [["Role", "Unity Engineer, Twin Reality Technologies"], ["Experience", "2+ years; previously Lead Game Developer at Jabsz Gaming"],
       ["Technologies", "Unity, C#, Mirror networking, WebGL, VR/XR, AR face tracking, REST APIs"],
       ["Education", "B.E. IT, Charutar Vidya Mandal University; CGPA 8.49"],
       ["Highlights", "LAN multiplayer, WebGL applications, interactive simulations and team leadership"]] },
-  { id: "hemang-jiwani", seek: "Full-time", yoe: "3+ yrs", level: "Mid", tags: ["Web design", "Frontend", "QA", "Game dev"], stack: "WordPress · Shopify · React · Figma · Selenium", city: "Vadodara", name: "Hemang Jiwani", track: "Web design, development & QA",
+  { id: "hemang-jiwani", seek: "Full-time", yoe: "3+ yrs", level: "Mid", tags: ["Frontend", "Web design", "QA", "Game dev"], stack: "WordPress · Shopify · React · Figma · Selenium", city: "Vadodara", name: "Hemang Jiwani", track: "Web design, development & QA",
     summary: "Web designer, developer and QA engineer with 3+ years of client work. Led 100+ projects at Techno Mantra and has launched 25+ freelance WordPress and Shopify sites for clients in India and the UK.",
     rows: [["Role", "Freelance web designer, developer, QA & AI tools specialist, Remote"], ["Experience", "3+ years"],
       ["Technologies", "WordPress, Shopify, Elementor, React, TypeScript, Figma, Selenium, Postman, SQL, Unreal Engine 5, Blender"],
       ["Highlights", "100+ client projects led from requirements to launch, cross-browser and regression testing, AI tools for faster asset and code delivery, Unreal Engine 5 game prototypes"]] },
-  { id: "dhairya-khatri", seek: "Intern or full-time", yoe: "Student", level: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
+  { id: "dhairya-khatri", seek: "Intern or full-time", yoe: "Student", level: "Student", stage: "Final year", tags: ["Full-stack", "AI"], stack: "React · Node.js · FastAPI · MongoDB", city: "Vadodara", name: "Dhairya Khatri", track: "Full-stack development & AI applications",
     summary: "Final-year computer science student with projects spanning AI code review and retrieval-augmented financial guidance. His builds include CodeOrbit, using GitHub webhooks, and Zen Wealth, using MongoDB Atlas vector search.",
     rows: [["Education", "Final-year B.Tech CSE, Parul University, Vadodara; CGPA 7.91"],
       ["Technologies", "JavaScript, TypeScript, Java, Python, React, Node.js, Express, FastAPI, MongoDB, MySQL, Firebase, Supabase"],
       ["Projects", "CodeOrbit and Zen Wealth"], ["Highlights", "1000+ DSA problems; LeetCode rating 1625; CodeChef 2-star"]] },
-  { id: "rushit-soni", open: "relocation to Ahmedabad", seek: "Internship", yoe: "Student", level: "Final year", tags: ["AI engineering", "Full-stack", "MERN"], stack: "Python · FastAPI · React · Node.js · RAG", city: "Vadodara", name: "Rushit Soni", track: "AI engineering & full-stack development",
+  { id: "rushit-soni", open: "relocation to Ahmedabad", seek: "Internship", yoe: "Student", level: "Student", stage: "Final year", tags: ["AI", "Full-stack"], stack: "Python · FastAPI · React · Node.js · RAG", city: "Vadodara", name: "Rushit Soni", track: "AI engineering & full-stack development",
     summary: "Final-year M.Tech student in ICT (Machine Learning) who builds AI products end to end. Projects include an adaptive learning portal with a RAG-grounded tutor, an LLM-powered support triage system and a WhatsApp shop assistant for small retailers.",
     rows: [["Education", "M.Tech ICT (Machine Learning), Dhirubhai Ambani University, Gandhinagar; CPI 8.91. B.E. CSE, MSU Baroda; CPI 9.03"],
       ["Seeking", "Final-semester internship in AI engineering, full-stack with AI or MERN"],
       ["Technologies", "Python, JavaScript, SQL, RAG, Hugging Face, ModernBERT, React, Redux Toolkit, Node.js, Express, FastAPI, MongoDB, MySQL, Supabase, n8n"],
       ["Research", "Privacy-risk classification with a 3-LLM judge ensemble, distilled into a ModernBERT model"],
       ["Highlights", "GATE CSIT 2025: AIR 3207, 98.12 percentile; GATE DSAI 2024 qualified"]] },
-  { id: "harshal-bhavsar", open: "relocation", seek: "Internship", yoe: "Student", level: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
+  { id: "harshal-bhavsar", open: "relocation", seek: "Internship", yoe: "Student", level: "Student", stage: "Intern exp.", tags: ["Backend", "DevOps"], stack: "Python · FastAPI · Docker", city: "Vadodara", name: "Harshal Bhavsar", track: "Backend development & infrastructure projects",
     summary: "Computer science student building experience in backend services and self-hosted infrastructure. His internship work includes Python Azure Functions and MySQL schema design, alongside a Raspberry Pi server project using Docker.",
     rows: [["Education", "B.Tech CSE, Parul University, Vadodara; expected 2027"], ["Experience", "Backend Developer Intern, Consult Anubhav, May - Aug 2023"],
       ["Technologies", "Java, Python, Rust, Flask, FastAPI, MySQL, MongoDB, Docker, Linux, Cloudflare"],
@@ -148,14 +216,14 @@ const first = n => n.split(" ")[0];
 const tagHtml = p => `<span class="tags">${p.tags.map((t, i) => `<span class="tag${i ? "" : " main"}">${esc(t)}</span>`).join("")}</span>`;
 
 document.getElementById("index").innerHTML = P.map(p =>
-  `<li><a href="#${p.id}"><b>${esc(p.name)}</b><small>${p.yoe} · ${esc(p.seek)}${p.open ? `<br>Open to ${p.open}` : ""}<br>${esc(p.tags.join(", "))}</small></a></li>`).join("");
+  `<li data-id="${p.id}"><a href="#${p.id}"><b>${esc(p.name)}</b><small>${p.yoe} · ${esc(p.seek)}${p.open ? `<br>Open to ${p.open}` : ""}${p.also ? `<br>${esc(p.also)}` : ""}<br>${esc(p.tags.join(", "))}</small></a></li>`).join("");
 
 document.getElementById("profiles").innerHTML = P.map(p => `
   <article class="profile" id="${p.id}">
     <div class="arch" aria-hidden="true">${initials(p.name)}</div>
     <div class="body">
       <h2>${esc(p.name)}</h2>
-      <div class="glance"><span class="yoe"><strong>${p.yoe}</strong><span>${esc(p.level)}${p.city ? " · " + esc(p.city) : ""}</span></span><span class="seek">${esc(p.seek)}</span>${p.open ? `<span class="seek">Open to ${p.open}</span>` : ""}${tagHtml(p)}</div>
+      <div class="glance"><span class="yoe"><strong>${p.yoe}</strong><span>${esc(p.stage || p.level)}${p.city ? " · " + esc(p.city) : ""}</span></span><span class="seek">${esc(p.seek)}</span>${p.open ? `<span class="seek">Open to ${p.open}</span>` : ""}${p.also ? `<span class="seek">${esc(p.also)}</span>` : ""}${tagHtml(p)}</div>
       <p class="summary">${esc(p.summary)}</p>
       <dl>${p.rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}
       </dl>
@@ -165,7 +233,121 @@ document.getElementById("profiles").innerHTML = P.map(p => `
     </div>
   </article>`).join("");
 
+// Filters. Options come from the data; OR within a group, AND across groups; state lives in the URL.
+const KEYS = { "Open to relocation": "relocation", "Open to remote": "remote", "0 - 3 yrs": "0-3", "4 - 7 yrs": "4-7", "8+ yrs": "8plus" };
+const slug = s => KEYS[s] || s.toLowerCase().replace(/\+/g, "plus").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const expBand = p => p.level == "Student" ? "Student" : (n => n <= 3 ? "0 - 3 yrs" : n <= 7 ? "4 - 7 yrs" : "8+ yrs")(parseInt(p.yoe));
+const byOrder = order => (a, b) => (order.indexOf(a) + 1 || 99) - (order.indexOf(b) + 1 || 99) || a.localeCompare(b);
+const TOGGLES = ["Open to relocation", "Open to remote"];
+const G = [
+  { k: "level", label: "Level", vals: p => [p.level], sort: byOrder(["Student", "Mid", "Senior"]) },
+  { k: "engage", label: "Engagement", vals: p => [/full-time/i.test(p.seek) && "Full-time", /intern/i.test(p.seek) && "Internship"], sort: byOrder(["Full-time", "Internship"]) },
+  { k: "loc", label: "Location", vals: p => [p.city, /^relocation/.test(p.open) && TOGGLES[0], p.open == "remote" && TOGGLES[1]], sort: byOrder([]), split: TOGGLES },
+  { k: "role", label: "Role", vals: p => p.tags },
+  { k: "exp", label: "Experience", vals: p => [expBand(p)], sort: byOrder(["Student", "0 - 3 yrs", "4 - 7 yrs", "8+ yrs"]) },
+];
+for (const g of G) {
+  const n = {};
+  for (const p of P) for (const v of g.vals(p).filter(Boolean)) n[v] = (n[v] || 0) + 1;
+  const all = Object.keys(n), main = all.filter(v => !g.split?.includes(v));
+  main.sort(g.sort || ((a, b) => n[b] - n[a] || a.localeCompare(b)));
+  g.opts = [...main, ...(g.split || []).filter(v => n[v])].map(v => ({ v, key: slug(v), n: n[v] }));
+}
+const hay = p => [p.name, p.seek, p.open, p.also, p.city, p.level, p.stage, p.track, p.stack, p.summary, ...p.tags, ...p.rows.flat()].filter(Boolean).join(" ").toLowerCase();
+const S = { q: "" };
+G.forEach(g => S[g.k] = new Set());
 
+const $ = id => document.getElementById(id);
+$("groups").innerHTML = G.map(g => `
+  <div class="grp" data-k="${g.k}">
+    <button type="button" class="btn grp-btn" aria-expanded="false">${g.label}<span class="n" hidden></span></button>
+    <div class="grp-opts" role="group" aria-label="${g.label}">${g.opts.map((o, i) =>
+      `${g.split && o.v == g.split.find(t => g.opts.some(x => x.v == t)) && i ? "<hr>" : ""}<label class="opt"><input type="checkbox" value="${o.key}"><span>${esc(o.v)}</span><small>${o.n}</small></label>`).join("")}</div>
+  </div>`).join("");
+
+function readURL() {
+  const u = new URLSearchParams(location.search);
+  S.q = u.get("q") || "";
+  for (const g of G) S[g.k] = new Set((u.get(g.k) || "").split(",").filter(k => g.opts.some(o => o.key == k)));
+}
+function writeURL() {
+  const u = new URLSearchParams();
+  if (S.q.trim()) u.set("q", S.q.trim());
+  for (const g of G) if (S[g.k].size) u.set(g.k, [...S[g.k]].join(","));
+  const qs = u.toString().replace(/%2C/g, ",");
+  history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+}
+function render() {
+  const words = S.q.toLowerCase().split(/\s+/).filter(Boolean);
+  let shown = 0;
+  for (const p of P) {
+    const ok = words.every(w => hay(p).includes(w)) && G.every(g => !S[g.k].size || g.vals(p).some(v => v && S[g.k].has(slug(v))));
+    $(p.id).hidden = !ok;
+    document.querySelector(`#index [data-id="${p.id}"]`).hidden = !ok;
+    shown += ok;
+  }
+  const active = G.reduce((a, g) => a + S[g.k].size, 0);
+  $("count").textContent = `Showing ${shown} of ${P.length}`;
+  $("empty").hidden = shown > 0;
+  $("fn").hidden = !active; $("fn").textContent = active;
+  $("fshow").textContent = `Show ${shown} result${shown == 1 ? "" : "s"}`;
+  document.querySelectorAll("[data-clear]").forEach(b => b.hidden = !active && !S.q.trim() && b.classList.contains("clear"));
+  for (const g of G) {
+    const el = document.querySelector(`.grp[data-k="${g.k}"]`), n = el.querySelector(".n");
+    el.classList.toggle("on", S[g.k].size > 0);
+    n.hidden = !S[g.k].size; n.textContent = S[g.k].size;
+    el.querySelectorAll("input").forEach(i => i.checked = S[g.k].has(i.value));
+  }
+  $("chips").innerHTML = (S.q.trim() ? [`<button type="button" class="chip" data-k="q" aria-label="Remove search">“${esc(S.q.trim())}”<span aria-hidden="true">×</span></button>`] : []).concat(
+    G.flatMap(g => g.opts.filter(o => S[g.k].has(o.key)).map(o =>
+      `<button type="button" class="chip" data-k="${g.k}" data-v="${o.key}" aria-label="Remove ${esc(o.v)}">${esc(o.v)}<span aria-hidden="true">×</span></button>`))).join("");
+  if ($("q").value != S.q) $("q").value = S.q;
+  writeURL();
+}
+
+$("q").addEventListener("input", e => { S.q = e.target.value; render(); });
+$("groups").addEventListener("change", e => {
+  const k = e.target.closest(".grp").dataset.k;
+  e.target.checked ? S[k].add(e.target.value) : S[k].delete(e.target.value);
+  render();
+});
+$("chips").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  c.dataset.k == "q" ? S.q = "" : S[c.dataset.k].delete(c.dataset.v);
+  render();
+});
+document.querySelectorAll("[data-clear]").forEach(b => b.addEventListener("click", () => {
+  S.q = ""; G.forEach(g => S[g.k].clear()); render();
+}));
+
+// Desktop dropdowns: one open at a time, close on outside click or Escape.
+const closeDrops = except => document.querySelectorAll(".grp.open").forEach(el => {
+  if (el != except) { el.classList.remove("open"); el.querySelector(".grp-btn").setAttribute("aria-expanded", "false"); }
+});
+$("groups").addEventListener("click", e => {
+  const b = e.target.closest(".grp-btn"); if (!b) return;
+  const el = b.parentElement, open = !el.classList.contains("open");
+  closeDrops(el); el.classList.remove("flip"); el.classList.toggle("open", open); b.setAttribute("aria-expanded", open);
+  // Keep the panel on screen: open leftwards when it would spill past the right edge.
+  if (open && el.querySelector(".grp-opts").getBoundingClientRect().right > document.documentElement.clientWidth - 8) el.classList.add("flip");
+});
+document.addEventListener("click", e => { if (!e.target.closest(".grp")) closeDrops(); });
+
+// Phone bottom sheet.
+const sheet = open => {
+  $("sheet").classList.toggle("open", open); $("backdrop").hidden = !open;
+  $("fopen").setAttribute("aria-expanded", open);
+  document.body.style.overflow = open ? "hidden" : "";
+  if (!open && document.activeElement && $("sheet").contains(document.activeElement)) $("fopen").focus();
+};
+$("fopen").addEventListener("click", () => sheet(true));
+["fclose", "fshow", "backdrop"].forEach(id => $(id).addEventListener("click", () => sheet(false)));
+document.addEventListener("keydown", e => { if (e.key == "Escape") { closeDrops(); sheet(false); } });
+matchMedia("(max-width: 720px)").addEventListener("change", () => { sheet(false); closeDrops(); });
+
+new ResizeObserver(([e]) => document.documentElement.style.setProperty("--barh", e.target.offsetHeight + "px")).observe($("bar"));
+readURL();
+render();
 </script>
 </body>
 </html>
