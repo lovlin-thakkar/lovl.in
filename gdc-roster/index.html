@@ -13,17 +13,17 @@
 :root {
   --navy: #16234a; --teal: #17807b; --mint: #74dccd; --cream: #fdf6ec;
   --bg: #f7f3ec; --surface: #fffdf9; --fg: #16234a; --muted: #5a6280; --line: #e2dccf;
-  --accent: #17807b; --accent-soft: #dcf2ee; --badge-bg: #16234a; --badge-fg: #fdf6ec; --hl: #ffe08a;
+  --accent: #17807b; --accent-soft: #dcf2ee; --badge-bg: #16234a; --badge-fg: #fdf6ec; --hl: #ffe08a; --hl-fg: inherit; --hl-from: 40%;
   --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --body: "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0f1730; --surface: #16203f; --fg: #f3ede2; --muted: #a3aac4; --line: #2a3660;
-  --accent: #74dccd; --accent-soft: #1b3a44; --badge-bg: #74dccd; --badge-fg: #0f1730; --hl: rgb(255 214 102 / 0.32); color-scheme: dark } }
+  --accent: #74dccd; --accent-soft: #1b3a44; --badge-bg: #74dccd; --badge-fg: #0f1730; --hl: rgb(255 214 102 / 0.55); --hl-fg: #ffd666; --hl-from: 88%; color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #0f1730; --surface: #16203f; --fg: #f3ede2; --muted: #a3aac4; --line: #2a3660;
-  --accent: #74dccd; --accent-soft: #1b3a44; --badge-bg: #74dccd; --badge-fg: #0f1730; --hl: rgb(255 214 102 / 0.32); color-scheme: dark }
+  --accent: #74dccd; --accent-soft: #1b3a44; --badge-bg: #74dccd; --badge-fg: #0f1730; --hl: rgb(255 214 102 / 0.55); --hl-fg: #ffd666; --hl-from: 88%; color-scheme: dark }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -32,7 +32,7 @@ body { background: var(--bg); color: var(--fg); font: 16px/1.6 var(--body); }
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid; gap: 48px; }
 a { color: var(--accent); }
-mark { background: linear-gradient(transparent 40%, var(--hl) 0); color: inherit; font-weight: 700; padding: 0 1px; }
+mark { background: linear-gradient(transparent var(--hl-from), var(--hl) 0); color: var(--hl-fg); font-weight: 700; padding: 0 1px; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 header { display: grid; gap: 20px; }
