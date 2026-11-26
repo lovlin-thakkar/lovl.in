@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neta Cards · Sample</title>
+<meta name="robots" content="noindex">
+<style>
+:root{
+  --bg:#efede6; --ink:#1c1c1a; --quiet:#64625c; --line:#dcd9cf; --card:#fffdf8;
+  --accent:#2f5d8a; --accent-soft:#e7eef5; --dot:#2f5d8a; --pend:#9a968b;
+  --up:#2f5d8a; --frame1:#d9cfb4; --frame2:#b9ab84;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Devanagari",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+header{width:100%;max-width:380px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.brand{font-weight:800;letter-spacing:-.3px;font-size:18px}
+.brand span{color:var(--accent)}
+.lang{font-size:13px;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex}
+.lang button{border:0;background:none;padding:5px 10px;font:inherit;color:var(--quiet);cursor:pointer}
+.lang button.on{background:var(--ink);color:#fff}
+.crumb{width:100%;max-width:380px;font-size:13px;color:var(--quiet);margin-bottom:10px}
+.crumb b{color:var(--ink)}
+
+/* card + flip */
+.scene{width:100%;max-width:380px;perspective:1400px}
+.cardwrap{position:relative;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.cardwrap.flipped{transform:rotateY(180deg)}
+.face{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;padding:10px;
+  background:linear-gradient(145deg,var(--frame1),var(--frame2));box-shadow:0 10px 30px rgba(40,35,20,.18)}
+.back{position:absolute;top:0;left:0;right:0;transform:rotateY(180deg)}
+.cardwrap{transition:transform .6s cubic-bezier(.2,.7,.2,1),height .3s}
+.inner{background:var(--card);border-radius:14px;padding:14px 14px 12px;min-height:100%}
+
+.top{display:flex;gap:12px;align-items:center}
+.photo{width:84px;height:104px;border-radius:10px;background:#e4e1d8;flex:none;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.photo img,.photo svg{width:100%;height:100%;object-fit:cover;display:block}
+.name{font-size:21px;font-weight:800;line-height:1.1;letter-spacing:-.3px}
+.meta{font-size:13px;color:var(--quiet);margin-top:4px;line-height:1.4}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:11px;font-weight:600;padding:3px 7px;border-radius:20px;background:var(--accent-soft);color:var(--accent)}
+.party{margin-top:12px;display:flex;align-items:center;justify-content:space-between;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+.party .hidden{display:flex;gap:8px;align-items:center;color:var(--quiet)}
+.blur{display:inline-block;width:86px;height:14px;border-radius:4px;background:repeating-linear-gradient(45deg,#d6d3ca 0 4px,#e8e5dc 4px 8px)}
+.btn{font:inherit;font-size:12.5px;font-weight:700;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:20px;padding:5px 12px;cursor:pointer}
+.btn.ghost{background:none;color:var(--ink)}
+.revealed{font-weight:700}
+
+.section{margin-top:14px}
+.sh{gap:10px;font-size:10.5px;text-transform:uppercase;letter-spacing:1.1px;color:var(--quiet);font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between}
+.stat{display:grid;grid-template-columns:1fr 92px;gap:2px 10px;align-items:center;padding:7px 0;border-top:1px solid #f0ede5;cursor:pointer}
+.stat:first-of-type{border-top:0}
+.sl{font-size:13.5px;font-weight:600}
+.sv{font-size:13.5px;font-weight:700;text-align:right;white-space:nowrap}
+.track{grid-column:1/3;position:relative;height:14px}
+.track:before{content:"";position:absolute;left:0;right:0;top:6px;height:2px;background:var(--line);border-radius:2px}
+.track .o{position:absolute;top:4px;width:6px;height:6px;border-radius:50%;background:#cfcbc0;transform:translateX(-50%)}
+.track .me{position:absolute;top:1px;width:12px;height:12px;border-radius:50%;background:var(--dot);border:2px solid #fff;box-shadow:0 0 0 1px var(--dot);transform:translateX(-50%)}
+.range{grid-column:1/3;font-size:11px;color:var(--quiet);display:flex;justify-content:space-between}
+.na{grid-column:1/3;font-size:11.5px;color:var(--quiet);font-style:italic}
+.src{display:none;grid-column:1/3;font-size:11.5px;background:#f6f4ee;border-radius:8px;padding:7px 9px;margin-top:4px;line-height:1.45}
+.src a{color:var(--accent)}
+.stat.open .src{display:block}
+
+.foot{margin-top:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--quiet)}
+.flipbtn{font:inherit;font-size:12.5px;font-weight:700;background:var(--accent);color:#fff;border:0;border-radius:20px;padding:7px 14px;cursor:pointer}
+
+/* back */
+.sector{border:1px solid #efece4;border-radius:10px;padding:8px 10px;margin-bottom:8px}
+.sector h4{font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.ind{display:grid;grid-template-columns:1fr auto auto;gap:8px;font-size:12.5px;padding:4px 0;align-items:center}
+.ind .d{font-weight:700;text-align:right}
+.lab{font-size:11px;font-weight:700;border-radius:12px;padding:2px 7px;white-space:nowrap}
+.lab.better{background:#e5eef7;color:#2f5d8a}
+.lab.same{background:#eeece6;color:#64625c}
+.lab.worse{background:#f3ece0;color:#7a5a20}
+.illus{font-size:10px;font-weight:700;color:#8a6d1f;background:#fbf1d6;border-radius:10px;padding:2px 6px}
+.kv{display:flex;justify-content:space-between;gap:14px;font-size:13px;padding:5px 0;border-top:1px solid #f0ede5}
+.kv:first-of-type{border-top:0}
+.kv b{font-weight:700;text-align:right}
+.note{font-size:11.5px;color:var(--quiet);line-height:1.45;background:#f6f4ee;border-radius:8px;padding:7px 9px;margin-top:6px}
+.note a{color:var(--accent)}
+
+.legend{width:100%;max-width:380px;margin-top:14px;font-size:12px;color:var(--quiet);line-height:1.5}
+.legend b{color:var(--ink)}
+.sample{width:100%;max-width:380px;margin-top:10px;font-size:11.5px;background:#fff7e0;border:1px solid #f0dc9c;border-radius:10px;padding:8px 10px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Neta<span>Cards</span></div>
+  <div class="lang"><button class="on" data-l="en">EN</button><button data-l="hi">हिं</button></div>
+</header>
+<div class="crumb">Goa › <b>North Goa</b> (Lok Sabha) · card 1 of 1 · order shuffled</div>
+
+<div class="scene"><div class="cardwrap" id="cw">
+
+<!-- FRONT -->
+<div class="face front"><div class="inner">
+  <div class="top">
+    <div class="photo" id="photo"></div>
+    <div>
+      <div class="name" id="name"></div>
+      <div class="meta" id="meta"></div>
+      <div class="tags" id="tags"></div>
+    </div>
+  </div>
+
+  <div class="party" id="party">
+    <div class="hidden"><span data-t="party">Party</span> <span class="blur"></span></div>
+    <button class="btn" id="reveal" data-t="reveal">Reveal</button>
+  </div>
+
+  <div class="section">
+    <div class="sh"><span data-t="record">Declared record</span><span data-t="vs">vs 2024 rivals</span></div>
+    <div id="stats"></div>
+  </div>
+
+  <div class="foot">
+    <span data-t="tap">Tap any stat for its source</span>
+    <button class="flipbtn" id="toBack"><span data-t="work">See work</span> ↻</button>
+  </div>
+</div></div>
+
+<!-- BACK -->
+<div class="face back"><div class="inner">
+  <div class="sh"><span id="bname"></span><span data-t="workh">Work in office</span></div>
+
+  <div class="section">
+    <div class="sh"><span data-t="house">In Lok Sabha</span></div>
+    <div id="house"></div>
+  </div>
+
+  <div class="section">
+    <div class="sh"><span data-t="fund">Local area fund (MPLADS)</span></div>
+    <div id="fund"></div>
+  </div>
+
+  <div class="section">
+    <div class="sh"><span data-t="minister">As minister</span></div>
+    <div id="min"></div>
+  </div>
+
+  <div class="section">
+    <div class="sh"><span data-t="sectors">Constituency sectors</span><span>vs Goa avg</span></div>
+    <div id="sectors"></div>
+    <div class="note" data-t="shared">Shared responsibility: many offices affect these numbers. Labels show what changed during the term, not who caused it.</div>
+  </div>
+
+  <div class="foot">
+    <span id="asof"></span>
+    <button class="flipbtn" id="toFront">↻ <span data-t="front">Front</span></button>
+  </div>
+</div></div>
+
+</div></div>
+
+<div class="legend">
+  <b>How to read the dots:</b> the big dot is this person; small dots are the other 2024 North Goa candidates. Left is lower, right is higher. Neither end means good or bad.
+</div>
+<div class="sample" id="samplenote"></div>
+
+<script src="data.js"></script>
+<script>
+const D = window.NETA;
+const T = {
+  en:{party:"Party",reveal:"Reveal",record:"Declared record",vs:"vs 2024 rivals",tap:"Tap any stat for its source",work:"See work",workh:"Work in office",house:"In Lok Sabha",fund:"Local area fund (MPLADS)",minister:"As minister",sectors:"Constituency sectors",shared:"Shared responsibility: many offices affect these numbers. Labels show what changed during the term, not who caused it.",front:"Front"},
+  hi:{party:"दल",reveal:"दिखाएँ",record:"घोषित रिकॉर्ड",vs:"2024 प्रतिद्वंद्वियों से तुलना",tap:"स्रोत देखने के लिए किसी भी आँकड़े पर टैप करें",work:"काम देखें",workh:"पद पर काम",house:"लोकसभा में",fund:"स्थानीय क्षेत्र निधि (MPLADS)",minister:"मंत्री के रूप में",sectors:"निर्वाचन क्षेत्र के क्षेत्र",shared:"साझा ज़िम्मेदारी: इन आँकड़ों पर कई पदों का असर होता है। लेबल बताते हैं कि कार्यकाल में क्या बदला, यह नहीं कि किसने बदला।",front:"सामने"}
+};
+let lang="en";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function silhouette(){return '<svg viewBox="0 0 84 104"><rect width="84" height="104" fill="#e4e1d8"/><circle cx="42" cy="40" r="17" fill="#c9c5ba"/><path d="M12 104c0-20 13-33 30-33s30 13 30 33z" fill="#c9c5ba"/></svg>';}
+
+function render(){
+  const p=D.person;
+  $("photo").innerHTML = p.photo ? `<img src="${esc(p.photo.url)}" alt="${esc(p.name)}">` : silhouette();
+  $("name").textContent=p.name; $("bname").textContent=p.name;
+  $("meta").innerHTML=p.meta.map(esc).join("<br>");
+  $("tags").innerHTML=p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+  $("stats").innerHTML=D.stats.map(s=>{
+    if(s.single) return `<div class="stat"><div class="sl">${esc(s.label)}</div><div class="sv">${esc(s.display)}</div><div class="na" style="font-style:normal">${esc(s.note)}</div><div class="src">${s.src}</div></div>`;
+    if(s.na) return `<div class="stat"><div class="sl">${esc(s.label)}</div><div class="sv">—</div><div class="na">${esc(s.na)}</div><div class="src">${s.src}</div></div>`;
+    const vals=s.others.concat([s.value]); const lo=Math.min(...vals), hi=Math.max(...vals);
+    const pos=v=> hi===lo?50:((s.log?Math.log10(v+1):v)-(s.log?Math.log10(lo+1):lo))/((s.log?Math.log10(hi+1):hi)-(s.log?Math.log10(lo+1):lo))*100;
+    const o=s.others.map(v=>`<span class="o" style="left:${pos(v)}%"></span>`).join("");
+    return `<div class="stat"><div class="sl">${esc(s.label)}</div><div class="sv">${esc(s.display)}</div>
+      <div class="track">${o}<span class="me" style="left:${pos(s.value)}%"></span></div>
+      <div class="range"><span>${esc(s.loLabel)}</span><span>${esc(s.hiLabel)}</span></div>
+      <div class="src">${s.src}</div></div>`;
+  }).join("");
+  document.querySelectorAll(".stat").forEach(el=>el.onclick=()=>el.classList.toggle("open"));
+  $("house").innerHTML=D.house.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.houseNote?`<div class="note">${D.houseNote}</div>`:"");
+  $("fund").innerHTML=D.fund.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.fundNote?`<div class="note">${D.fundNote}</div>`:"");
+  $("min").innerHTML=D.minister.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.ministerNote?`<div class="note">${D.ministerNote}</div>`:"");
+  $("sectors").innerHTML=D.sectors.map(s=>`<div class="sector"><h4>${esc(s.name)} ${s.illustrative?'<span class="illus">ILLUSTRATIVE</span>':''}</h4>`+
+     s.rows.map(r=>`<div class="ind"><span>${esc(r[0])}</span><span class="d">${esc(r[1])}</span><span class="lab ${r[2]}">${{better:"▲ Better",same:"= Same",worse:"▼ Worse"}[r[2]]}</span></div>`).join("")+`</div>`).join("");
+  $("asof").textContent=D.asof;
+  $("samplenote").innerHTML=D.sampleNote;
+  applyLang();
+}
+function applyLang(){document.querySelectorAll("[data-t]").forEach(el=>{const v=T[lang][el.dataset.t]; if(v && !(el.id==="reveal" && el.dataset.done)) el.textContent=v;});}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".lang button").forEach(x=>x.classList.remove("on"));b.classList.add("on");lang=b.dataset.l;applyLang();});
+$("reveal").onclick=()=>{const p=D.person.party; $("party").innerHTML=`<span>${esc(T[lang].party)}: <span class="revealed">${esc(p.name)}</span></span><span style="color:var(--quiet);font-size:12px">${esc(p.alliance||"")}</span>`;};
+const fit=b=>{const f=document.querySelector(b?".back":".front");$("cw").style.height=f.offsetHeight+"px";};
+$("toBack").onclick=()=>{$("cw").classList.add("flipped");fit(true);};
+$("toFront").onclick=()=>{$("cw").classList.remove("flipped");fit(false);};
+render();
+</script>
+</body>
+</html>
