@@ -118,12 +118,15 @@ button{font:inherit;color:inherit;cursor:pointer}
 .ind .row .sl{font-size:12.5px}
 .vals{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
 .vals b{color:var(--ink);font-weight:600}
-.meter{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:6px}
-.meter i{height:6px;border-radius:2px;background:var(--track)}
-.meter i.mid{background:#DAD7CF}
-.meter i.b{background:var(--better)} .meter i.w{background:var(--worse)}
+.dtrk{position:relative;height:8px;margin-top:7px;border-radius:99px;background:var(--track)}
+.dfill{position:absolute;top:0;bottom:0;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.dfill.b{left:50%;border-radius:0 99px 99px 0;background:linear-gradient(90deg,#818CF8,#6366F1 45%,#A855F7);box-shadow:0 0 12px -2px rgba(124,58,237,.55)}
+.dfill.w{right:50%;border-radius:99px 0 0 99px;background:linear-gradient(270deg,#FBBF24,#F59E0B 45%,#EA580C);box-shadow:0 0 12px -2px rgba(234,88,12,.5)}
+.dtrk .c{position:absolute;left:50%;top:-3px;bottom:-3px;width:2px;margin-left:-1px;border-radius:2px;background:#C9C5BC}
+.dtrk .z{position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #B9B5AC}
+.dscale{display:flex;justify-content:space-between;margin-top:5px;font-family:var(--mono);font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.4px}
 .lab{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap}
-.lab.p{color:var(--better);background:var(--better-soft)} .lab.n{color:var(--worse);background:var(--worse-soft)} .lab.z{color:var(--muted);background:var(--chip)}
+.lab.p{color:#fff;background:linear-gradient(90deg,#6366F1,#A855F7)} .lab.n{color:#fff;background:linear-gradient(90deg,#F59E0B,#EA580C)} .lab.z{color:var(--muted);background:var(--chip)}
 .illus{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.5px;color:#92400E;background:#FEF3C7;border-radius:5px;padding:2px 6px}
 
 .below{width:100%;max-width:368px;margin-top:18px;display:grid;gap:10px}
@@ -173,7 +176,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="sec"><h3><span data-t="fund">Local area fund</span><small>MPLADS</small></h3><div id="fund"></div></div>
   <div class="sec"><h3><span data-t="minister">As minister</span><small>Union govt</small></h3><div id="min"></div></div>
   <div class="sec"><h3><span data-t="sectors">Constituency, during term</span><span class="illus">ILLUSTRATIVE</span></h3>
-    <div id="sectors"></div>
+    <div class="dscale" style="margin:2px 0 2px"><span>◂ Worse than Goa</span><span>Same</span><span>Better than Goa ▸</span></div><div id="sectors"></div>
     <div class="note" data-t="shared">Compared with the change across Goa in the same years. Many offices affect these numbers; labels show what changed, not who caused it.</div>
   </div>
 
@@ -226,14 +229,15 @@ function render(){
   $("min").innerHTML=D.minister.map(kv).join("")+`<div class="note">${D.ministerNote}</div>`;
   $("sectors").innerHTML=D.sectors.flatMap(sec=>sec.rows.map(r=>{
     const [lvl,txt,cls]=LV[r[3]];
-    const seg=[-3,-2,-1,0,1,2,3].map(i=>{let c=i===0?'mid':'';if(lvl>0&&i>0&&i<=lvl)c='b';if(lvl<0&&i<0&&i>=lvl)c='w';return `<i class="${c}"></i>`;}).join("");
+    const w=Math.abs(lvl)/3*50;
+    const bar=lvl===0?'<span class="z"></span>':`<span class="dfill ${lvl>0?'b':'w'}" data-w="${w}"></span><span class="c"></span>`;
     return `<div class="ind"><div class="row"><span class="sl">${esc(sec.name)} · ${esc(r[0])}</span><span class="lab ${cls}">${txt}</span></div>
-      <div class="vals">Here <b>${esc(r[1])}</b> · Goa ${esc(r[2])}</div><div class="meter">${seg}</div></div>`;
+      <div class="vals">Here <b>${esc(r[1])}</b> · Goa ${esc(r[2])}</div><div class="dtrk">${bar}</div></div>`;
   })).join("");
   $("asof").textContent=D.asof.toUpperCase();
   $("samplenote").innerHTML=D.sampleNote;
   applyLang();
-  requestAnimationFrame(()=>setTimeout(()=>document.querySelectorAll(".fill").forEach(f=>f.style.width=Math.max(f.dataset.w,0)+"%"),60));
+  requestAnimationFrame(()=>setTimeout(()=>document.querySelectorAll(".fill,.dfill").forEach(f=>f.style.width=Math.max(f.dataset.w,0)+"%"),60));
 }
 function applyLang(){document.querySelectorAll("[data-t]").forEach(el=>{const v=T[lang][el.dataset.t];if(v)el.textContent=v;});}
 document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".seg button").forEach(x=>x.classList.remove("on"));b.classList.add("on");lang=b.dataset.l;applyLang();});
