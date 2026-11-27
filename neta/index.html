@@ -69,12 +69,14 @@ header{width:100%;max-width:380px;display:flex;justify-content:space-between;ali
 /* back */
 .sector{border:1px solid #efece4;border-radius:10px;padding:8px 10px;margin-bottom:8px}
 .sector h4{font-size:13px;display:flex;justify-content:space-between;align-items:center}
-.ind{display:grid;grid-template-columns:1fr auto auto;gap:8px;font-size:12.5px;padding:4px 0;align-items:center}
+.ind{display:grid;grid-template-columns:1fr auto auto;line-height:1.25;gap:8px;font-size:12.5px;padding:4px 0;align-items:center}
 .ind .d{font-weight:700;text-align:right}
 .lab{font-size:11px;font-weight:700;border-radius:12px;padding:2px 7px;white-space:nowrap}
-.lab.better{background:#e5eef7;color:#2f5d8a}
+.lab.mbetter,.lab.sbetter{background:#e5eef7;color:#2f5d8a}
 .lab.same{background:#eeece6;color:#64625c}
-.lab.worse{background:#f3ece0;color:#7a5a20}
+.lab.mworse,.lab.sworse{background:#f3ece0;color:#7a5a20}
+.st{display:block;font-size:10.5px;font-weight:500;color:var(--quiet)}
+.lab.mbetter{background:#2f5d8a;color:#fff}.lab.mworse{background:#8a6420;color:#fff}
 .illus{font-size:10px;font-weight:700;color:#8a6d1f;background:#fbf1d6;border-radius:10px;padding:2px 6px}
 .kv{display:flex;justify-content:space-between;gap:14px;font-size:13px;padding:5px 0;border-top:1px solid #f0ede5}
 .kv:first-of-type{border-top:0}
@@ -143,7 +145,7 @@ header{width:100%;max-width:380px;display:flex;justify-content:space-between;ali
   </div>
 
   <div class="section">
-    <div class="sh"><span data-t="sectors">Constituency sectors</span><span>vs Goa avg</span></div>
+    <div class="sh"><span data-t="sectors">Constituency sectors</span><span>change in term vs Goa</span></div>
     <div id="sectors"></div>
     <div class="note" data-t="shared">Shared responsibility: many offices affect these numbers. Labels show what changed during the term, not who caused it.</div>
   </div>
@@ -196,7 +198,7 @@ function render(){
   $("fund").innerHTML=D.fund.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.fundNote?`<div class="note">${D.fundNote}</div>`:"");
   $("min").innerHTML=D.minister.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.ministerNote?`<div class="note">${D.ministerNote}</div>`:"");
   $("sectors").innerHTML=D.sectors.map(s=>`<div class="sector"><h4>${esc(s.name)} ${s.illustrative?'<span class="illus">ILLUSTRATIVE</span>':''}</h4>`+
-     s.rows.map(r=>`<div class="ind"><span>${esc(r[0])}</span><span class="d">${esc(r[1])}</span><span class="lab ${r[2]}">${{better:"▲ Better",same:"= Same",worse:"▼ Worse"}[r[2]]}</span></div>`).join("")+`</div>`).join("");
+     s.rows.map(r=>`<div class="ind"><span>${esc(r[0])}</span><span class="d">${esc(r[1])}<span class="st">Goa ${esc(r[2])}</span></span><span class="lab ${r[3]}">${{mbetter:"▲▲ Much better",sbetter:"▲ Slightly better",same:"= Same",sworse:"▼ Slightly worse",mworse:"▼▼ Much worse"}[r[3]]}</span></div>`).join("")+`</div>`).join("");
   $("asof").textContent=D.asof;
   $("samplenote").innerHTML=D.sampleNote;
   applyLang();

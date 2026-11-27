@@ -48,11 +48,12 @@ window.NETA = {
     ["Before", "MoS Tourism (2021–24), Defence (2019–21), AYUSH (independent charge, 2014–21)"]
   ],
   ministerNote: `Ministry numbers for his term (e.g. renewable capacity added, from CEA and MNRE) are pending. Source for roles: <a href="https://en.wikipedia.org/wiki/Shripad_Naik" target="_blank" rel="noopener">Wikipedia</a>, to be cross-checked against the Cabinet Secretariat list.`,
+  // rows: [indicator, change here, change in Goa, label]. Label = gap between the two, by the published thresholds.
   sectors: [
-    { name: "Education", illustrative: true, rows: [["Literacy rate", "+2.1 pts", "better"], ["School dropout", "+0.4 pts", "worse"]] },
-    { name: "Health", illustrative: true, rows: [["Infant deaths / 1,000", "−1.8", "better"]] },
-    { name: "Safety", illustrative: true, rows: [["Crime rate", "+3%", "same"], ["Road deaths", "+6%", "worse"]] },
-    { name: "Roads", illustrative: true, rows: [["Rural road km (PMGSY)", "48 km", "same"]] }
+    { name: "Education", illustrative: true, rows: [["Literacy rate", "+2.1 pts", "+1.4 pts", "sbetter"], ["School dropout", "+0.4 pts", "−0.3 pts", "sworse"]] },
+    { name: "Health", illustrative: true, rows: [["Infant deaths / 1,000", "−1.8", "−0.6", "sbetter"]] },
+    { name: "Safety", illustrative: true, rows: [["Crime rate", "+3%", "+2.5%", "same"], ["Road deaths", "+6%", "−4%", "mworse"]] },
+    { name: "Roads", illustrative: true, rows: [["Rural road built", "48 km", "45 km", "same"]] }
   ],
   sampleNote: "<b>Sample card.</b> Front side and the Lok Sabha / minister facts are real, with sources on tap. The fund numbers and ministry numbers are still pending. <b>The sector numbers are made up</b>, only to show the design; they're marked ILLUSTRATIVE. Photo: Biswarup Ganguly, CC BY 3.0, via Wikimedia Commons (2014)."
 };
