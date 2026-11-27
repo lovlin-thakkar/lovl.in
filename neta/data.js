@@ -51,9 +51,9 @@ window.NETA = {
   // rows: [indicator, change here, change in Goa, label]. Label = gap between the two, by the published thresholds.
   sectors: [
     { name: "Education", illustrative: true, rows: [["Literacy rate", "+2.1 pts", "+1.4 pts", "sbetter"], ["School dropout", "+0.4 pts", "−0.3 pts", "sworse"]] },
-    { name: "Health", illustrative: true, rows: [["Infant deaths / 1,000", "−1.8", "−0.6", "sbetter"]] },
-    { name: "Safety", illustrative: true, rows: [["Crime rate", "+3%", "+2.5%", "same"], ["Road deaths", "+6%", "−4%", "mworse"]] },
-    { name: "Roads", illustrative: true, rows: [["Rural road built", "48 km", "45 km", "same"]] }
+    { name: "Health", illustrative: true, rows: [["Infant deaths / 1,000", "−1.8", "−0.6", "better"]] },
+    { name: "Safety", illustrative: true, rows: [["Crime rate", "+3%", "+2.5%", "sworse"], ["Road deaths", "+6%", "−4%", "mworse"]] },
+    { name: "Roads", illustrative: true, rows: [["Rural road built", "48 km", "45 km", "sbetter"]] }
   ],
   sampleNote: "<b>Sample card.</b> Front side and the Lok Sabha / minister facts are real, with sources on tap. The fund numbers and ministry numbers are still pending. <b>The sector numbers are made up</b>, only to show the design; they're marked ILLUSTRATIVE. Photo: Biswarup Ganguly, CC BY 3.0, via Wikimedia Commons (2014)."
 };
