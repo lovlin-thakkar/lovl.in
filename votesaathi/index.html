@@ -3,212 +3,250 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vote Saathi · Sample</title>
+<title>Vote Saathi · Sample card</title>
 <meta name="robots" content="noindex">
 <style>
+@font-face{font-family:"Geist";src:url(fonts/geist-latin-wght-normal.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Geist";src:url(fonts/geist-latin-ext-wght-normal.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0,U+2113,U+A720-A7FF}
+@font-face{font-family:"Geist Mono";src:url(fonts/geist-mono-latin-wght-normal.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Geist Mono";src:url(fonts/geist-mono-latin-ext-wght-normal.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0,U+2113,U+A720-A7FF}
+@font-face{font-family:"Bricolage";src:url(fonts/bricolage-grotesque-latin-wght-normal.woff2) format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Noto Deva";src:url(fonts/noto-sans-devanagari-devanagari-wght-normal.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF}
+
 :root{
-  --bg:#efede6; --ink:#1c1c1a; --quiet:#64625c; --line:#dcd9cf; --card:#fffdf8;
-  --accent:#2f5d8a; --accent-soft:#e7eef5; --dot:#2f5d8a; --pend:#9a968b;
-  --up:#2f5d8a; --frame1:#d9cfb4; --frame2:#b9ab84;
+  --page:#F4F3EF; --paper:#FFFEFB; --ink:#0E0F12; --ink2:#2A2D33; --muted:#6B6F76; --faint:#A3A6AC;
+  --line:#ECEAE4; --track:#EFEDE7; --chip:#F3F1EC;
+  --better:#4338CA; --better-soft:#EEF0FF; --worse:#B45309; --worse-soft:#FDF3E7;
+  --sans:"Geist","Noto Deva",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono","Noto Deva",ui-monospace,Menlo,monospace;
+  --display:"Bricolage","Geist","Noto Deva",ui-sans-serif,system-ui,sans-serif;
+  --foil:conic-gradient(from var(--a,0deg) at 50% 50%,#ffd6e7,#ffe8c7,#d9f7e8,#cfe8ff,#e3d9ff,#ffd6e7);
 }
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Devanagari",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
-header{width:100%;max-width:380px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.brand{font-weight:800;letter-spacing:-.3px;font-size:18px}
-.brand span{color:var(--accent)}
-.lang{font-size:13px;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex}
-.lang button{border:0;background:none;padding:5px 10px;font:inherit;color:var(--quiet);cursor:pointer}
-.lang button.on{background:var(--ink);color:#fff}
-.crumb{width:100%;max-width:380px;font-size:13px;color:var(--quiet);margin-bottom:10px}
-.crumb b{color:var(--ink)}
+html{background:var(--page)}
+body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(circle at 1px 1px,rgba(14,15,18,.07) 1px,transparent 0) 0 0/18px 18px,var(--page);
+  display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
 
-/* card + flip */
-.scene{width:100%;max-width:380px;perspective:1400px}
-.cardwrap{position:relative;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
-.cardwrap.flipped{transform:rotateY(180deg)}
-.face{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;padding:10px;
-  background:linear-gradient(145deg,var(--frame1),var(--frame2));box-shadow:0 10px 30px rgba(40,35,20,.18)}
-.back{position:absolute;top:0;left:0;right:0;transform:rotateY(180deg)}
-.cardwrap{transition:transform .6s cubic-bezier(.2,.7,.2,1),height .3s}
-.inner{background:var(--card);border-radius:14px;padding:14px 14px 12px;min-height:100%}
+/* top bar */
+.bar{width:100%;max-width:368px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.4px}
+.logo i{width:22px;height:22px;border-radius:7px;background:var(--foil);box-shadow:inset 0 0 0 1px rgba(14,15,18,.12);display:grid;place-items:center;font-style:normal;font-size:12px}
+.seg{display:flex;background:#fff;border:1px solid var(--line);border-radius:99px;padding:3px}
+.seg button{border:0;background:none;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--ink);color:#fff}
+.crumb{width:100%;max-width:368px;font-size:12.5px;color:var(--muted);margin-bottom:14px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.crumb b{color:var(--ink);font-weight:600}
+.dotsep{width:3px;height:3px;border-radius:50%;background:var(--faint)}
 
-.top{display:flex;gap:12px;align-items:center}
-.photo{width:84px;height:104px;border-radius:10px;background:#e4e1d8;flex:none;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
-.photo img,.photo svg{width:100%;height:100%;object-fit:cover;display:block}
-.name{font-size:21px;font-weight:800;line-height:1.1;letter-spacing:-.3px}
-.meta{font-size:13px;color:var(--quiet);margin-top:4px;line-height:1.4}
-.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
-.tag{font-size:11px;font-weight:600;padding:3px 7px;border-radius:20px;background:var(--accent-soft);color:var(--accent)}
-.party{margin-top:12px;display:flex;align-items:center;justify-content:space-between;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
-.party .hidden{display:flex;gap:8px;align-items:center;color:var(--quiet)}
-.blur{display:inline-block;width:86px;height:14px;border-radius:4px;background:repeating-linear-gradient(45deg,#d6d3ca 0 4px,#e8e5dc 4px 8px)}
-.btn{font:inherit;font-size:12.5px;font-weight:700;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:20px;padding:5px 12px;cursor:pointer}
-.btn.ghost{background:none;color:var(--ink)}
-.revealed{font-weight:700}
+/* card */
+.scene{width:100%;max-width:368px;perspective:1200px}
+.tilt{transition:transform .25s ease-out;transform-style:preserve-3d}
+.flip{position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.75,.15,1),height .35s ease}
+.flip.flipped{transform:rotateY(180deg)}
+.face{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:24px;padding:6px;background:var(--foil);
+  animation:spin 9s linear infinite;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 24px 48px -18px rgba(14,15,18,.35),0 2px 6px rgba(14,15,18,.08)}
+@keyframes spin{to{--a:360deg}}
+@media (prefers-reduced-motion:reduce){.face{animation:none}.flip,.tilt{transition:none}}
+.back{position:absolute;top:0;left:0;right:0;transform:rotateY(180deg);display:none}
+.in{position:relative;background:var(--paper);border-radius:19px;padding:12px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(14,15,18,.06)}
+.sheen{pointer-events:none;position:absolute;inset:0;border-radius:19px;mix-blend-mode:soft-light;opacity:0;transition:opacity .3s;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.9),transparent 45%)}
+.scene:hover .sheen{opacity:1}
 
-.section{margin-top:14px}
-.sh{gap:10px;font-size:10.5px;text-transform:uppercase;letter-spacing:1.1px;color:var(--quiet);font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between}
-.stat{display:grid;grid-template-columns:1fr 92px;gap:2px 10px;align-items:center;padding:7px 0;border-top:1px solid #f0ede5;cursor:pointer}
-.stat:first-of-type{border-top:0}
-.sl{font-size:13.5px;font-weight:600}
-.sv{font-size:13.5px;font-weight:700;text-align:right;white-space:nowrap}
-.track{grid-column:1/3;position:relative;height:14px}
-.track:before{content:"";position:absolute;left:0;right:0;top:6px;height:2px;background:var(--line);border-radius:2px}
-.track .o{position:absolute;top:4px;width:6px;height:6px;border-radius:50%;background:#cfcbc0;transform:translateX(-50%)}
-.track .me{position:absolute;top:1px;width:12px;height:12px;border-radius:50%;background:var(--dot);border:2px solid #fff;box-shadow:0 0 0 1px var(--dot);transform:translateX(-50%)}
-.range{grid-column:1/3;font-size:11px;color:var(--quiet);display:flex;justify-content:space-between}
-.na{grid-column:1/3;font-size:11.5px;color:var(--quiet);font-style:italic}
-.src{display:none;grid-column:1/3;font-size:11.5px;background:#f6f4ee;border-radius:8px;padding:7px 9px;margin-top:4px;line-height:1.45}
-.src a{color:var(--accent)}
+.cardtop{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:2px 4px 10px}
+.cardtop b{color:var(--ink);font-weight:600}
+
+.art{position:relative;height:216px;border-radius:14px;overflow:hidden;background:#E9E7E1}
+.art img,.art svg{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block;filter:saturate(.92) contrast(1.02)}
+.art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,15,18,0) 45%,rgba(14,15,18,.55))}
+.art .chips{position:absolute;left:10px;bottom:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap;z-index:1}
+.chip{font-size:11px;font-weight:600;padding:4px 9px;border-radius:99px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);color:var(--ink)}
+.chip.dim{background:rgba(14,15,18,.45);color:#fff}
+.credit{position:absolute;top:8px;right:9px;z-index:1;font-size:9px;color:rgba(255,255,255,.85);font-family:var(--mono);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+
+.id{padding:12px 4px 2px}
+.name{font-family:var(--display);font-weight:700;font-size:27px;line-height:1.02;letter-spacing:-.8px}
+.meta{margin-top:7px;display:flex;flex-wrap:wrap;gap:6px}
+.meta span{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink2);background:var(--chip);border-radius:6px;padding:3px 7px}
+
+.party{margin:12px 4px 4px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 8px 8px 12px;border-radius:12px;border:1px dashed #DCD9D1;background:repeating-linear-gradient(-45deg,#FAF9F5 0 6px,#F4F2EC 6px 12px)}
+.party .l{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.party .l svg{flex:none}
+.party.shown{background:var(--paper);border-style:solid;border-color:var(--line)}
+.party.shown .l{color:var(--ink);font-weight:600}
+.pill{border:0;background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:99px}
+.pill.ghost{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+
+.label{display:flex;justify-content:space-between;align-items:baseline;padding:12px 4px 2px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+
+.stat{padding:9px 4px;border-radius:10px;cursor:pointer;transition:background .15s}
+.stat:hover{background:#FAF9F5}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sl{font-size:13.5px;font-weight:550}
+.sv{font-family:var(--mono);font-size:14px;font-weight:600;letter-spacing:-.2px}
+.trk{position:relative;height:8px;margin-top:7px;border-radius:99px;background:var(--track);overflow:hidden}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#3A3E46,var(--ink));width:0;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.tick{position:absolute;top:1px;bottom:1px;width:2px;margin-left:-1px;border-radius:2px;background:rgba(14,15,18,.22)}
+.fill~.tick.on{background:rgba(255,255,255,.55)}
+.rng{display:flex;justify-content:space-between;margin-top:5px;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.sub{margin-top:4px;font-size:11.5px;color:var(--muted)}
+.src{display:none;margin-top:8px;font-size:11.5px;line-height:1.5;color:var(--ink2);background:#F7F6F2;border-radius:9px;padding:8px 10px}
+.src a{color:var(--ink);text-underline-offset:2px}
 .stat.open .src{display:block}
 
-.foot{margin-top:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--quiet)}
-.flipbtn{font:inherit;font-size:12.5px;font-weight:700;background:var(--accent);color:#fff;border:0;border-radius:20px;padding:7px 14px;cursor:pointer}
+.cardfoot{display:flex;justify-content:space-between;align-items:center;padding:10px 4px 2px;margin-top:6px;border-top:1px solid var(--line)}
+.cardfoot .n{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.5px}
+.flipbtn{display:flex;align-items:center;gap:6px;border:0;background:var(--ink);color:#fff;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:99px}
 
 /* back */
-.sector{border:1px solid #efece4;border-radius:10px;padding:8px 10px;margin-bottom:8px}
-.sector h4{font-size:13px;display:flex;justify-content:space-between;align-items:center}
-.ind{display:grid;grid-template-columns:1fr auto auto;line-height:1.25;gap:8px;font-size:12.5px;padding:4px 0;align-items:center}
-.ind .d{font-weight:700;text-align:right}
-.lab{font-size:11px;font-weight:700;border-radius:12px;padding:2px 7px;white-space:nowrap}
-.lab.better{background:#e5eef7;color:#2f5d8a}
-.lab.same{background:#eeece6;color:#64625c}
-.lab.worse{background:#f3ece0;color:#7a5a20}
-.st{display:block;font-size:10.5px;font-weight:500;color:var(--quiet)}
-.lab.mbetter{background:#2f5d8a;color:#fff}.lab.mworse{background:#8a6420;color:#fff}.lab.sbetter{background:none;color:#2f5d8a;box-shadow:inset 0 0 0 1px #b9cde0}.lab.sworse{background:none;color:#7a5a20;box-shadow:inset 0 0 0 1px #e2cfa8}
-.illus{font-size:10px;font-weight:700;color:#8a6d1f;background:#fbf1d6;border-radius:10px;padding:2px 6px}
-.kv{display:flex;justify-content:space-between;gap:14px;font-size:13px;padding:5px 0;border-top:1px solid #f0ede5}
+.sec{margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.sec h3{font-size:12.5px;font-weight:650;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.sec h3 small{font-family:var(--mono);font-weight:500;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:6px 0;font-size:12.5px;border-top:1px solid #F3F1EC}
 .kv:first-of-type{border-top:0}
-.kv b{font-weight:700;text-align:right}
-.note{font-size:11.5px;color:var(--quiet);line-height:1.45;background:#f6f4ee;border-radius:8px;padding:7px 9px;margin-top:6px}
-.note a{color:var(--accent)}
+.kv span{color:var(--muted)}
+.kv b{font-weight:600;text-align:right}
+.kv b.mono{font-family:var(--mono);font-weight:600}
+.kv b.pend{font-family:var(--mono);font-weight:500;color:var(--faint)}
+.note{margin-top:6px;font-size:11px;line-height:1.5;color:var(--muted)}
+.note a{color:var(--ink2)}
+.ind{padding:8px 0;border-top:1px solid #F3F1EC}
+.ind:first-of-type{border-top:0}
+.ind .row .sl{font-size:12.5px}
+.vals{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+.vals b{color:var(--ink);font-weight:600}
+.meter{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:6px}
+.meter i{height:6px;border-radius:2px;background:var(--track)}
+.meter i.mid{background:#DAD7CF}
+.meter i.b{background:var(--better)} .meter i.w{background:var(--worse)}
+.lab{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.lab.p{color:var(--better);background:var(--better-soft)} .lab.n{color:var(--worse);background:var(--worse-soft)} .lab.z{color:var(--muted);background:var(--chip)}
+.illus{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.5px;color:#92400E;background:#FEF3C7;border-radius:5px;padding:2px 6px}
 
-.legend{width:100%;max-width:380px;margin-top:14px;font-size:12px;color:var(--quiet);line-height:1.5}
-.legend b{color:var(--ink)}
-.sample{width:100%;max-width:380px;margin-top:10px;font-size:11.5px;background:#fff7e0;border:1px solid #f0dc9c;border-radius:10px;padding:8px 10px;line-height:1.5}
+.below{width:100%;max-width:368px;margin-top:18px;display:grid;gap:10px}
+.tip{font-size:12px;line-height:1.55;color:var(--muted);padding:0 4px}
+.tip b{color:var(--ink);font-weight:600}
+.sample{font-size:12px;line-height:1.55;color:#5B4A1A;background:#FFF8E6;border:1px solid #F3E3B5;border-radius:14px;padding:10px 12px}
+.sample b{color:#3D3110}
 </style>
 </head>
 <body>
-<header>
-  <div class="brand">Vote <span>Saathi</span></div>
-  <div class="lang"><button class="on" data-l="en">EN</button><button data-l="hi">हिं</button></div>
-</header>
-<div class="crumb">Goa › <b>North Goa</b> (Lok Sabha) · card 1 of 1 · order shuffled</div>
 
-<div class="scene"><div class="cardwrap" id="cw">
+<div class="bar">
+  <div class="logo"><i>✓</i>Vote Saathi</div>
+  <div class="seg"><button class="on" data-l="en">EN</button><button data-l="hi">हिं</button></div>
+</div>
+<div class="crumb">Goa <span class="dotsep"></span> <b>North Goa</b> <span>(Lok Sabha)</span> <span class="dotsep"></span> <span data-t="shuffled">order shuffled</span></div>
+
+<div class="scene" id="scene"><div class="tilt" id="tilt"><div class="flip" id="flip">
 
 <!-- FRONT -->
-<div class="face front"><div class="inner">
-  <div class="top">
-    <div class="photo" id="photo"></div>
-    <div>
-      <div class="name" id="name"></div>
-      <div class="meta" id="meta"></div>
-      <div class="tags" id="tags"></div>
-    </div>
+<div class="face front" id="front"><div class="in">
+  <div class="sheen"></div>
+  <div class="cardtop"><span><b>Vote Saathi</b> · LS 2024</span><span>#001 / 008</span></div>
+  <div class="art" id="art"></div>
+  <div class="id">
+    <div class="name" id="name"></div>
+    <div class="meta" id="meta"></div>
   </div>
-
   <div class="party" id="party">
-    <div class="hidden"><span data-t="party">Party</span> <span class="blur"></span></div>
-    <button class="btn" id="reveal" data-t="reveal">Reveal</button>
+    <div class="l"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg><span data-t="hidden">Party hidden</span></div>
+    <button class="pill" id="reveal" data-t="reveal">Reveal</button>
   </div>
-
-  <div class="section">
-    <div class="sh"><span data-t="record">Declared record</span><span data-t="vs">vs 2024 rivals</span></div>
-    <div id="stats"></div>
-  </div>
-
-  <div class="foot">
-    <span data-t="tap">Tap any stat for its source</span>
-    <button class="flipbtn" id="toBack"><span data-t="work">See work</span> ↻</button>
+  <div class="label"><span data-t="record">Declared record</span><span data-t="vs">vs 8 candidates, 2024</span></div>
+  <div id="stats"></div>
+  <div class="cardfoot">
+    <span class="n" data-t="tap">TAP A STAT FOR ITS SOURCE</span>
+    <button class="flipbtn" id="toBack"><span data-t="work">Work</span> <span>↻</span></button>
   </div>
 </div></div>
 
 <!-- BACK -->
-<div class="face back"><div class="inner">
-  <div class="sh"><span id="bname"></span><span data-t="workh">Work in office</span></div>
+<div class="face back" id="back"><div class="in">
+  <div class="sheen"></div>
+  <div class="cardtop"><span><b id="bname"></b></span><span data-t="workh">Work in office</span></div>
 
-  <div class="section">
-    <div class="sh"><span data-t="house">In Lok Sabha</span></div>
-    <div id="house"></div>
-  </div>
-
-  <div class="section">
-    <div class="sh"><span data-t="fund">Local area fund (MPLADS)</span></div>
-    <div id="fund"></div>
-  </div>
-
-  <div class="section">
-    <div class="sh"><span data-t="minister">As minister</span></div>
-    <div id="min"></div>
-  </div>
-
-  <div class="section">
-    <div class="sh"><span data-t="sectors">Constituency sectors</span><span>change in term vs Goa</span></div>
+  <div class="sec"><h3><span data-t="house">In Lok Sabha</span><small>PRS</small></h3><div id="house"></div></div>
+  <div class="sec"><h3><span data-t="fund">Local area fund</span><small>MPLADS</small></h3><div id="fund"></div></div>
+  <div class="sec"><h3><span data-t="minister">As minister</span><small>Union govt</small></h3><div id="min"></div></div>
+  <div class="sec"><h3><span data-t="sectors">Constituency, during term</span><span class="illus">ILLUSTRATIVE</span></h3>
     <div id="sectors"></div>
-    <div class="note" data-t="shared">Shared responsibility: many offices affect these numbers. Labels show what changed during the term, not who caused it.</div>
+    <div class="note" data-t="shared">Compared with the change across Goa in the same years. Many offices affect these numbers; labels show what changed, not who caused it.</div>
   </div>
 
-  <div class="foot">
-    <span id="asof"></span>
-    <button class="flipbtn" id="toFront">↻ <span data-t="front">Front</span></button>
+  <div class="cardfoot">
+    <span class="n" id="asof"></span>
+    <button class="flipbtn" id="toFront"><span>↻</span> <span data-t="front">Front</span></button>
   </div>
 </div></div>
 
-</div></div>
+</div></div></div>
 
-<div class="legend">
-  <b>How to read the dots:</b> the big dot is this person; small dots are the other 2024 North Goa candidates. Left is lower, right is higher. Neither end means good or bad.
+<div class="below">
+  <div class="tip"><b data-t="howh">Reading the bars:</b> <span data-t="how">the bar fills to where this person sits among all 2024 North Goa candidates. Each small notch is another candidate. Longer is not better or worse, only higher.</span></div>
+  <div class="sample" id="samplenote"></div>
 </div>
-<div class="sample" id="samplenote"></div>
 
 <script src="data.js"></script>
 <script>
-const D = window.NETA;
-const T = {
-  en:{party:"Party",reveal:"Reveal",record:"Declared record",vs:"vs 2024 rivals",tap:"Tap any stat for its source",work:"See work",workh:"Work in office",house:"In Lok Sabha",fund:"Local area fund (MPLADS)",minister:"As minister",sectors:"Constituency sectors",shared:"Shared responsibility: many offices affect these numbers. Labels show what changed during the term, not who caused it.",front:"Front"},
-  hi:{party:"दल",reveal:"दिखाएँ",record:"घोषित रिकॉर्ड",vs:"2024 प्रतिद्वंद्वियों से तुलना",tap:"स्रोत देखने के लिए किसी भी आँकड़े पर टैप करें",work:"काम देखें",workh:"पद पर काम",house:"लोकसभा में",fund:"स्थानीय क्षेत्र निधि (MPLADS)",minister:"मंत्री के रूप में",sectors:"निर्वाचन क्षेत्र के क्षेत्र",shared:"साझा ज़िम्मेदारी: इन आँकड़ों पर कई पदों का असर होता है। लेबल बताते हैं कि कार्यकाल में क्या बदला, यह नहीं कि किसने बदला।",front:"सामने"}
+const D=window.NETA;
+const T={
+ en:{shuffled:"order shuffled",hidden:"Party hidden",reveal:"Reveal",record:"Declared record",vs:"vs 8 candidates, 2024",tap:"TAP A STAT FOR ITS SOURCE",work:"Work",workh:"Work in office",house:"In Lok Sabha",fund:"Local area fund",minister:"As minister",sectors:"Constituency, during term",shared:"Compared with the change across Goa in the same years. Many offices affect these numbers; labels show what changed, not who caused it.",front:"Front",howh:"Reading the bars:",how:"the bar fills to where this person sits among all 2024 North Goa candidates. Each small notch is another candidate. Longer is not better or worse, only higher.",party:"Party"},
+ hi:{shuffled:"क्रम बदला हुआ",hidden:"दल छिपा है",reveal:"दिखाएँ",record:"घोषित रिकॉर्ड",vs:"2024 के 8 उम्मीदवारों से तुलना",tap:"स्रोत के लिए आँकड़े पर टैप करें",work:"काम",workh:"पद पर काम",house:"लोकसभा में",fund:"स्थानीय क्षेत्र निधि",minister:"मंत्री के रूप में",sectors:"कार्यकाल में निर्वाचन क्षेत्र",shared:"उन्हीं वर्षों में पूरे गोवा के बदलाव से तुलना। इन आँकड़ों पर कई पदों का असर होता है; लेबल बताते हैं क्या बदला, किसने बदला यह नहीं।",front:"सामने",howh:"बार कैसे पढ़ें:",how:"बार दिखाता है कि यह व्यक्ति 2024 के सभी उत्तर गोवा उम्मीदवारों में कहाँ है। हर छोटा निशान एक दूसरा उम्मीदवार है। लंबा होना अच्छा या बुरा नहीं, सिर्फ़ ज़्यादा है।",party:"दल"}
 };
+const LV={mbetter:[3,"Much better","p"],better:[2,"Better","p"],sbetter:[1,"Slightly better","p"],same:[0,"Same","z"],sworse:[-1,"Slightly worse","n"],worse:[-2,"Worse","n"],mworse:[-3,"Much worse","n"]};
 let lang="en";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const silhouette='<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#E4E1DA"/><circle cx="50" cy="40" r="16" fill="#CFCBC2"/><path d="M18 100c0-20 14-34 32-34s32 14 32 34z" fill="#CFCBC2"/></svg>';
 
-function silhouette(){return '<svg viewBox="0 0 84 104"><rect width="84" height="104" fill="#e4e1d8"/><circle cx="42" cy="40" r="17" fill="#c9c5ba"/><path d="M12 104c0-20 13-33 30-33s30 13 30 33z" fill="#c9c5ba"/></svg>';}
+function pos(s,v){const all=s.others.concat([s.value]);const f=x=>s.log?Math.log10(x+1):x;const lo=f(Math.min(...all)),hi=f(Math.max(...all));return hi===lo?50:(f(v)-lo)/(hi-lo)*100;}
 
 function render(){
   const p=D.person;
-  $("photo").innerHTML = p.photo ? `<img src="${esc(p.photo.url)}" alt="${esc(p.name)}">` : silhouette();
+  $("art").innerHTML=(p.photo?`<img src="${esc(p.photo.url)}" alt="${esc(p.name)}"><span class="credit">© Biswarup Ganguly · CC BY 3.0</span>`:silhouette)+
+    `<div class="chips">${p.tags.map((t,i)=>`<span class="chip${i===p.tags.length-1?' dim':''}">${esc(t)}</span>`).join("")}</div>`;
   $("name").textContent=p.name; $("bname").textContent=p.name;
-  $("meta").innerHTML=p.meta.map(esc).join("<br>");
-  $("tags").innerHTML=p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+  $("meta").innerHTML=p.chips.map(c=>`<span>${esc(c)}</span>`).join("");
   $("stats").innerHTML=D.stats.map(s=>{
-    if(s.single) return `<div class="stat"><div class="sl">${esc(s.label)}</div><div class="sv">${esc(s.display)}</div><div class="na" style="font-style:normal">${esc(s.note)}</div><div class="src">${s.src}</div></div>`;
-    if(s.na) return `<div class="stat"><div class="sl">${esc(s.label)}</div><div class="sv">—</div><div class="na">${esc(s.na)}</div><div class="src">${s.src}</div></div>`;
-    const vals=s.others.concat([s.value]); const lo=Math.min(...vals), hi=Math.max(...vals);
-    const pos=v=> hi===lo?50:((s.log?Math.log10(v+1):v)-(s.log?Math.log10(lo+1):lo))/((s.log?Math.log10(hi+1):hi)-(s.log?Math.log10(lo+1):lo))*100;
-    const o=s.others.map(v=>`<span class="o" style="left:${pos(v)}%"></span>`).join("");
-    return `<div class="stat"><div class="sl">${esc(s.label)}</div><div class="sv">${esc(s.display)}</div>
-      <div class="track">${o}<span class="me" style="left:${pos(s.value)}%"></span></div>
-      <div class="range"><span>${esc(s.loLabel)}</span><span>${esc(s.hiLabel)}</span></div>
-      <div class="src">${s.src}</div></div>`;
+    if(s.single) return `<div class="stat"><div class="row"><span class="sl">${esc(s.label)}</span><span class="sv">${esc(s.display)}</span></div><div class="sub">${esc(s.note)}</div><div class="src">${s.src}</div></div>`;
+    const me=pos(s,s.value);
+    const ticks=s.others.map(v=>{const x=pos(s,v);return `<span class="tick${x<=me?' on':''}" style="left:${Math.min(99,Math.max(1,x))}%"></span>`;}).join("");
+    return `<div class="stat"><div class="row"><span class="sl">${esc(s.label)}</span><span class="sv">${esc(s.display)}</span></div>
+      <div class="trk"><span class="fill" data-w="${me}"></span>${ticks}</div>
+      <div class="rng"><span>${esc(s.loLabel)}</span><span>${esc(s.hiLabel)}</span></div><div class="src">${s.src}</div></div>`;
   }).join("");
-  document.querySelectorAll(".stat").forEach(el=>el.onclick=()=>el.classList.toggle("open"));
-  $("house").innerHTML=D.house.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.houseNote?`<div class="note">${D.houseNote}</div>`:"");
-  $("fund").innerHTML=D.fund.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.fundNote?`<div class="note">${D.fundNote}</div>`:"");
-  $("min").innerHTML=D.minister.map(k=>`<div class="kv"><span>${esc(k[0])}</span><b>${esc(k[1])}</b></div>`).join("")+(D.ministerNote?`<div class="note">${D.ministerNote}</div>`:"");
-  $("sectors").innerHTML=D.sectors.map(s=>`<div class="sector"><h4>${esc(s.name)} ${s.illustrative?'<span class="illus">ILLUSTRATIVE</span>':''}</h4>`+
-     s.rows.map(r=>`<div class="ind"><span>${esc(r[0])}</span><span class="d">${esc(r[1])}<span class="st">Goa ${esc(r[2])}</span></span><span class="lab ${r[3]}">${{mbetter:"▲▲ Much better",better:"▲ Better",sbetter:"△ Slightly better",same:"= Same",sworse:"▽ Slightly worse",worse:"▼ Worse",mworse:"▼▼ Much worse"}[r[3]]}</span></div>`).join("")+`</div>`).join("");
-  $("asof").textContent=D.asof;
+  document.querySelectorAll(".stat").forEach(el=>el.onclick=e=>{if(e.target.tagName!=="A")el.classList.toggle("open");});
+  const kv=r=>`<div class="kv"><span>${esc(r[0])}</span><b class="${r[2]||''}">${esc(r[1])}</b></div>`;
+  $("house").innerHTML=D.house.map(kv).join("")+`<div class="note">${D.houseNote}</div>`;
+  $("fund").innerHTML=D.fund.map(kv).join("")+`<div class="note">${D.fundNote}</div>`;
+  $("min").innerHTML=D.minister.map(kv).join("")+`<div class="note">${D.ministerNote}</div>`;
+  $("sectors").innerHTML=D.sectors.flatMap(sec=>sec.rows.map(r=>{
+    const [lvl,txt,cls]=LV[r[3]];
+    const seg=[-3,-2,-1,0,1,2,3].map(i=>{let c=i===0?'mid':'';if(lvl>0&&i>0&&i<=lvl)c='b';if(lvl<0&&i<0&&i>=lvl)c='w';return `<i class="${c}"></i>`;}).join("");
+    return `<div class="ind"><div class="row"><span class="sl">${esc(sec.name)} · ${esc(r[0])}</span><span class="lab ${cls}">${txt}</span></div>
+      <div class="vals">Here <b>${esc(r[1])}</b> · Goa ${esc(r[2])}</div><div class="meter">${seg}</div></div>`;
+  })).join("");
+  $("asof").textContent=D.asof.toUpperCase();
   $("samplenote").innerHTML=D.sampleNote;
   applyLang();
+  requestAnimationFrame(()=>setTimeout(()=>document.querySelectorAll(".fill").forEach(f=>f.style.width=Math.max(f.dataset.w,0)+"%"),60));
 }
-function applyLang(){document.querySelectorAll("[data-t]").forEach(el=>{const v=T[lang][el.dataset.t]; if(v && !(el.id==="reveal" && el.dataset.done)) el.textContent=v;});}
-document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".lang button").forEach(x=>x.classList.remove("on"));b.classList.add("on");lang=b.dataset.l;applyLang();});
-$("reveal").onclick=()=>{const p=D.person.party; $("party").innerHTML=`<span>${esc(T[lang].party)}: <span class="revealed">${esc(p.name)}</span></span><span style="color:var(--quiet);font-size:12px">${esc(p.alliance||"")}</span>`;};
-const fit=b=>{const f=document.querySelector(b?".back":".front");$("cw").style.height=f.offsetHeight+"px";};
-$("toBack").onclick=()=>{$("cw").classList.add("flipped");fit(true);};
-$("toFront").onclick=()=>{$("cw").classList.remove("flipped");fit(false);};
+function applyLang(){document.querySelectorAll("[data-t]").forEach(el=>{const v=T[lang][el.dataset.t];if(v)el.textContent=v;});}
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".seg button").forEach(x=>x.classList.remove("on"));b.classList.add("on");lang=b.dataset.l;applyLang();});
+$("reveal").onclick=()=>{const p=D.person.party;const el=$("party");el.classList.add("shown");
+  el.innerHTML=`<div class="l">${esc(T[lang].party)}: ${esc(p.name)}</div><span class="pill ghost" style="font-family:var(--mono);font-size:11px">${esc(p.alliance||"")}</span>`;};
+const fit=b=>{$("flip").style.height=$(b?"back":"front").offsetHeight+"px";};
+$("toBack").onclick=()=>{$("back").style.display="block";fit(true);requestAnimationFrame(()=>requestAnimationFrame(()=>$("flip").classList.add("flipped")));};
+$("toFront").onclick=()=>{$("flip").classList.remove("flipped");fit(false);setTimeout(()=>{if(!$("flip").classList.contains("flipped"))$("back").style.display="none";},750);};
+// gentle tilt + sheen
+const sc=$("scene"),tl=$("tilt");
+sc.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse")return;const r=sc.getBoundingClientRect();const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+  tl.style.transform=`rotateX(${(.5-y)*6}deg) rotateY(${(x-.5)*8}deg)`;document.querySelectorAll(".sheen").forEach(s=>{s.style.setProperty("--mx",x*100+"%");s.style.setProperty("--my",y*100+"%");});});
+sc.addEventListener("pointerleave",()=>tl.style.transform="");
 render();
 </script>
 </body>

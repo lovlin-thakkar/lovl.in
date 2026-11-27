@@ -8,8 +8,8 @@ window.NETA = {
   person: {
     name: "Shripad Yesso Naik",
     photo: { url: "naik.jpg", credit: "Photo: Biswarup Ganguly, CC BY 3.0, via Wikimedia Commons (2014)" },
-    meta: ["Age 74 · Graduate (BA, Bombay University, 1978)", "MP, North Goa · 6th term"],
-    tags: ["Sitting MP", "Union Minister of State", "Contesting 2029: not yet known"],
+    chips: ["74 yrs", "BA, 1978", "6th term"],
+    tags: ["Sitting MP", "Union MoS", "2029: not announced"],
     party: { name: "Bharatiya Janata Party (BJP)", alliance: "NDA" }
   },
   stats: [
@@ -30,22 +30,22 @@ window.NETA = {
       src: `Age as declared in the 2024 affidavit. Source: ${MYNETA_LIST}.` }
   ],
   house: [
-    ["Attendance", "Not recorded"],
-    ["Questions asked", "Not applicable"],
-    ["Debates", "Not applicable"],
-    ["Private member bills", "Not applicable"]
+    ["Attendance", "Not recorded", "pend"],
+    ["Questions asked", "N/A (minister)", "pend"],
+    ["Debates", "N/A (minister)", "pend"],
+    ["Private member bills", "N/A (minister)", "pend"]
   ],
   houseNote: `He is a minister. Ministers answer for the government, so they don't sign the attendance register, ask questions or bring private bills. Period: 24 Jun 2024 – 13 Aug 2026. Source: ${PRS}.`,
   fund: [
-    ["Entitlement", "₹5 Cr / year"],
-    ["Works recommended", "Pending"],
-    ["Amount spent", "Pending"]
+    ["Entitlement", "₹5 Cr / year", "mono"],
+    ["Works recommended", "Pending", "pend"],
+    ["Amount spent", "Pending", "pend"]
   ],
   fundNote: `The ₹5 Cr/year entitlement is set by the MPLADS scheme. North Goa's per-MP figures sit behind the <a href="https://mplads.mospi.gov.in/" target="_blank" rel="noopener">eSAKSHI dashboard</a>, which has no public export yet. Our data pipeline will collect them.`,
   minister: [
-    ["Now", "MoS, Power + New & Renewable Energy"],
-    ["Since", "10 Jun 2024"],
-    ["Before", "MoS Tourism (2021–24), Defence (2019–21), AYUSH (independent charge, 2014–21)"]
+    ["Now", "MoS, Power + Renewable Energy"],
+    ["Since", "10 Jun 2024", "mono"],
+    ["Before", "Tourism ’21–24 · Defence ’19–21 · AYUSH ’14–21"]
   ],
   ministerNote: `Ministry numbers for his term (e.g. renewable capacity added, from CEA and MNRE) are pending. Source for roles: <a href="https://en.wikipedia.org/wiki/Shripad_Naik" target="_blank" rel="noopener">Wikipedia</a>, to be cross-checked against the Cabinet Secretariat list.`,
   // rows: [indicator, change here, change in Goa, label]. Label = gap between the two, by the published thresholds.
@@ -53,7 +53,7 @@ window.NETA = {
     { name: "Education", illustrative: true, rows: [["Literacy rate", "+2.1 pts", "+1.4 pts", "sbetter"], ["School dropout", "+0.4 pts", "−0.3 pts", "sworse"]] },
     { name: "Health", illustrative: true, rows: [["Infant deaths / 1,000", "−1.8", "−0.6", "better"]] },
     { name: "Safety", illustrative: true, rows: [["Crime rate", "+3%", "+2.5%", "sworse"], ["Road deaths", "+6%", "−4%", "mworse"]] },
-    { name: "Roads", illustrative: true, rows: [["Rural road built", "48 km", "45 km", "sbetter"]] }
+    { name: "Roads", illustrative: true, rows: [["Rural road built", "48 km", "45 km avg", "sbetter"]] }
   ],
-  sampleNote: "<b>Sample card.</b> Front side and the Lok Sabha / minister facts are real, with sources on tap. The fund numbers and ministry numbers are still pending. <b>The sector numbers are made up</b>, only to show the design; they're marked ILLUSTRATIVE. Photo: Biswarup Ganguly, CC BY 3.0, via Wikimedia Commons (2014)."
+  sampleNote: "<b>Sample card.</b> Front side and the Lok Sabha / minister facts are real, with sources on tap. The fund numbers and ministry numbers are still pending. <b>The sector numbers are made up</b>, only to show the design; they're marked ILLUSTRATIVE. "
 };
